@@ -13,7 +13,7 @@
 class Pretre : public Unite
 {
     public:
-    Pretre(QGraphicsItem * parent, vector<Case*> ensCase, Joueur* j);
+    Pretre(QGraphicsItem * parent, Case* c, Joueur* j);
 };
 
 

@@ -1,7 +1,12 @@
 #include "Chevalier.h"
 
-Chevalier::Chevalier(QGraphicsItem * parent, vector<Case*> ensCase, Joueur* j) : Unite(parent,1,2,1,5,0,ensCase,j,"Chevalier")
+Chevalier::Chevalier(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,1,2,1,5,0,c,j,"Chevalier")
 {
-    QPixmap* chevBleu=new QPixmap("ChevalierBleu.png");
-    this->setPixmap(chevBleu->copy(0,0,36,36));
+    QPixmap* chev;
+    if (j && j->getNumero()==0) {
+        chev=new QPixmap("images/ChevalierBleu.png");
+    }
+    else
+        chev=new QPixmap("images/ChevalierRouge.png");
+    this->setPixmap(chev->copy(0,0,36,36));
 }

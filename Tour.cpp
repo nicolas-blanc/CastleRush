@@ -1,10 +1,9 @@
 #include "Tour.h"
 #include <math.h>
-Tour::Tour(QGraphicsItem* parent, vector<Case*>& ensCase, Joueur* j, string nom)
-: Batiment(parent, ensCase, j, nom, 0, 10),
-m_attaque(5) 
+Tour::Tour(QGraphicsItem* parent, Case* c, Joueur* j, string nom)
+: Batiment(parent, c, j, nom, 0, 10),m_attaque(5)
 {
-    getJoueur()->setBatiment(this);
+    setPixmap(* new QPixmap("images/Tour1"));
 }
 
 void Tour::attaquer(Case* c) {

@@ -13,7 +13,7 @@
 class Magicien : public Unite
 {
     public:
-    Magicien(QGraphicsItem * parent, vector<Case*> ensCase, Joueur* j);
+    Magicien(QGraphicsItem * parent, Case* c, Joueur* j);
 };
 
 

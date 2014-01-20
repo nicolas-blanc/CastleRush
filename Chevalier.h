@@ -13,7 +13,7 @@
 class Chevalier : public Unite
 {
     public:
-    Chevalier(QGraphicsItem * parent, vector<Case*> ensCase, Joueur* j);
+    Chevalier(QGraphicsItem * parent, Case* c, Joueur* j);
 };
 
 

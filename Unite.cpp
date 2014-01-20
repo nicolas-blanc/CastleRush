@@ -5,14 +5,12 @@
 #include <QMessageBox>
 #include <math.h>
 
-Unite::Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned int pop, int vieMax, int vieMin, vector<Case*>& ensCase, Joueur* j, string nom)
-: Entite(parent, ensCase,j,nom,vieMin,vieMax) {
+Unite::Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned int pop, int vieMax, int vieMin, Case* c, Joueur* j, string nom)
+: Entite(parent, *new vector<Case*>(1,c),j,nom,vieMin,vieMax) {
     this->setMouvement(mvt);
     this->setCout(ct);
     this->setPopulation(pop);
     this->setAttaqueDeBase();
-    for (unsigned int i=0; i<ensCase.size(); i++)
-        ensCase[i]->setOccupant(this);
     setFlags(QGraphicsItem::ItemIsSelectable);
 }
 
@@ -22,21 +20,17 @@ void Unite::setAttaqueDeBase() {
 }
 
 void Unite::deplacer(Case* c) {
-    if(deplacement(c))
+    if(deplacementPossible(c))
     {
-    vector<Case*> position;
-    position.push_back(c);
-    this->setPosition(position);
-    this->getJoueur()->setPtAction(this->getMouvement());
-    ((Plateau*)((Case*)this->parentItem())->parent())->setFlag(attente);
-    }
-    else
-    {
-        cout << "erreur" << endl;
+        vector<Case*> position;
+        position.push_back(c);
+        this->setPosition(position);
+        this->getJoueur()->setPtAction(this->getMouvement());
+        ((Plateau*)((Case*)this->parentItem())->parent())->setFlag(attente);
     }
 }
 
-bool Unite::deplacement(Case* c) {
+bool Unite::deplacementPossible(Case* c) {
     return ((getMouvement()+getJoueur()->getListeBonusJoueur()[5]>=
             abs(c->getX()-this->getPosition()[0]->getX())+abs(c->getY()-this->getPosition()[0]->getY()))
             && !c->isOccupee());
@@ -67,6 +61,11 @@ void Unite::attaquer(Case* c) {
 
 int Unite::getMouvement() {
     return m_mouvement;
+}
+
+void Unite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    QGraphicsPixmapItem::mouseReleaseEvent(event);
+    ((Case*)parentItem())->parent()->setSelect(this);
 }
 
 Unite::~Unite() {

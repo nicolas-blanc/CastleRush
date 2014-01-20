@@ -7,7 +7,7 @@ using namespace std;
 
 class Guerrier : public Unite {
 public:
-    Guerrier(QGraphicsItem * parent, vector<Case*> ensCase, Joueur* j);
+    Guerrier(QGraphicsItem * parent, Case* c, Joueur* j);
     virtual ~Guerrier();
 private:
 

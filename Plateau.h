@@ -36,8 +36,8 @@ public :
         inline Case * getCase(int x, int y) { return plateau[x][y]; }
         inline void ajoutBatiment(Batiment * bat) { v_Batiment.push_back(bat); }
         bool isFini(ifstream& fichier);
-        inline void setSelected(QGraphicsItem* c) {if (selected) selected->setSelected(false); selected=c; selected->setSelected(true);}
-        inline QGraphicsItem* getSelected() {return selected;}
+        void setSelect(QGraphicsItem* c);
+        inline QGraphicsItem* getSelect() {return selected;}
         inline void setFlag(flagsAppli f) {flag=f;}
         inline flagsAppli getFlag() {return flag;}
 };

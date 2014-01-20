@@ -34,7 +34,6 @@ public :
         void transmettreAttaque(int nbPV);
         bool isOccupee();
         void declencherEffets();
-        void setSelected(bool selected);
         Plateau* parent();
 
         Case& operator=(const Case& ) {return *this;}

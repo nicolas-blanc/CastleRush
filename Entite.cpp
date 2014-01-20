@@ -7,6 +7,8 @@ Entite::Entite(QGraphicsItem * parent, vector<Case*>& ensCase, Joueur* j, string
     setJoueur(j);
     Setnom(nom);
     this->setOffset(OFFSET+(ensCase[0]->getX()*SIZE),OFFSET+(ensCase[0]->getY()*SIZE));
+    for (unsigned int i=0; i<ensCase.size(); i++)
+        ensCase[i]->setOccupant(this);
 }
 
 Entite::~Entite()
@@ -35,5 +37,7 @@ void Entite::setPosition(vector<Case *> position) {
     m_position = position;
     for (unsigned int i=0; i<m_position.size(); i++)
         m_position[i]->setOccupant(this);
+    setParentItem(m_position[0]);
     this->setOffset(OFFSET+(m_position[0]->getX()*SIZE),OFFSET+(m_position[0]->getY()*SIZE));
+    setSelected(true);
 }
