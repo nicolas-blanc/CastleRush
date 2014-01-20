@@ -6,7 +6,7 @@
 class Archer : public Unite
 {
     public:
-    Archer(QGraphicsItem * parent, vector<Case*> ensCase, Joueur* j);
+    Archer(QGraphicsItem * parent, Case* c, Joueur* j);
 };
 #endif	/* ARCHER_H */
 

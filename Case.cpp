@@ -16,21 +16,15 @@ Case::Case(int x, int y, QObject* parent) : QGraphicsRectItem(x*SIZE,y*SIZE,SIZE
     setFlags(QGraphicsItem::ItemIsSelectable);
 }
 
-//n'est pas appellée par Plateau car setSelected n'est pas virtuelle dans QGraphicsItem. Ne pose pas de probleme pour le moment.
-void Case::setSelected(bool selected) {
-    if (selected)
-        setBrush(* new QBrush(Qt::red));
-    else
-        setBrush(* new QBrush(Qt::white));
-    QGraphicsItem::setSelected(selected);
-}
-
-void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *) {
+void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    QGraphicsRectItem::mouseReleaseEvent(event);
     if (parent()->getFlag()==attente) {
-        ((Plateau*)this->parent())->setSelected(this);
+        this->setSelected(true);
+        ((Plateau*)this->parent())->setSelect(this);
     }
     else if (parent()->getFlag()==deplacement) {
-        ((Unite*)(parent()->getSelected()))->deplacer(this);
+        ((Unite*)(parent()->getSelect()))->deplacer(this);
+        parent()->setFlag(attente);
     }
 }
 

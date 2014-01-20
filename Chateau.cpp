@@ -4,35 +4,35 @@
 #include <QPixmap>
 
 Chateau::Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, Joueur* j, string nom) : Batiment(parent, EnsCase, j, nom, 0, 20) {
-    this->setPixmap(* new QPixmap("ChateauCentral.png"));
+    if (j && j->getNumero()==0)
+        this->setPixmap(* new QPixmap("images/ChateauBleu.png"));
+    else
+        this->setPixmap(* new QPixmap("images/ChateauRouge.png"));
 }
 
 void Chateau::Invoquer(int unite, Case * c)
 {
     bool invoc_possible = adjacent(c);
-
-    vector<Case *> ensCase;
-    ensCase.push_back(c);
     Unite* u;
 
     switch(unite) {
         case guerrier: {
-            u = new Guerrier(this->parentItem(), ensCase, this->getJoueur());
+            u = new Guerrier(this->parentItem(), c, this->getJoueur());
             break;}
         case archer: {
-            u = new Archer(this->parentItem(), ensCase, getJoueur());
+            u = new Archer(this->parentItem(), c, getJoueur());
             break; }
         case chevalier: {
-            u = new Chevalier(this->parentItem(), ensCase, getJoueur());
+            u = new Chevalier(this->parentItem(), c, getJoueur());
             break;}
         case magicien:{
-            u = new Magicien(this->parentItem(), ensCase, getJoueur());
+            u = new Magicien(this->parentItem(), c, getJoueur());
             break;}
         case pretre:{
-            u = new Pretre(this->parentItem(), ensCase, getJoueur());
+            u = new Pretre(this->parentItem(), c, getJoueur());
             break;}
         default:{
-            u = new Voleur(this->parentItem(), ensCase, getJoueur());
+            u = new Voleur(this->parentItem(), c, getJoueur());
             break;}
     }
 

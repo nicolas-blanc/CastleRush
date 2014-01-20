@@ -1,5 +1,6 @@
 #include "Plateau.h"
 #include "Batiment.h"
+#include "BatimentBonusStat.h"
 #include "Tour.h"
 #include "Chateau.h"
 #include <iostream>
@@ -53,10 +54,12 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
                 switch (type) {
                     case chateau : {
                         Batiment* bat = new Chateau(plateau[x+j][y+i],cases,NULL,"Chateau");
+                        v_Batiment.push_back(bat);
                         break;
                     }
                     case tour : {
-                        Batiment* bat = new Tour(plateau[x+j][y+i],cases,NULL,"Tour");
+                        Batiment* bat = new Tour(plateau[x+j][y+i],cases[0],NULL,"Tour");
+                        v_Batiment.push_back(bat);
                         break;
                     }
                     default :
@@ -67,17 +70,14 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
     }
 
 
+
+    Joueur* j = new Joueur(1,1);
+    Joueur* j2 = new Joueur(1,0);
+
     QPushButton* dep = new QPushButton("Déplacer");
     dep->setGeometry(10,SIZE*(m_hauteur+1),80,25);
     addWidget(dep);
     connect(dep, SIGNAL(released()), this, SLOT(handleDep()));
-
-    Joueur* j = new Joueur(1,1);
-
-    vector<Case*> cases;
-    cases.push_back(plateau[8][8]);
-    Unite* ch=new Chevalier(plateau[8][8],cases,j);
-    //ch->deplacer(plateau[8][7]);
 
     pop = new QProgressBar;
     pop->setGeometry(550, 10, 80, 25);
@@ -88,6 +88,36 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
     addWidget(pop);
     PtAction->setValue(j->getPtAction());
     addWidget(PtAction);
+
+
+    //--------------------------------
+    //--------------------------------
+
+    Unite* ch=new Chevalier(plateau[8][8],plateau[8][8],j);
+    Unite* vol=new Voleur(plateau[7][8],plateau[7][8],j);
+    Unite* pret=new Pretre(plateau[6][8],plateau[6][8],j);
+    Unite* mage=new Magicien(plateau[5][8],plateau[5][8],j);
+    Unite* guer=new Guerrier(plateau[4][8],plateau[4][8],j);
+
+
+    Unite* ch2=new Chevalier(plateau[8][7],plateau[8][7],j2);
+    Unite* vol2=new Voleur(plateau[7][7],plateau[7][7],j2);
+    Unite* pret2=new Pretre(plateau[6][7],plateau[6][7],j2);
+    Unite* mage2=new Magicien(plateau[5][7],plateau[5][7],j2);
+    Unite* guer2=new Guerrier(plateau[4][7],plateau[4][7],j2);
+
+
+    Batiment* t=new Tour(plateau[1][1],plateau[1][1],NULL,"Tour");
+    vector<Case*> ensCase;
+    ensCase.push_back(plateau[2][2]);
+    ensCase.push_back(plateau[2][3]);
+    ensCase.push_back(plateau[3][2]);
+    ensCase.push_back(plateau[3][3]);
+    Batiment* c=new Chateau(plateau[1][1],ensCase,j2,"Chateau");
+
+    //-----------------------------
+    //-----------------------------
+
 }
 
 bool Plateau::isFini(ifstream& fichier) {
@@ -98,11 +128,16 @@ bool Plateau::isFini(ifstream& fichier) {
 }
 
 void Plateau::handleDep() {
-    QList<QGraphicsItem *> selection = selectedItems();
-    if (selection.size()>0)
-        setSelected(selection[0]);
     setFlag(deplacement);
 }
+
+void Plateau::setSelect(QGraphicsItem *c){
+    if (selected)
+        selected->setSelected(false);
+    selected=c;
+    selected->setSelected(true);
+}
+
 
 Plateau::~Plateau() {
     for ( int i=0; i < m_largeur; i++)

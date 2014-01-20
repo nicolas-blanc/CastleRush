@@ -13,7 +13,7 @@
 class Voleur : public Unite
 {
     public:
-    Voleur(QGraphicsItem * parent, vector<Case*> ensCase, Joueur* j);
+    Voleur(QGraphicsItem * parent, Case* c, Joueur* j);
 };
 
 

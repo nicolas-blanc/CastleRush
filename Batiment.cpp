@@ -9,3 +9,11 @@ Batiment::Batiment(QGraphicsItem * parent, vector<Case*>& ensCase, Joueur* j, st
         ensCase[i]->setOccupant(this,true);
 }
 
+Batiment::Batiment(QGraphicsItem *parent, Case *c, Joueur *j, string nom, int vieMin, int vieMax)
+: Entite(parent, *new vector<Case*>(1,c), j, nom, vieMin, vieMax)
+{
+    if (getJoueur())
+        m_Joueur->setBatiment(this);
+    c->setOccupant(this,true);
+}
+

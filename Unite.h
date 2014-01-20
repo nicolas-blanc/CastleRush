@@ -18,7 +18,7 @@ class Sort;
 class Effet;
 class Unite : public Entite {
     public:
-        Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned int pop, int vieMax, int vieMin, vector<Case*>& ensCase, Joueur* j, string nom);
+        Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned int pop, int vieMax, int vieMin, Case* c, Joueur* j, string nom);
         virtual ~Unite();
         int getMouvement();
         inline void setMouvement(int val) { if (val >= 0) m_mouvement = val; } // a modif exception
@@ -29,14 +29,15 @@ class Unite : public Entite {
         inline AttaqueDeBase* getAttaqueParDefaut() { return m_AttaqueParDefaut; }
         inline Sort* getSort(string nomSort) { return v_sort[nomSort]; }
         virtual void initSort();
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
         void deplacer(Case* c);
-        bool deplacement(Case* c); // /!\ a corriger avec getDepX et getDepY
+        bool deplacementPossible(Case* c); // /!\ a corriger avec getDepX et getDepY
         void attaquer(Case* c, Attaque* attaque);
         void attaquer(Case* c);
         void modifierVie(int vie);
 
-        inline void insererEffet(Effet* effet) { this->v_effet.push_back(effet); };
+        inline void insererEffet(Effet* effet) { this->v_effet.push_back(effet); }
         void enleverEffet(Effet* effet);
 
     protected:
