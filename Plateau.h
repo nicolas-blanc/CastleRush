@@ -47,7 +47,7 @@ private :
         QPushButton* mag;
         QPushButton* pret;
 
-        int unitInvoc;
+        catUnite unitInvoc;
 
         vector<Joueur*> j;
         Joueur* jtour;
@@ -83,17 +83,14 @@ public :
         void afficheInfoUnite(Entite *u);
         void cacheInfoUnite();
         void InfoNull();
-        void allumerButtons();
-        void eteindreButtons();
-        void allumerButtonsBati();
-        void eteindreButtonsBati();
+        void setBoutons(typeElement type);
+        void setBoutonsUnite(bool active);
         void highlight(Case* c, int portee=0);
         bool porteePossible(Case* c1, Case* c2, int portee);
 
-        inline void setUnitInvoc(int i) { unitInvoc = i;cout<<"set : "<<unitInvoc<<flush;}
-        inline int getUnitInvoc() { cout<<"get : "<<unitInvoc<<endl<<flush; return unitInvoc;}
-        void uniteInvocable();
-        void deleteUniteInvocable();
+        inline void setUnitInvoc(catUnite unite) { unitInvoc = unite;}
+        inline catUnite getUnitInvoc() { return unitInvoc;}
+
         Joueur * getJoueurTour(){return jtour;}
 
 
@@ -101,9 +98,6 @@ public :
         int getNombreTour(){return NombreTour;}
 
         void setNombreTourJoueur(int tour){NombreTourJoueur = tour;}
-        int getNombreTourJoueur(){return NombreTourJoueur;}
-
-        void InvocNull();
-};
+        int getNombreTourJoueur(){return NombreTourJoueur;}};
 
 #endif

@@ -12,6 +12,7 @@ enum catBatiments {chateau, tour,libre};
 enum catUnite {guerrier, chevalier, voleur, magicien, pretre, archer};
 enum flagsAppli {attente,deplacement,attaque,invoquer};
 enum bonusJoueur {population, action, vie, degat, portee, mouvement};
+enum typeElement {batiment, unite, carre, batChateau};
 
 #endif	/* ENUMERATIONS_H */
 

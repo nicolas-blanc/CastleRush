@@ -58,18 +58,16 @@ void Chateau::Invoquer(int unite, Case * c)
             cout << "erreur Pt"<<flush;
             //throw ManquePtAction();
         }
-        else if(!adjacent(c))
+        else
         {
             cout << "erreur portee"<<flush;
             //throw ManquePortee();
         }
-        else
-            cout << "et merde !"<<flush;
     }
 }
 
 
 void Chateau::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     Batiment::mouseReleaseEvent(event);
-    ((Case*)parentItem())->parent()->uniteInvocable();
+    ((Case*)parentItem())->parent()->setBoutons(batChateau);
 }

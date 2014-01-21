@@ -47,5 +47,10 @@ void Entite::setPosition(vector<Case *> position) {
 
 void Entite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsPixmapItem::mouseReleaseEvent(event);
+    if (((Case*)parentItem())->parent()->getFlag()==deplacement) {
+        ((Case*)parentItem())->parent()->setFlag(attente);
+        ((Case*)parentItem())->parent()->highlight(((Case*)parentItem()));
+    }
+
     ((Case*)parentItem())->parent()->setSelect(this);
 }

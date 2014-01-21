@@ -143,7 +143,71 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
 
     update();
 
-    eteindreButtons();
+    guer = new QPushButton;
+    guer->setToolTip("guerrier");
+    guer->setIcon(QIcon("images/Guerrier1.png"));
+    guer->setIconSize(QSize(30,30));
+    guer->setGeometry(10,SIZE*(m_hauteur+1)-12,50,50);
+    addWidget(guer);
+    connect(guer, SIGNAL(released()), this, SLOT(intInvocGue()));
+
+    arch = new QPushButton;
+    arch->setToolTip("archer");
+    arch->setIcon(QIcon("images/Archer1.png"));
+    arch->setIconSize(QSize(30,30));
+    arch->setGeometry(70,SIZE*(m_hauteur+1)-12,50,50);
+    addWidget(arch);
+    connect(arch, SIGNAL(released()), this, SLOT(intInvocArc()));
+
+    chev = new QPushButton;
+    chev->setToolTip("chevalier");
+    chev->setIcon(QIcon("images/Chevalier1.png"));
+    chev->setIconSize(QSize(30,30));
+    chev->setGeometry(130,SIZE*(m_hauteur+1)-12,50,50);
+    addWidget(chev);
+    connect(chev, SIGNAL(released()), this, SLOT(intInvocChe()));
+
+    mag = new QPushButton;
+    mag->setToolTip("magicien");
+    mag->setIcon(QIcon("images/Magicien1.png"));
+    mag->setIconSize(QSize(30,30));
+    mag->setGeometry(190,SIZE*(m_hauteur+1)-12,50,50);
+    addWidget(mag);
+    connect(mag, SIGNAL(released()), this, SLOT(intInvocMag()));
+
+    pret = new QPushButton;
+    pret->setToolTip("pretre");
+    pret->setIcon(QIcon("images/Pretre1.png"));
+    pret->setIconSize(QSize(30,30));
+    pret->setGeometry(250,SIZE*(m_hauteur+1)-12,50,50);
+    addWidget(pret);
+    connect(pret, SIGNAL(released()), this, SLOT(intInvocPre()));
+
+    vol = new QPushButton;
+    vol->setToolTip("voleur");
+    vol->setIcon(QIcon("images/Voleur1.png"));
+    vol->setIconSize(QSize(30,30));
+    vol->setGeometry(310,SIZE*(m_hauteur+1)-12,50,50);
+    addWidget(vol);
+    connect(vol, SIGNAL(released()), this, SLOT(intInvocVol()));
+
+    nom = new QLabel();
+    nom->setGeometry(SIZE*(m_largeur+1), 70, 105, 25);
+    addWidget(nom);
+
+    vie = new QLabel();
+    vie->setGeometry(SIZE*(m_largeur+1), 100, 105, 25);
+    addWidget(vie);
+
+    mvt = new QLabel();
+    mvt->setGeometry(SIZE*(m_largeur+1), 130, 105, 25);
+    addWidget(mvt);
+
+    atk = new QLabel();
+    atk->setGeometry(SIZE*(m_largeur+1), 160, 105, 25);
+    addWidget(atk);
+
+    setBoutons(carre);
 
     //--------------------------------
     //--------------------------------
@@ -165,8 +229,8 @@ bool Plateau::isFini(ifstream& fichier) {
 void Plateau::handleDep() {
     if(((Unite*)selected)->getJoueur() == jtour)
     {
-    highlight(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getMouvement()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[mouvement]);
-    setFlag(deplacement);
+        highlight(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getMouvement()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[mouvement]);
+        setFlag(deplacement);
     }
 }
 
@@ -222,21 +286,9 @@ void Plateau::afficheInfoUnite(Entite *u)
        typeid(*u) == typeid(Voleur)     ||
        typeid(*u) == typeid(Archer))
     {
-    mvt = new QLabel("Mouvement : " + QString::number(((Unite*)u)->getMouvement()));
-    mvt->setGeometry(SIZE*(m_largeur+1), 130, 105, 25);
-    addWidget(mvt);
-    atk = new QLabel("Attaque : " + QString::number(((Unite*)u)->getMouvement()));
-    atk->setGeometry(SIZE*(m_largeur+1), 160, 105, 25);
-    addWidget(atk);
+        mvt->setText("Mouvement : " + QString::number(((Unite*)u)->getMouvement()));
+        atk->setText("Attaque : " + QString::number(((Unite*)u)->getMouvement()));
     }
-}
-
-void Plateau::cacheInfoUnite()
-{
-    delete nom;
-    delete vie;
-    delete mvt;
-    delete atk;
 }
 
 void Plateau::InfoNull()
@@ -257,130 +309,102 @@ void Plateau::handleAtt(){
     }
 }
 
-void Plateau::allumerButtons(){
-    att->show();
-    dep->show();
-    sorts->show();
-    capt->show();
-    capt->setEnabled(false);
+void Plateau::setBoutons(typeElement type) {
+    switch (type) {
+    case (carre) : {
+        att->hide();
+        dep->hide();
+        sorts->hide();
+        nom->hide();
+        vie->hide();
+        mvt->hide();
+        atk->hide();
+        guer->hide();
+        mag->hide();
+        vol->hide();
+        pret->hide();
+        chev->hide();
+        arch->hide();
+        capt->hide();
+        break;
+    }
+    case (batiment) : {
+        att->hide();
+        dep->hide();
+        sorts->hide();
+        nom->show();
+        vie->show();
+        mvt->hide();
+        atk->hide();
+        guer->show();
+        mag->show();
+        vol->show();
+        pret->show();
+        chev->show();
+        arch->show();
+        capt->hide();
+        break;
+    }
+    case (unite) : {
+        att->show();
+        dep->show();
+        sorts->show();
+        nom->show();
+        vie->show();
+        mvt->show();
+        atk->show();
+        guer->hide();
+        mag->hide();
+        vol->hide();
+        pret->hide();
+        chev->hide();
+        arch->hide();
+        capt->show();
+        break;
+    }
+    }
 }
 
-void Plateau::eteindreButtons(){
-    att->hide();
-    dep->hide();
-    sorts->hide();
-    capt->hide();
+
+void Plateau::setBoutonsUnite(bool active) {
+
 }
 
 void Plateau::intInvocGue()
 {
-  setUnitInvoc(1);
+  setUnitInvoc(guerrier);
   setFlag(invoquer);
 }
 void Plateau::intInvocArc()
 {
-  setUnitInvoc(2);
+  setUnitInvoc(archer);
   setFlag(invoquer);
 }
 void Plateau::intInvocChe()
 {
-  setUnitInvoc(3);
+  setUnitInvoc(chevalier);
   setFlag(invoquer);
 }
 void Plateau::intInvocMag()
 {
-  setUnitInvoc(4);
+  setUnitInvoc(magicien);
   setFlag(invoquer);
 }
 void Plateau::intInvocPre()
 {
-  setUnitInvoc(5);
+  setUnitInvoc(pretre);
   setFlag(invoquer);
 }
 void Plateau::intInvocVol()
 {
-  setUnitInvoc(6);
+  setUnitInvoc(voleur);
   setFlag(invoquer);
-}
-
-void Plateau::uniteInvocable()
-{
-    if(((Chateau*)selected)->getJoueur() == jtour)
-    {
-        guer = new QPushButton;
-        guer->setToolTip("guerrier");
-        guer->setIcon(QIcon("images/Guerrier1.png"));
-        guer->setIconSize(QSize(30,30));
-        guer->setGeometry(10,SIZE*(m_hauteur+1)-12,50,50);
-        addWidget(guer);
-        connect(guer, SIGNAL(released()), this, SLOT(intInvocGue()));
-
-        arch = new QPushButton;
-        arch->setToolTip("archer");
-        arch->setIcon(QIcon("images/Archer1.png"));
-        arch->setIconSize(QSize(30,30));
-        arch->setGeometry(70,SIZE*(m_hauteur+1)-12,50,50);
-        addWidget(arch);
-        connect(arch, SIGNAL(released()), this, SLOT(intInvocArc()));
-
-        chev = new QPushButton;
-        chev->setToolTip("chevalier");
-        chev->setIcon(QIcon("images/Chevalier1.png"));
-        chev->setIconSize(QSize(30,30));
-        chev->setGeometry(130,SIZE*(m_hauteur+1)-12,50,50);
-        addWidget(chev);
-        connect(chev, SIGNAL(released()), this, SLOT(intInvocChe()));
-
-        mag = new QPushButton;
-        mag->setToolTip("magicien");
-        mag->setIcon(QIcon("images/Magicien1.png"));
-        mag->setIconSize(QSize(30,30));
-        mag->setGeometry(190,SIZE*(m_hauteur+1)-12,50,50);
-        addWidget(mag);
-        connect(mag, SIGNAL(released()), this, SLOT(intInvocMag()));
-
-        pret = new QPushButton;
-        pret->setToolTip("pretre");
-        pret->setIcon(QIcon("images/Pretre1.png"));
-        pret->setIconSize(QSize(30,30));
-        pret->setGeometry(250,SIZE*(m_hauteur+1)-12,50,50);
-        addWidget(pret);
-        connect(pret, SIGNAL(released()), this, SLOT(intInvocPre()));
-
-        vol = new QPushButton;
-        vol->setToolTip("voleur");
-        vol->setIcon(QIcon("images/Voleur1.png"));
-        vol->setIconSize(QSize(30,30));
-        vol->setGeometry(310,SIZE*(m_hauteur+1)-12,50,50);
-        addWidget(vol);
-        connect(vol, SIGNAL(released()), this, SLOT(intInvocVol()));
-    }
-}
-
-void Plateau::deleteUniteInvocable()
-{
-    delete arch;
-    delete guer;
-    delete chev;
-    delete vol;
-    delete mag;
-    delete pret;
-}
-
-void Plateau::InvocNull()
-{
-    arch = NULL;
-    guer = NULL;
-    chev = NULL;
-    vol = NULL;
-    mag = NULL;
-    pret = NULL;
 }
 
 void Plateau::highlight(Case* c, int portee) {
     QColor color = Qt::red;
     if (portee==0) {
-        color=Qt::transparent;
+        color=Qt::white;
         portee=m_largeur*m_hauteur;
         c->setBrush(*new QBrush(color));
     }
@@ -393,22 +417,22 @@ void Plateau::highlight(Case* c, int portee) {
                 cout<<"x2 = "<<plateau[i+c->getX()][j+c->getY()]->getX()<<flush;
                 cout<<", y2 = "<<plateau[i+c->getX()][j+c->getY()]->getY()<<endl<<flush;
                 cout<<"portee = "<<portee<<endl<<endl<<flush;
-                if (color==Qt::transparent||porteePossible(c, plateau[i+c->getX()][j+c->getY()],portee)) {
+                if (color==Qt::white||porteePossible(c, plateau[i+c->getX()][j+c->getY()],portee)) {
                     plateau[i+c->getX()][j+c->getY()]->setBrush(*new QBrush(color));
                 }
             }
             if (c->getX()-i>=0&&c->getY()-j>=0) {
-                if (color==Qt::transparent||porteePossible(c, plateau[c->getX()-i][c->getY()-j],portee)) {
+                if (color==Qt::white||porteePossible(c, plateau[c->getX()-i][c->getY()-j],portee)) {
                     plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
                 }
             }
             if (c->getX()+i<m_largeur&&c->getY()-j>=0) {
-                if (color==Qt::transparent||porteePossible(c, plateau[c->getX()+i][c->getY()-j],portee)) {
+                if (color==Qt::white||porteePossible(c, plateau[c->getX()+i][c->getY()-j],portee)) {
                     plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
                 }
             }
             if (c->getX()-i>=0&&c->getY()+j<m_hauteur) {
-                if (color==Qt::transparent||porteePossible(c, plateau[c->getX()-i][c->getY()+j],portee)) {
+                if (color==Qt::white||porteePossible(c, plateau[c->getX()-i][c->getY()+j],portee)) {
                     plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
                 }
             }

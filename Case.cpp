@@ -21,14 +21,10 @@ Case::Case(int x, int y, QObject* parent) : QGraphicsRectItem(x*SIZE,y*SIZE,SIZE
 
 void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsRectItem::mouseReleaseEvent(event);
-    this->parent()->cacheInfoUnite();
-    this->parent()->InfoNull();
-    this->parent()->eteindreButtons();
-    this->parent()->deleteUniteInvocable();
-    this->parent()->InvocNull();
     if (parent()->getFlag()==attente) {
         this->setSelected(true);
         this->parent()->setSelect(this);
+        parent()->setBoutons(carre);
     }
     else if (parent()->getFlag()==deplacement) {
         ((Unite*)(parent()->getSelect()))->deplacer(this);
@@ -45,7 +41,6 @@ void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         Chateau* ch=((Chateau*)(parent()->getSelect()));
         ch->Invoquer(parent()->getUnitInvoc(), this);
         this->parent()->update();
-        this->parent()->deleteUniteInvocable();
         parent()->setFlag(attente);
     }
 }
