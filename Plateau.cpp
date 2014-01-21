@@ -2,6 +2,7 @@
 #include "Batiment.h"
 #include "Tour.h"
 #include "Chateau.h"
+#include "BatimentBonusStat.h"
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -16,7 +17,7 @@
 #define SIZE 36
 
 
-Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
+Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() {
     this->setNombreTour(1);
     this->setNombreTourJoueur(1);
     selected=NULL;
@@ -31,7 +32,12 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
     vol = NULL;
     mag = NULL;
     pret = NULL;
-    Batiment* bat1;
+
+    jclient = joueurs[0];
+    jserveur = joueurs[1];
+
+    Batiment* bat;
+
     ifstream fichierPlateau(nomPlateau.c_str(), ios::in | ios::binary);
         if (fichierPlateau.fail()) { // Si echec de l'ouverture
                 cout << "Impossible d'ouvrir ou de créer le fichier" << endl;
@@ -53,6 +59,7 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
 
         while(!isFini(fichierPlateau)) {
             int size,x,y,joueur;
+            int jTaille = joueurs.size();
             catBatiments type;
             fichierPlateau.read((char*)&joueur, sizeof(int));
             fichierPlateau.read((char*)&type, sizeof(catBatiments));
@@ -71,18 +78,39 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
                 for (int j=0; j<size; j++) {
                     switch (type) {
                         case chateau : {
-                            bat1 = new Chateau(plateau[x+j][y+i],cases,NULL,"Chateau");
-                            v_Batiment.push_back(bat1);
+                            if(joueur < jTaille && joueur != -1) {
+                                bat = new Chateau(plateau[x+i][y+j],cases,joueurs[joueur],"Chateau");
+                            }
+                            else {
+                                bat = new Chateau(plateau[x+i][y+j],cases,"Chateau");
+                            }
                             break;
                         }
                         case tour : {
-                            Batiment* bat = new Tour(plateau[x+j][y+i],cases[0],NULL,"Tour");
-                            v_Batiment.push_back(bat);
+                            if(joueur < jTaille && joueur != -1) {
+                                bat = new Tour(plateau[x+i][y+j],cases[0],joueurs[joueur],"Tour");
+                            }
+                            else {
+                                bat = new Tour(plateau[x+i][y+j],cases[0],"Tour");
+                            }
+                            break;
+                        }
+                        case campement : {
+                            bat = new BatimentBonusStat(plateau[x+i][y+j],cases,"Campement",-1);
+                                    break;
+                            }
+                        case village : {
+                            bat = new BatimentBonusStat(plateau[x+i][y+j],cases,"Village",-2);
+                            break;
+                            }
+                        case magie : {
+                            bat = new BatimentBonusStat(plateau[x+i][y+j],cases,"Tour de Magie",-3);
                             break;
                         }
                         default :
                             break;
                     }
+                    v_Batiment.push_back(bat);
                 }
             }
         }
@@ -134,8 +162,6 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
     pop->setGeometry(SIZE*(m_largeur+1), 10, 80, 25);
     PtAction = new QProgressBar;
     PtAction->setGeometry(SIZE*(m_largeur+1), 40, 80, 25);
-
-    bat1->setJoueur(jclient);
 
     addWidget(pop);
 

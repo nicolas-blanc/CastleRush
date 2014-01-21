@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsView>
-#include "Plateau.h"
+#include "Jeux.h"
 #include <QMessageBox>
 
 namespace Ui {
@@ -25,6 +25,8 @@ public slots :
 private:
     Ui::MainWindow *ui;
     QMessageBox *popup2;
+
+    Jeux * m_jeux;
 };
 
 #endif // MAINWINDOW_H

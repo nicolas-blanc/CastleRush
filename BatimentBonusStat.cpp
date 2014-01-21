@@ -1,9 +1,17 @@
 #include "BatimentBonusStat.h"
 
-BatimentBonusStat::BatimentBonusStat(QGraphicsItem* parent, vector<Case*>& ensCase, Joueur* j, string nom, int stat) : Batiment(parent, ensCase, j, nom, -1, -1) {
+BatimentBonusStat::BatimentBonusStat(QGraphicsItem* parent, vector<Case*>& ensCase, string nom, int stat)
+: Batiment(parent, ensCase, nom, -1, -1) {
     setStat(stat);
     setBonus(0);
     setNbTours(0);
+    if(nom == "Tour de Magie") {
+        this->setPixmap(* new QPixmap("images/ChateauCentral.png"));
+    } else if (nom == "Campement") {
+        this->setPixmap(* new QPixmap("images/Village1.png"));
+    } else {
+        this->setPixmap(* new QPixmap("images/Village2.png"));
+    }
 }
 
 void BatimentBonusStat::modifBonus() {

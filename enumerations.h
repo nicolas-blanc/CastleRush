@@ -8,7 +8,7 @@
 #ifndef ENUMERATIONS_H
 #define	ENUMERATIONS_H
 
-enum catBatiments {chateau, tour,libre};
+enum catBatiments {chateau, tour, campement, village, magie, libre};
 enum catUnite {guerrier, chevalier, voleur, magicien, pretre, archer};
 enum flagsAppli {attente,deplacement,attaque,invoquer};
 enum bonusJoueur {population, action, vie, degat, portee, mouvement};

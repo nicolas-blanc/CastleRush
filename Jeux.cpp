@@ -10,7 +10,7 @@ Jeux::Jeux(int nbrJoueur, string nomPlateau)
         m_Joueur.push_back(new Joueur(i,i));
 
     setnbTour(0);
-    //m_Plateau = new Plateau(nomPlateau);
+    m_Plateau = new Plateau(m_Joueur);
 }
 
 Jeux::~Jeux()

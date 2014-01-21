@@ -10,8 +10,11 @@ Chateau::Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, Joueur* j, strin
         this->setPixmap(* new QPixmap("images/ChateauRouge.png"));
 }
 
-void Chateau::Invoquer(catUnite unite, Case * c)
-{
+Chateau::Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, string nom) : Batiment(parent, EnsCase, nom, 0, 20) {
+        this->setPixmap(* new QPixmap("images/ChateauCentrale.png"));
+}
+
+void Chateau::Invoquer(catUnite unite, Case * c){
     bool invoc_possible = adjacent(c);
     Unite* u;
 

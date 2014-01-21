@@ -9,6 +9,12 @@ Tour::Tour(QGraphicsItem* parent, Case* c, Joueur* j, string nom)
     setPixmap(* new QPixmap("images/Tour1"));
 }
 
+Tour::Tour(QGraphicsItem* parent, Case* c, string nom)
+: Batiment(parent, c, nom, 0, 10),m_attaque(5)
+{
+    setPixmap(* new QPixmap("images/Tour1"));
+}
+
 void Tour::attaquer(Case* c) {
     getAttaque().lancerAttaque(c);
 }

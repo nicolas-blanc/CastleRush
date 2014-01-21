@@ -15,8 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::handleJouer() {
     try{
-    Plateau* p=new Plateau();
-    QGraphicsView* view = new QGraphicsView(p);
+        m_jeux = new Jeux(2);
+    QGraphicsView* view = new QGraphicsView(m_jeux->getPlateau());
     this->hide();
     view->show();
     }
@@ -35,34 +35,96 @@ void MainWindow::handleGen() {
         cout << "Impossible d'ouvrir ou de créer le fichier" << endl;
         exit(0);
     }
-    int hauteur = 15;
+    int hauteur = 14;
     int largeur = 20;
     fichier.write((char*)&largeur, sizeof(int));
     fichier.write((char*)&hauteur, sizeof(int));
 
     catBatiments l = libre;
     catBatiments t = tour;
+    catBatiments m = magie;
+    catBatiments ca = campement;
+    catBatiments v = village;
     catBatiments c = chateau;
+
     int size = 1;
-    int joueur=-1;
+    int joueur = -1;
+    //Campement
+    int x = 5;
+    int y = 5;
+    fichier.write((char*)&joueur,sizeof(int));
+    fichier.write((char*)&ca,sizeof(catBatiments));
+    fichier.write((char*)&size,sizeof(int));
+    fichier.write((char*)&x,sizeof(int));
+    fichier.write((char*)&y,sizeof(int));
+    //village
+    x = 14;
+    y = 8;
+    fichier.write((char*)&joueur,sizeof(int));
+    fichier.write((char*)&v,sizeof(catBatiments));
+    fichier.write((char*)&size,sizeof(int));
+    fichier.write((char*)&x,sizeof(int));
+    fichier.write((char*)&y,sizeof(int));
 
-    for (int i=0; i<hauteur; i++) {
-        for (int j=0; j<largeur; j++) {
-            int x=i;
-            int y=j;
-            fichier.write((char*)&joueur,sizeof(int));
-            fichier.write((char*)&l,sizeof(catBatiments));
-            fichier.write((char*)&size,sizeof(int));
-            fichier.write((char*)&x,sizeof(int));
-            fichier.write((char*)&y,sizeof(int));
-        }
-    }
-
-    size=2;
-    int x=7,y=4;
     joueur = 0;
+    //tour 1
+    x = 5;
+    y = 2;
+    fichier.write((char*)&joueur,sizeof(int));
+    fichier.write((char*)&t,sizeof(catBatiments));
+    fichier.write((char*)&size,sizeof(int));
+    fichier.write((char*)&x,sizeof(int));
+    fichier.write((char*)&y,sizeof(int));
+    //tour 2
+    x = 2;
+    y = 5;
+    fichier.write((char*)&joueur,sizeof(int));
+    fichier.write((char*)&t,sizeof(catBatiments));
+    fichier.write((char*)&size,sizeof(int));
+    fichier.write((char*)&x,sizeof(int));
+    fichier.write((char*)&y,sizeof(int));
+
+    joueur = 1;
+    //tour 1
+    x = 17;
+    y = 8;
+    fichier.write((char*)&joueur,sizeof(int));
+    fichier.write((char*)&t,sizeof(catBatiments));
+    fichier.write((char*)&size,sizeof(int));
+    fichier.write((char*)&x,sizeof(int));
+    fichier.write((char*)&y,sizeof(int));
+    //tour 2
+    x = 14;
+    y = 11;
+    fichier.write((char*)&joueur,sizeof(int));
+    fichier.write((char*)&t,sizeof(catBatiments));
+    fichier.write((char*)&size,sizeof(int));
+    fichier.write((char*)&x,sizeof(int));
+    fichier.write((char*)&y,sizeof(int));
+
+    size = 2;
+    x = 17;
+    y = 11;
     fichier.write((char*)&joueur,sizeof(int));
     fichier.write((char*)&c,sizeof(catBatiments));
+    fichier.write((char*)&size,sizeof(int));
+    fichier.write((char*)&x,sizeof(int));
+    fichier.write((char*)&y,sizeof(int));
+
+    joueur = 0;
+    x = 1;
+    y = 1;
+    fichier.write((char*)&joueur,sizeof(int));
+    fichier.write((char*)&c,sizeof(catBatiments));
+    fichier.write((char*)&size,sizeof(int));
+    fichier.write((char*)&x,sizeof(int));
+    fichier.write((char*)&y,sizeof(int));
+
+    joueur = -1;
+    x = 9;
+    y = 6;
+    fichier.write((char*)&joueur,sizeof(int));
+    fichier.write((char*)&m,sizeof(catBatiments));
     fichier.write((char*)&size,sizeof(int));
     fichier.write((char*)&x,sizeof(int));
     fichier.write((char*)&y,sizeof(int));

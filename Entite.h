@@ -18,6 +18,7 @@ class Entite : public QGraphicsPixmapItem
 {
     public:
         Entite(QGraphicsItem * parent, vector<Case*>& ensCase, Joueur* j, string nom, int vieMin, int vieMax);
+        Entite(QGraphicsItem * parent, vector<Case*>& ensCase, string nom, int vieMin, int vieMax);
         virtual ~Entite();
         inline string Getnom() { return m_nom; }
         inline void Setnom(string val) { m_nom = val; }

@@ -16,7 +16,7 @@ class BatimentBonusStat : public Batiment
         int m_NbTours;
 
     public :
-        BatimentBonusStat(QGraphicsItem* parent, vector<Case*>& EnsCase, Joueur* j, string nom, int stat = 0);
+        BatimentBonusStat(QGraphicsItem* parent, vector<Case*>& ensCase, string nom, int stat);
         inline int getStat() { return m_Stat;}
         inline void setStat(int Stat) { m_Stat = Stat;}
         inline int getBonus() { return m_Bonus; }

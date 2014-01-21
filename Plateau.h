@@ -66,7 +66,7 @@ private slots :
     void intInvocPre();
     void intInvocVol();
 public :
-        Plateau(string nomFichier="plateau1.data");
+        Plateau(vector<Joueur*> joueurs, string nomPlateau = "plateau1.data");
         Plateau(const Plateau& ) : QGraphicsScene(){}
         ~Plateau();
 

@@ -12,11 +12,12 @@ using namespace std;
 class Jeux
 {
     public:
-        Jeux(int nbrJoueur, string nomPlateau);
+        Jeux(int nbrJoueur, string nomPlateau = "plateau1.data");
         virtual ~Jeux();
         inline int getnbTour() { return m_nbTour; }
         inline void setnbTour(int val) { m_nbTour = val; }
         inline int getnbJoueur() { return m_nbJoueur; }
+        inline Plateau* getPlateau() { return m_Plateau; }
 
         void afficherGraphiqueConsole();
         void partieConsole();
