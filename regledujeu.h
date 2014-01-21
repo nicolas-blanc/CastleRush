@@ -106,19 +106,19 @@ private slots:
 
 void agrandirDep()
 {
-    im.setImage("deplacergrand.png");
+    im.setImage("images/deplacergrand.png");
     im.show();
 }
 
 void agrandirInfoUnite()
 {
-    im.setImage("infoAdversairegrand.png");
+    im.setImage("images/infoAdversairegrand.png");
     im.show();
 }
 
 void agrandirMap()
 {
-    im.setImage("Plateaugrand.jpeg");
+    im.setImage("images/Plateaugrand.jpeg");
     im.show();
 }
 

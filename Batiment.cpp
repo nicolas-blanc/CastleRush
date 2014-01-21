@@ -1,4 +1,5 @@
 #include "Batiment.h"
+#include "Plateau.h"
 
 Batiment::Batiment(QGraphicsItem * parent, vector<Case*>& ensCase, Joueur* j, string nom, int vieMin, int vieMax)
 : Entite(parent, ensCase, j, nom, vieMin, vieMax)
@@ -17,3 +18,10 @@ Batiment::Batiment(QGraphicsItem *parent, Case *c, Joueur *j, string nom, int vi
     c->setOccupant(this,true);
 }
 
+void Batiment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    Entite::mouseReleaseEvent(event);
+    ((Case*)parentItem())->parent()->cacheInfoUnite();
+    ((Case*)parentItem())->parent()->afficheInfoUnite(this);
+    ((Case*)parentItem())->parent()->eteindreButtons();
+
+}

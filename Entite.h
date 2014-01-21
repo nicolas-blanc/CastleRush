@@ -37,6 +37,7 @@ class Entite : public QGraphicsPixmapItem
         PointDeVie m_vie;
         vector<Case*> m_position;
         Joueur* m_Joueur;
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 };
 
 #include "Attaque.h"

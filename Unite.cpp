@@ -11,7 +11,7 @@ Unite::Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned
     this->setCout(ct);
     this->setPopulation(pop);
     this->setAttaqueDeBase();
-    setFlags(QGraphicsItem::ItemIsSelectable);
+
 }
 
 void Unite::setAttaqueDeBase() {
@@ -20,14 +20,35 @@ void Unite::setAttaqueDeBase() {
 }
 
 void Unite::deplacer(Case* c) {
+    int mvt = this->mouvementDemande(c);
     if(deplacementPossible(c))
     {
-        vector<Case*> position;
-        position.push_back(c);
-        this->setPosition(position);
-        this->getJoueur()->setPtAction(this->getMouvement());
-        ((Plateau*)((Case*)this->parentItem())->parent())->setFlag(attente);
+        if(this->getJoueur()->getPtAction()-mvt >=0)
+        {
+            vector<Case*> position;
+            position.push_back(c);
+            this->setPosition(position);
+            this->getJoueur()->modifPtAction(mvt);
+            ((Plateau*)((Case*)this->parentItem())->parent())->setFlag(attente);
+        }
+        else
+        {
+            QMessageBox popup;
+            popup.setText("Vous n'avez pas assez de point d'action !");
+            popup.exec();
+        }
     }
+    else
+    {
+        QMessageBox popup;
+        popup.setText("Cette unité ne peut se déplacer autant !");
+        popup.exec();
+    }
+}
+
+int Unite::mouvementDemande(Case* c)
+{
+    return abs(c->getX()-this->getPosition()[0]->getX())+abs(c->getY()-this->getPosition()[0]->getY());
 }
 
 bool Unite::deplacementPossible(Case* c) {
@@ -63,17 +84,20 @@ int Unite::getMouvement() {
     return m_mouvement;
 }
 
-void Unite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsPixmapItem::mouseReleaseEvent(event);
-    ((Case*)parentItem())->parent()->setSelect(this);
-}
-
 Unite::~Unite() {
 
 }
 
 void Unite::initSort() {
 
+}
+
+void Unite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    Entite::mouseReleaseEvent(event);
+    ((Case*)parentItem())->parent()->allumerButtons();
+    ((Case*)parentItem())->parent()->cacheInfoUnite();
+    ((Case*)parentItem())->parent()->afficheInfoUnite(this);
+    ((Case*)parentItem())->parent()->setSelect(this);
 }
 
 //Penser � supprimer l'effet quand il arrive � 0 tours

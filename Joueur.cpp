@@ -6,11 +6,11 @@ Joueur::Joueur(int couleur, int numero) : m_listeBonusJoueur() {
 
     for (unsigned int i=0; i<6; i++)
         m_listeBonusJoueur.push_back(0);
-
-    setPtAction(0);
-    setPopulationMax(10);
+    setPtActionMax(20);
+    setPtAction(20);
+    setPopulationMax(100);
     setPopulation(0);
-    setPtActionMax(0);
+
 }
 
 Joueur::~Joueur() {

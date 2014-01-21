@@ -4,6 +4,8 @@
 #include <QtGui>
 #include <QBrush>
 #include <math.h>
+#include "Chateau.h"
+
 #define SIZE 36
 
 
@@ -18,12 +20,28 @@ Case::Case(int x, int y, QObject* parent) : QGraphicsRectItem(x*SIZE,y*SIZE,SIZE
 
 void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsRectItem::mouseReleaseEvent(event);
+    this->parent()->cacheInfoUnite();
+    this->parent()->InfoNull();
+    this->parent()->eteindreButtons();
     if (parent()->getFlag()==attente) {
         this->setSelected(true);
-        ((Plateau*)this->parent())->setSelect(this);
+        this->parent()->setSelect(this);
     }
     else if (parent()->getFlag()==deplacement) {
         ((Unite*)(parent()->getSelect()))->deplacer(this);
+        parent()->setFlag(attente);
+        this->parent()->update();
+    }
+    else if (parent()->getFlag()==attaque) {
+        ((Unite*)(parent()->getSelect()))->attaquer(this);
+        parent()->setFlag(attente);
+        this->parent()->update();
+    }
+    else if (parent()->getFlag()==invoquer){
+        Chateau* ch=((Chateau*)(parent()->getSelect()));
+        ch->Invoquer(parent()->getUnitInvoc(), this);
+        this->parent()->update();
+        this->parent()->deleteUniteInvocable();
         parent()->setFlag(attente);
     }
 }

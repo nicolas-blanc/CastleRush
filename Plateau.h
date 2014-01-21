@@ -1,6 +1,7 @@
 #ifndef PLATEAU_H
 #define PLATEAU_H
 
+#include <QLabel>
 #include <iostream>
 #include <string>
 #include <QGraphicsScene>
@@ -8,6 +9,7 @@
 #include "Case.h"
 #include "enumerations.h"
 #include "Entite.h"
+#include <QPushButton>
 
 using namespace std;
 
@@ -22,10 +24,41 @@ private :
         QProgressBar *pop;
         QProgressBar *PtAction;
         vector<Batiment *> v_Batiment;
+        Joueur *jclient;
+        Joueur *jserveur;
+        QLabel *nom;
+        QLabel *mvt;
+        QLabel *atk;
+        QLabel *por;
+        QLabel *vie;
+
+        QPushButton* att;
+        QPushButton* sorts;
+        QPushButton* dep;
+        QPushButton* capt;
+        QPushButton* annuler;
+        QPushButton* fint;
+        QPushButton* invoc;
+
+        QPushButton* guer;
+        QPushButton* arch;
+        QPushButton* chev;
+        QPushButton* vol;
+        QPushButton* mag;
+        QPushButton* pret;
+
+        int unitInvoc;
 
 private slots :
     void handleDep();
-
+    void handleAtt();
+    void handleInvoc();
+    void intInvocGue();
+    void intInvocArc();
+    void intInvocChe();
+    void intInvocMag();
+    void intInvocPre();
+    void intInvocVol();
 public :
         Plateau(string nomFichier="plateau1.data");
         Plateau(const Plateau& ) : QGraphicsScene(){}
@@ -40,6 +73,19 @@ public :
         inline QGraphicsItem* getSelect() {return selected;}
         inline void setFlag(flagsAppli f) {flag=f;}
         inline flagsAppli getFlag() {return flag;}
+        void update();
+        void afficheInfoUnite(Entite *u);
+        void cacheInfoUnite();
+        void InfoNull();
+        void allumerButtons();
+        void eteindreButtons();
+        void allumerButtonsBati();
+        void eteindreButtonsBati();
+
+        inline void setUnitInvoc(int i) { unitInvoc = i;cout<<"set : "<<unitInvoc<<flush;}
+        inline int getUnitInvoc() { cout<<"get : "<<unitInvoc<<endl<<flush; return unitInvoc;}
+        void uniteInvocable();
+        void deleteUniteInvocable();
 };
 
 #endif

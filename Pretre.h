@@ -6,7 +6,7 @@
  */
 
 #ifndef PRETRE_H
-#define	PRETRE_H
+#define        PRETRE_H
 
 #include "Unite.h"
 
@@ -17,5 +17,4 @@ class Pretre : public Unite
 };
 
 
-#endif	/* PRETRE_H */
-
+#endif        /* PRETRE_H */

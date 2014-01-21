@@ -51,7 +51,7 @@ RegleDuJeu::RegleDuJeu()
     MAP= new QWidget;
     QGridLayout *vbox29 = new QGridLayout;
     Map = new QPushButton("");
-    Map->setIcon(QIcon("Plateau.JPG"));
+    Map->setIcon(QIcon("images/Plateau.JPG"));
     Map->setIconSize(QSize(190,169));
     Map->setMaximumSize(QSize(190,169));
     Map->setToolTip("Agrandir");
@@ -153,7 +153,7 @@ RegleDuJeu::RegleDuJeu()
     vbox17->addWidget(CampEntrainement);
 
     CampEntrainementIMG = new QPushButton("");
-    CampEntrainementIMG->setIcon(QIcon("CampEntrainement.png"));
+    CampEntrainementIMG->setIcon(QIcon("images/CampEntrainement.png"));
     CampEntrainementIMG->setIconSize(QSize(76,68));
     CampEntrainementIMG->clicked(false);
     CampEntrainementIMG->setStyleSheet("QPushButton\
@@ -179,7 +179,7 @@ RegleDuJeu::RegleDuJeu()
     vbox18->addWidget(Village);
 
     VillageIMG = new QPushButton("");
-    VillageIMG->setIcon(QIcon("Village.png"));
+    VillageIMG->setIcon(QIcon("images/Village.png"));
     VillageIMG->setIconSize(QSize(80,69));
     VillageIMG->clicked(false);
     VillageIMG->setStyleSheet("QPushButton\
@@ -206,7 +206,7 @@ RegleDuJeu::RegleDuJeu()
     vbox19->addWidget(ChateauBonus);
 
     ChateauBonusIMG = new QPushButton("");
-    ChateauBonusIMG->setIcon(QIcon("ChateauBonus.png"));
+    ChateauBonusIMG->setIcon(QIcon("images/ChateauBonus.png"));
     ChateauBonusIMG->setIconSize(QSize(57,55));
     ChateauBonusIMG->clicked(false);
     ChateauBonusIMG->setStyleSheet("QPushButton\
@@ -244,7 +244,7 @@ RegleDuJeu::RegleDuJeu()
     vbox20->addWidget(Chateau);
 
     ChateauIMG = new QPushButton("");
-    ChateauIMG->setIcon(QIcon("Chateau.png"));
+    ChateauIMG->setIcon(QIcon("images/Chateau.png"));
     ChateauIMG->setIconSize(QSize(62,64));
     ChateauIMG->clicked(false);
     ChateauIMG->setStyleSheet("QPushButton\
@@ -271,7 +271,7 @@ RegleDuJeu::RegleDuJeu()
     vbox21->addWidget(Tour);
 
     TourIMG = new QPushButton("");
-    TourIMG->setIcon(QIcon("Tour.png"));
+    TourIMG->setIcon(QIcon("images/Tour.png"));
     TourIMG->setIconSize(QSize(50,50));
     TourIMG->clicked(false);
     TourIMG->setStyleSheet("QPushButton\
@@ -362,7 +362,7 @@ RegleDuJeu::RegleDuJeu()
     vbox11->addWidget(CommandeDeplacement);
 
     CommandeDeplacementIMG = new QPushButton("");
-    CommandeDeplacementIMG->setIcon(QIcon("deplacer.png"));
+    CommandeDeplacementIMG->setIcon(QIcon("images/deplacer.png"));
     CommandeDeplacementIMG->setIconSize(QSize(190,169));
     CommandeDeplacementIMG->setMaximumSize(QSize(190,169));
     CommandeDeplacementIMG->setToolTip("Agrandir");
@@ -390,7 +390,7 @@ RegleDuJeu::RegleDuJeu()
     vbox12->addWidget(CommandeInfoUniteAdverse);
 
     CommandeInfoUniteAdverseIMG = new QPushButton("");
-    CommandeInfoUniteAdverseIMG->setIcon(QIcon("infoAdversaire.png"));
+    CommandeInfoUniteAdverseIMG->setIcon(QIcon("images/infoAdversaire.png"));
     CommandeInfoUniteAdverseIMG->setIconSize(QSize(190,169));
     CommandeInfoUniteAdverseIMG->setMaximumSize(QSize(190,169));
     CommandeInfoUniteAdverseIMG->setToolTip("Agrandir");
@@ -459,7 +459,7 @@ RegleDuJeu::RegleDuJeu()
     vbox23->addWidget(Archer);
 
     ArcherIMG = new QPushButton("");
-    ArcherIMG->setIcon(QIcon("Archer.png"));
+    ArcherIMG->setIcon(QIcon("images/Archer.png"));
     ArcherIMG->setIconSize(QSize(100,130));
     ArcherIMG->clicked(false);
     ArcherIMG->setStyleSheet("QPushButton\
@@ -490,7 +490,7 @@ RegleDuJeu::RegleDuJeu()
     vbox24->addWidget(Chevalier);
 
     ChevalierIMG = new QPushButton("");
-    ChevalierIMG->setIcon(QIcon("Chevalier.png"));
+    ChevalierIMG->setIcon(QIcon("images/Chevalier.png"));
     ChevalierIMG->setIconSize(QSize(100,130));
     ChevalierIMG->clicked(false);
     ChevalierIMG->setStyleSheet("QPushButton\
@@ -520,7 +520,7 @@ RegleDuJeu::RegleDuJeu()
     vbox25->addWidget(Guerrier);
 
     GuerrierIMG = new QPushButton("");
-    GuerrierIMG->setIcon(QIcon("Guerrier.png"));
+    GuerrierIMG->setIcon(QIcon("images/Guerrier.png"));
     GuerrierIMG->setIconSize(QSize(100,130));
     GuerrierIMG->clicked(false);
     GuerrierIMG->setStyleSheet("QPushButton\
@@ -550,7 +550,7 @@ RegleDuJeu::RegleDuJeu()
     vbox26->addWidget(Voleur);
 
     VoleurIMG = new QPushButton("");
-    VoleurIMG->setIcon(QIcon("Voleur.png"));
+    VoleurIMG->setIcon(QIcon("images/Voleur.png"));
     VoleurIMG->setIconSize(QSize(100,130));
     VoleurIMG->clicked(false);
     VoleurIMG->setStyleSheet("QPushButton\
@@ -580,7 +580,7 @@ RegleDuJeu::RegleDuJeu()
     vbox27->addWidget(Pretre);
 
     PretreIMG = new QPushButton("");
-    PretreIMG->setIcon(QIcon("Pretre.png"));
+    PretreIMG->setIcon(QIcon("images/Pretre.png"));
     PretreIMG->setIconSize(QSize(100,130));
     PretreIMG->clicked(false);
     PretreIMG->setStyleSheet("QPushButton\
@@ -610,7 +610,7 @@ RegleDuJeu::RegleDuJeu()
     vbox28->addWidget(Magicien);
 
     MagicienIMG = new QPushButton("");
-    MagicienIMG->setIcon(QIcon("Magicien.png"));
+    MagicienIMG->setIcon(QIcon("images/Magicien.png"));
     MagicienIMG->setIconSize(QSize(100,130));
     MagicienIMG->clicked(false);
     MagicienIMG->setStyleSheet("QPushButton\

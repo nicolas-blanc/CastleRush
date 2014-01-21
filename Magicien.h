@@ -6,7 +6,7 @@
  */
 
 #ifndef MAGICIEN_H
-#define	MAGICIEN_H
+#define        MAGICIEN_H
 
 #include "Unite.h"
 
@@ -17,5 +17,4 @@ class Magicien : public Unite
 };
 
 
-#endif	/* MAGICIEN_H */
-
+#endif        /* MAGICIEN_H */

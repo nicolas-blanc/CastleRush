@@ -1,5 +1,8 @@
 #include "Tour.h"
 #include <math.h>
+#include "Case.h"
+#include "Plateau.h"
+
 Tour::Tour(QGraphicsItem* parent, Case* c, Joueur* j, string nom)
 : Batiment(parent, c, j, nom, 0, 10),m_attaque(5)
 {
@@ -12,7 +15,7 @@ void Tour::attaquer(Case* c) {
 
 
 void Tour::attaqueAuto()
-{/*
+{
     Entite* danger_entite;
     float distance;
     float distance_danger;
@@ -22,14 +25,14 @@ void Tour::attaqueAuto()
     {
         for(int y = 0; y<ma_position[0]->getY()+m_attaque.getPortee(); y++)
         {
-            Case caseoccupee = Case(x,y);
-            if(caseoccupee.isOccupee())
+            Case *caseoccupee = new Case(x,y,((Case*)parentItem())->parent());
+            if(caseoccupee->isOccupee())
             {
                 entite_presentent.push_back(ma_position[0]->getOccupant());
             }
         }
     }
-    
+
     distance_danger = sqrt(((getJoueur()->getBatiment("Chateau")->getPosition()[0]->getX()
                 -entite_presentent[0]->getPosition()[0]->getX())^2)+
                 ((getJoueur()->getBatiment("Chateau")->getPosition()[0]->getY()
@@ -47,6 +50,6 @@ void Tour::attaqueAuto()
             danger_entite = entite_presentent[0];
         }
     }
-    
-    attaquer(danger_entite->getPosition()[0]);*/
+
+    attaquer(danger_entite->getPosition()[0]);
 }
