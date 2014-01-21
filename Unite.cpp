@@ -6,7 +6,7 @@
 #include <math.h>
 
 Unite::Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned int pop, int vieMax, int vieMin, Case* c, Joueur* j, string nom)
-: Entite(parent, *new vector<Case*>(1,c),j,nom,vieMin,vieMax) {
+: Entite(parent, *new vector<Case*>(1,c),j,nom,vieMin,vieMax), v_dep_face(), v_dep_gauche(), v_dep_droite(), v_dep_dos() {
     this->setMouvement(mvt);
     this->setCout(ct);
     this->setPopulation(pop);
@@ -94,9 +94,15 @@ void Unite::initSort() {
 
 void Unite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     Entite::mouseReleaseEvent(event);
+    if(((Case*)parentItem())->parent()->getJoueurTour() == this->getJoueur())
     ((Case*)parentItem())->parent()->allumerButtons();
+    else
+    ((Case*)parentItem())->parent()->eteindreButtons();
     ((Case*)parentItem())->parent()->cacheInfoUnite();
     ((Case*)parentItem())->parent()->afficheInfoUnite(this);
+    ((Case*)parentItem())->parent()->setSelect(this);
+    ((Case*)parentItem())->parent()->deleteUniteInvocable();
+    ((Case*)parentItem())->parent()->InvocNull();
 }
 
 //Penser � supprimer l'effet quand il arrive � 0 tours

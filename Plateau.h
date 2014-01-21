@@ -49,7 +49,14 @@ private :
 
         int unitInvoc;
 
+        vector<Joueur*> j;
+        Joueur* jtour;
+
+        int NombreTour;
+        int NombreTourJoueur;
+
 private slots :
+    void gestionTour();
     void handleDep();
     void handleAtt();
     void intInvocGue();
@@ -87,6 +94,16 @@ public :
         inline int getUnitInvoc() { cout<<"get : "<<unitInvoc<<endl<<flush; return unitInvoc;}
         void uniteInvocable();
         void deleteUniteInvocable();
+        Joueur * getJoueurTour(){return jtour;}
+
+
+        void setNombreTour(int tour){NombreTour = tour;}
+        int getNombreTour(){return NombreTour;}
+
+        void setNombreTourJoueur(int tour){NombreTourJoueur = tour;}
+        int getNombreTourJoueur(){return NombreTourJoueur;}
+
+        void InvocNull();
 };
 
 #endif

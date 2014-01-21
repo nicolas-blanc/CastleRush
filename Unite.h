@@ -41,6 +41,16 @@ class Unite : public Entite {
         void enleverEffet(Effet* effet);
         int mouvementDemande(Case* c);
 
+        QPixmap getImageFace(int num) { return v_dep_face[num]; }
+        QPixmap getImageGauche(int num) { return v_dep_gauche[num]; }
+        QPixmap getImageDroite(int num) { return v_dep_droite[num]; }
+        QPixmap getImageDos(int num) { return v_dep_dos[num]; }
+
+        void setImageFace(QPixmap im) { v_dep_face.push_back(im); }
+        void setImageGauche(QPixmap im) { v_dep_gauche.push_back(im); }
+        void setImageDroite(QPixmap im) { v_dep_droite.push_back(im); }
+        void setImageDos(QPixmap im) { v_dep_dos.push_back(im); }
+
     protected:
         string m_nom;
         unsigned int m_mouvement;
@@ -49,6 +59,11 @@ class Unite : public Entite {
         AttaqueDeBase* m_AttaqueParDefaut;
         map <string,Sort*> v_sort;
         vector <Effet*> v_effet;
+
+        vector <QPixmap> v_dep_face;
+         vector <QPixmap> v_dep_gauche;
+         vector <QPixmap> v_dep_droite;
+         vector <QPixmap> v_dep_dos;
 
     private:
         //inline int getDepX(Case c) { int dep = c.getX() - Entite::getPosition()[0].getX(); return abs(dep); };

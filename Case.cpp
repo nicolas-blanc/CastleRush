@@ -24,6 +24,8 @@ void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     this->parent()->cacheInfoUnite();
     this->parent()->InfoNull();
     this->parent()->eteindreButtons();
+    this->parent()->deleteUniteInvocable();
+    this->parent()->InvocNull();
     if (parent()->getFlag()==attente) {
         this->setSelected(true);
         this->parent()->setSelect(this);
