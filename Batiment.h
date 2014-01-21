@@ -1,6 +1,8 @@
 #ifndef BATIMENT_H
 #define BATIMENT_H
 
+
+
 #include <vector>
 
 #include "Entite.h"

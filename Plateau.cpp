@@ -57,9 +57,10 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
             }
         }
 
+        int jTaille = joueurs.size();
+
         while(!isFini(fichierPlateau)) {
             int size,x,y,joueur;
-            int jTaille = joueurs.size();
             catBatiments type;
             fichierPlateau.read((char*)&joueur, sizeof(int));
             fichierPlateau.read((char*)&type, sizeof(catBatiments));

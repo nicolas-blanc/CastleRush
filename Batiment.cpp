@@ -1,6 +1,8 @@
 #include "Batiment.h"
 #include "Plateau.h"
 
+
+
 Batiment::Batiment(QGraphicsItem * parent, vector<Case*>& ensCase, Joueur* j, string nom, int vieMin, int vieMax)
 : Entite(parent, ensCase, j, nom, vieMin, vieMax)
 {
