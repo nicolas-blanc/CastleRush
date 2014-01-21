@@ -17,6 +17,7 @@
 
 
 Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
+
     selected=NULL;
     flag=attente;
     nom = NULL;
@@ -119,12 +120,12 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
     bat1->setJoueur(jclient);
 
     pop = new QProgressBar;
-    pop->setGeometry(550, 10, 80, 25);
+    pop->setGeometry(SIZE*(m_largeur+1), 10, 80, 25);
     pop->setMaximum(jclient->getPopulationMax());
     pop->setAlignment(Qt::AlignCenter);
 
     PtAction = new QProgressBar;
-    PtAction->setGeometry(550, 40, 80, 25);
+    PtAction->setGeometry(SIZE*(m_largeur+1), 40, 80, 25);
     PtAction->setMaximum(jclient->getPtActionMax());
     PtAction->setAlignment(Qt::AlignCenter);
 
@@ -196,10 +197,10 @@ PtAction->setFormat("%v/%m");
 void Plateau::afficheInfoUnite(Entite *u)
 {
     nom = new QLabel("Nom : " + *new QString(u->Getnom().c_str()));
-    nom->setGeometry(550, 70, 105, 25);
+    nom->setGeometry(SIZE*(m_largeur+1), 70, 105, 25);
     addWidget(nom);
     vie = new QLabel("Point de Vie : " + QString::number(u->getVie()));
-    vie->setGeometry(550, 100, 105, 25);
+    vie->setGeometry(SIZE*(m_largeur+1), 100, 105, 25);
     addWidget(vie);
     if(typeid(*u) == typeid(Chevalier)  ||
        typeid(*u) == typeid(Pretre)     ||
@@ -209,10 +210,10 @@ void Plateau::afficheInfoUnite(Entite *u)
        typeid(*u) == typeid(Archer))
     {
     mvt = new QLabel("Mouvement : " + QString::number(((Unite*)u)->getMouvement()));
-    mvt->setGeometry(550, 130, 105, 25);
+    mvt->setGeometry(SIZE*(m_largeur+1), 130, 105, 25);
     addWidget(mvt);
     atk = new QLabel("Attaque : " + QString::number(((Unite*)u)->getMouvement()));
-    atk->setGeometry(550, 160, 105, 25);
+    atk->setGeometry(SIZE*(m_largeur+1), 160, 105, 25);
     addWidget(atk);
     }
 }
@@ -288,42 +289,42 @@ void Plateau::uniteInvocable()
     guer = new QPushButton;
     guer->setToolTip("guerrier");
     guer->setIcon(QIcon("images/Guerrier1.png"));
-    guer->setGeometry(550,190,50,50);
+    guer->setGeometry(SIZE*(m_largeur+1),190,50,50);
     addWidget(guer);
     connect(guer, SIGNAL(released()), this, SLOT(intInvocGue()));
 
     arch = new QPushButton;
     arch->setToolTip("archer");
     arch->setIcon(QIcon("images/Archer1.png"));
-    arch->setGeometry(600,190,50,50);
+    arch->setGeometry(SIZE*(m_largeur+1)+50,190,50,50);
     addWidget(arch);
     connect(arch, SIGNAL(released()), this, SLOT(intInvocArc()));
 
     chev = new QPushButton;
     chev->setToolTip("chevalier");
     chev->setIcon(QIcon("images/Chevalier1.png"));
-    chev->setGeometry(550,240,50,50);
+    chev->setGeometry(SIZE*(m_largeur+1),240,50,50);
     addWidget(chev);
     connect(chev, SIGNAL(released()), this, SLOT(intInvocChe()));
 
     mag = new QPushButton;
     mag->setToolTip("magicien");
     mag->setIcon(QIcon("images/Magicien1.png"));
-    mag->setGeometry(600,240,50,50);
+    mag->setGeometry(SIZE*(m_largeur+1)+50,240,50,50);
     addWidget(mag);
     connect(mag, SIGNAL(released()), this, SLOT(intInvocMag()));
 
     pret = new QPushButton;
     pret->setToolTip("pretre");
     pret->setIcon(QIcon("images/Pretre1.png"));
-    pret->setGeometry(550,290,50,50);
+    pret->setGeometry(SIZE*(m_largeur+1),290,50,50);
     addWidget(pret);
     connect(pret, SIGNAL(released()), this, SLOT(intInvocPre()));
 
     vol = new QPushButton;
     vol->setToolTip("voleur");
     vol->setIcon(QIcon("images/Voleur1.png"));
-    vol->setGeometry(600,290,50,50);
+    vol->setGeometry(SIZE*(m_largeur+1)+50,290,50,50);
     addWidget(vol);
     connect(vol, SIGNAL(released()), this, SLOT(intInvocVol()));
 }
