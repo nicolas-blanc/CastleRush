@@ -83,7 +83,7 @@ public :
         void afficheInfoUnite(Entite *u);
         void cacheInfoUnite();
         void InfoNull();
-        void setBoutons(typeElement type);
+        void setBoutons(typeElement type, int numJoueur=0);
         void setBoutonsUnite(bool active);
         void highlight(Case* c, int portee=0);
         bool porteePossible(Case* c1, Case* c2, int portee);

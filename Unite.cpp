@@ -94,8 +94,8 @@ void Unite::initSort() {
 
 void Unite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     Entite::mouseReleaseEvent(event);
-    ((Case*)parentItem())->parent()->setBoutons(unite);
-    ((Case*)parentItem())->parent()->setBoutonsUnite(((Case*)parentItem())->parent()->getJoueurTour() == this->getJoueur());
+    ((Case*)parentItem())->parent()->setBoutons(unite, getJoueur()->getNumero());
+
 }
 
 //Penser � supprimer l'effet quand il arrive � 0 tours

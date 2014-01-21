@@ -52,5 +52,6 @@ void Entite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         ((Case*)parentItem())->parent()->highlight(((Case*)parentItem()));
     }
 
+    ((Case*)parentItem())->parent()->afficheInfoUnite(this);
     ((Case*)parentItem())->parent()->setSelect(this);
 }

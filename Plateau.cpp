@@ -213,7 +213,7 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
     //--------------------------------
 
     Unite* vol=new Voleur(plateau[7][8],plateau[7][8],jclient);
-    Unite* pret=new Pretre(plateau[6][8],plateau[6][8],jclient);
+    Unite* pret=new Pretre(plateau[6][8],plateau[6][8],jserveur);
     //-----------------------------
     //-----------------------------
 
@@ -273,12 +273,12 @@ void Plateau::update()
 
 void Plateau::afficheInfoUnite(Entite *u)
 {
-    nom = new QLabel("Nom : " + *new QString(u->Getnom().c_str()));
-    nom->setGeometry(SIZE*(m_largeur+1), 70, 105, 25);
-    addWidget(nom);
-    vie = new QLabel("Point de Vie : " + QString::number(u->getVie()));
-    vie->setGeometry(SIZE*(m_largeur+1), 100, 105, 25);
-    addWidget(vie);
+    mvt->hide();
+    atk->hide();
+    nom->show();
+    nom->setText("Nom : " + QString(u->Getnom().c_str()));
+    vie->show();
+    vie->setText("Point de Vie : " + QString::number(u->getVie()));
     if(typeid(*u) == typeid(Chevalier)  ||
        typeid(*u) == typeid(Pretre)     ||
        typeid(*u) == typeid(Magicien)   ||
@@ -286,17 +286,11 @@ void Plateau::afficheInfoUnite(Entite *u)
        typeid(*u) == typeid(Voleur)     ||
        typeid(*u) == typeid(Archer))
     {
+        mvt->show();
         mvt->setText("Mouvement : " + QString::number(((Unite*)u)->getMouvement()));
+        atk->show();
         atk->setText("Attaque : " + QString::number(((Unite*)u)->getMouvement()));
     }
-}
-
-void Plateau::InfoNull()
-{
-    nom = NULL;
-    mvt = NULL;
-    atk = NULL;
-    vie = NULL;
 }
 
 void Plateau::handleAtt(){
@@ -309,7 +303,7 @@ void Plateau::handleAtt(){
     }
 }
 
-void Plateau::setBoutons(typeElement type) {
+void Plateau::setBoutons(typeElement type, int numJoueur) {
     switch (type) {
     case (carre) : {
         att->hide();
@@ -332,34 +326,40 @@ void Plateau::setBoutons(typeElement type) {
         att->hide();
         dep->hide();
         sorts->hide();
-        nom->show();
-        vie->show();
-        mvt->hide();
-        atk->hide();
-        guer->show();
-        mag->show();
-        vol->show();
-        pret->show();
-        chev->show();
-        arch->show();
-        capt->hide();
-        break;
-    }
-    case (unite) : {
-        att->show();
-        dep->show();
-        sorts->show();
-        nom->show();
-        vie->show();
-        mvt->show();
-        atk->show();
         guer->hide();
         mag->hide();
         vol->hide();
         pret->hide();
         chev->hide();
         arch->hide();
-        capt->show();
+        capt->hide();
+        break;
+    }
+    case (batChateau) : {
+        att->hide();
+        dep->hide();
+        sorts->hide();
+        capt->hide();
+        guer->show();
+        mag->show();
+        vol->show();
+        pret->show();
+        chev->show();
+        arch->show();
+        break;
+    }
+    case (unite) : {
+        guer->hide();
+        mag->hide();
+        vol->hide();
+        pret->hide();
+        chev->hide();
+        arch->hide();
+        att->setEnabled(numJoueur==this->getJoueurTour()->getNumero());
+        dep->setEnabled(numJoueur==this->getJoueurTour()->getNumero());
+        sorts->setEnabled(numJoueur==this->getJoueurTour()->getNumero());
+        capt->setEnabled(numJoueur==this->getJoueurTour()->getNumero());
+        setBoutonsUnite(getJoueurTour()->getNumero() == numJoueur);
         break;
     }
     }
@@ -367,7 +367,18 @@ void Plateau::setBoutons(typeElement type) {
 
 
 void Plateau::setBoutonsUnite(bool active) {
-
+    if (active) {
+        att->show();
+        dep->show();
+        sorts->show();
+        capt->show();
+    }
+    else {
+        att->hide();
+        dep->hide();
+        sorts->hide();
+        capt->hide();
+    }
 }
 
 void Plateau::intInvocGue()
@@ -404,7 +415,7 @@ void Plateau::intInvocVol()
 void Plateau::highlight(Case* c, int portee) {
     QColor color = Qt::red;
     if (portee==0) {
-        color=Qt::white;
+        color=Qt::transparent;
         portee=m_largeur*m_hauteur;
         c->setBrush(*new QBrush(color));
     }
@@ -412,27 +423,22 @@ void Plateau::highlight(Case* c, int portee) {
     for (int i=0; i<=portee; i++) {
         for (int j=0; j<=portee-i; j++) {
             if (i+c->getX()<m_largeur&&j+c->getY()<m_hauteur) {
-                cout<<"x1 = "<<c->getX()<<flush;
-                cout<<", y1 = "<<c->getY()<<endl<<flush;
-                cout<<"x2 = "<<plateau[i+c->getX()][j+c->getY()]->getX()<<flush;
-                cout<<", y2 = "<<plateau[i+c->getX()][j+c->getY()]->getY()<<endl<<flush;
-                cout<<"portee = "<<portee<<endl<<endl<<flush;
-                if (color==Qt::white||porteePossible(c, plateau[i+c->getX()][j+c->getY()],portee)) {
+                if (color==Qt::transparent||porteePossible(c, plateau[i+c->getX()][j+c->getY()],portee)) {
                     plateau[i+c->getX()][j+c->getY()]->setBrush(*new QBrush(color));
                 }
             }
             if (c->getX()-i>=0&&c->getY()-j>=0) {
-                if (color==Qt::white||porteePossible(c, plateau[c->getX()-i][c->getY()-j],portee)) {
+                if (color==Qt::transparent||porteePossible(c, plateau[c->getX()-i][c->getY()-j],portee)) {
                     plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
                 }
             }
             if (c->getX()+i<m_largeur&&c->getY()-j>=0) {
-                if (color==Qt::white||porteePossible(c, plateau[c->getX()+i][c->getY()-j],portee)) {
+                if (color==Qt::transparent||porteePossible(c, plateau[c->getX()+i][c->getY()-j],portee)) {
                     plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
                 }
             }
             if (c->getX()-i>=0&&c->getY()+j<m_hauteur) {
-                if (color==Qt::white||porteePossible(c, plateau[c->getX()-i][c->getY()+j],portee)) {
+                if (color==Qt::transparent||porteePossible(c, plateau[c->getX()-i][c->getY()+j],portee)) {
                     plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
                 }
             }

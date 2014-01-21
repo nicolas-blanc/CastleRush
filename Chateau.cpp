@@ -1,5 +1,4 @@
 #include "Chateau.h"
-#include "enumerations.h"
 #include <math.h>
 #include <QPixmap>
 #include "Plateau.h"
@@ -11,25 +10,25 @@ Chateau::Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, Joueur* j, strin
         this->setPixmap(* new QPixmap("images/ChateauRouge.png"));
 }
 
-void Chateau::Invoquer(int unite, Case * c)
+void Chateau::Invoquer(catUnite unite, Case * c)
 {
     bool invoc_possible = adjacent(c);
     Unite* u;
 
     switch(unite) {
-        case 1: {
+        case guerrier: {
             u = new Guerrier(this->parentItem(), c, this->getJoueur());
             break;}
-        case 2: {
+        case archer: {
             u = new Archer(this->parentItem(), c, getJoueur());
             break; }
-        case 3: {
+        case chevalier: {
             u = new Chevalier(this->parentItem(), c, getJoueur());
             break;}
-        case 4:{
+        case magicien:{
             u = new Magicien(this->parentItem(), c, getJoueur());
             break;}
-        case 5:{
+        case pretre:{
             u = new Pretre(this->parentItem(), c, getJoueur());
             break;}
         default:{

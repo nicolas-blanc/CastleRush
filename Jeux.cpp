@@ -44,7 +44,17 @@ void Jeux::partieConsole() {
                 cout << "Donnez la coordonn2e Y autour de votre Chateau" << endl;
                 cin >> y;
                 if (unit > 0 && unit < 7) {
-                    ((Chateau*)m_Joueur[(m_nbTour%m_nbJoueur)]->getBatiment("Chateau"))->Invoquer(unit,m_Plateau->getCase(x,y)); // a rajouter a plateau => Case * getCase(int x, int y);
+                    catUnite u;
+                    switch (unit) {
+                    case 1 : u=guerrier;break;
+                    case 2 : u=chevalier;break;
+                    case 3 : u=archer;break;
+                    case 4 : u=voleur;break;
+                    case 5 : u=pretre;break;
+                    case 6 : u=magicien;break;
+                    }
+
+                    ((Chateau*)m_Joueur[(m_nbTour%m_nbJoueur)]->getBatiment("Chateau"))->Invoquer(u,m_Plateau->getCase(x,y)); // a rajouter a plateau => Case * getCase(int x, int y);
                     afficherGraphiqueConsole();
                 }
                 break;}

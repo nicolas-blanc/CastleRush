@@ -20,7 +20,6 @@ Batiment::Batiment(QGraphicsItem *parent, Case *c, Joueur *j, string nom, int vi
 
 void Batiment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     Entite::mouseReleaseEvent(event);
-    ((Case*)parentItem())->parent()->afficheInfoUnite(this);
     ((Case*)parentItem())->parent()->setBoutons(batiment);
 
 }

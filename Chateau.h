@@ -16,12 +16,13 @@
 #include "Magicien.h"
 #include "Pretre.h"
 #include "Voleur.h"
+#include "enumerations.h"
 
 class Chateau : public Batiment
 {
     public:
     Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, Joueur* j, string nom);
-    void Invoquer(int unite, Case* c);
+    void Invoquer(catUnite unite, Case* c);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
 };
 
