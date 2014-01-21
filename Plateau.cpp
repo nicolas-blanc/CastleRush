@@ -139,18 +139,8 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
     //--------------------------------
     //--------------------------------
 
-    Unite* ch=new Chevalier(plateau[8][8],plateau[8][8],jclient);
     Unite* vol=new Voleur(plateau[7][8],plateau[7][8],jclient);
     Unite* pret=new Pretre(plateau[6][8],plateau[6][8],jclient);
-    Unite* mage=new Magicien(plateau[5][8],plateau[5][8],jclient);
-    Unite* guer=new Guerrier(plateau[4][8],plateau[4][8],jclient);
-
-
-    Unite* ch2=new Chevalier(plateau[8][7],plateau[8][7],jserveur);
-    Unite* vol2=new Voleur(plateau[7][7],plateau[7][7],jserveur);
-    Unite* pret2=new Pretre(plateau[6][7],plateau[6][7],jserveur);
-    Unite* mage2=new Magicien(plateau[5][7],plateau[5][7],jserveur);
-    Unite* guer2=new Guerrier(plateau[4][7],plateau[4][7],jserveur);
 
 
     Batiment* t=new Tour(plateau[1][1],plateau[1][1],NULL,"Tour");
@@ -163,6 +153,8 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
 
     //-----------------------------
     //-----------------------------
+
+    cout<<"result : "<<porteePossible(plateau[6][8],plateau[10][8],5)<<endl<<flush;
 
 }
 
@@ -357,22 +349,27 @@ void Plateau::highlight(Case* c, int portee) {
     for (int i=0; i<=portee; i++) {
         for (int j=0; j<=portee-i; j++) {
             if (i+c->getX()<m_largeur&&j+c->getY()<m_hauteur) {
-                if (color==Qt::white||porteePossible(c, plateau[i+c->getX()][j+c->getY()])) {
+                cout<<"x1 = "<<c->getX()<<flush;
+                cout<<", y1 = "<<c->getY()<<endl<<flush;
+                cout<<"x2 = "<<plateau[i+c->getX()][j+c->getY()]->getX()<<flush;
+                cout<<", y2 = "<<plateau[i+c->getX()][j+c->getY()]->getY()<<endl<<flush;
+                cout<<"portee = "<<portee<<endl<<endl<<flush;
+                if (color==Qt::white||porteePossible(c, plateau[i+c->getX()][j+c->getY()],portee)) {
                     plateau[i+c->getX()][j+c->getY()]->setBrush(*new QBrush(color));
                 }
             }
             if (c->getX()-i>=0&&c->getY()-j>=0) {
-                if (color==Qt::white||porteePossible(c, plateau[c->getX()-i][c->getY()-j])) {
+                if (color==Qt::white||porteePossible(c, plateau[c->getX()-i][c->getY()-j],portee)) {
                     plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
                 }
             }
             if (c->getX()+i<m_largeur&&c->getY()-j>=0) {
-                if (color==Qt::white||porteePossible(c, plateau[c->getX()+i][c->getY()-j])) {
+                if (color==Qt::white||porteePossible(c, plateau[c->getX()+i][c->getY()-j],portee)) {
                     plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
                 }
             }
             if (c->getX()-i>=0&&c->getY()+j<m_hauteur) {
-                if (color==Qt::white||porteePossible(c, plateau[c->getX()-i][c->getY()+j])) {
+                if (color==Qt::white||porteePossible(c, plateau[c->getX()-i][c->getY()+j],portee)) {
                     plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
                 }
             }
@@ -380,54 +377,29 @@ void Plateau::highlight(Case* c, int portee) {
     }
 }
 
-bool Plateau::porteePossible(Case *c1, Case *c2) {
-    vector<Case*> occupees;
-    vector<Case*> libres;
-    cout<<"c2.x = "<<c2->getX()<<", ";
-    cout<<"c2.y = "<<c2->getY()<<endl;
-    int minX = (c1->getX()<c2->getX()?c1->getX():c2->getX());//7
-    int maxX = (c1->getX()>c2->getX()?c1->getX():c2->getX());//8
-    int minY = (c1->getY()<c2->getY()?c1->getY():c2->getY());//8
-    int maxY = (c1->getY()>c2->getY()?c1->getY():c2->getY());//8
-    for (int i=minX; i<maxX; i++) {
-        for (int j=minY; j<maxY; j++) {
-            if (plateau[i][j]->isOccupee()&&(i!=minX||j!=minY)) {
-                occupees.push_back(plateau[i][j]);
-                    cout<<"obstacle x = "<<i<<", "<<flush;
-                    cout<<"obstacle y = "<<j<<endl<<flush;
-            }
-            else
-                libres.push_back(plateau[i][j]);
-        }
+bool Plateau::porteePossible(Case *c1, Case *c2, int portee) {
+    if (c1==NULL)
+        return false;
+    else if ((c1->getX()==c2->getX())&&(c1->getY()==c2->getY()))
+        return true;
+    else if (portee==0) {
+        return false;
     }
 
-    bool possible=(occupees.size()==0);
-    for (unsigned int i=0; i<occupees.size()&&!possible; i++) {
-        if (occupees[i]->getX()>c2->getX()) {
-            if (occupees[i]->getY()>c2->getY()) {
-                if (((occupees[i]->getY()-c2->getY())-(occupees[i]->getX()-c2->getX())>0))
-                    possible=true;
-            }
-            else
-                if (((occupees[i]->getY()-c2->getY())+(occupees[i]->getX()-c2->getX())<0))
-                    possible=true;
-                else {
-                    cout<<"x = "<<c2->getX()<<", "<<flush;
-                    cout<<"y = "<<c2->getY()<<endl<<flush;
-                }
-        }
-        if (occupees[i]->getX()<c2->getX()) {
-            if (occupees[i]->getY()>c2->getY()) {
-                if (((occupees[i]->getY()-c2->getY())+(occupees[i]->getX()-c2->getX())>0))
-                    possible=true;
-            }
-            else
-                if (((occupees[i]->getY()-c2->getY())-(occupees[i]->getX()-c2->getX())<0))
-                    possible=true;
-        }
-    }
+    Case* gauche=NULL;
+    Case* droite=NULL;
+    Case* avant=NULL;
+    Case* arriere=NULL;
 
-    cout<<"-----------------"<<endl;
+    if (c1->getX()<=c2->getX()&&!plateau[c1->getX()+1][c1->getY()]->isOccupee())
+        droite=plateau[c1->getX()+1][c1->getY()];
+    if (c1->getX()>=c2->getX()&&!plateau[c1->getX()-1][c1->getY()]->isOccupee())
+        gauche=plateau[c1->getX()-1][c1->getY()];
+    if (c1->getY()<=c2->getY()&&!plateau[c1->getX()][c1->getY()+1]->isOccupee())
+        avant=plateau[c1->getX()][c1->getY()+1];
+    if (c1->getY()>=c2->getY()&&!plateau[c1->getX()][c1->getY()-1]->isOccupee())
+        arriere=plateau[c1->getX()][c1->getY()-1];
 
-    return possible;
+
+    return porteePossible(droite,c2,portee-1)||porteePossible(gauche,c2,portee-1)||porteePossible(avant,c2,portee-1)||porteePossible(arriere,c2,portee-1);
 }
