@@ -58,11 +58,13 @@ void Chateau::Invoquer(int unite, Case * c)
             cout << "erreur Pt"<<flush;
             //throw ManquePtAction();
         }
-        else
+        else if(!adjacent(c))
         {
             cout << "erreur portee"<<flush;
             //throw ManquePortee();
         }
+        else
+            cout << "et merde !"<<flush;
     }
 }
 

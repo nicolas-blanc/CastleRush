@@ -380,7 +380,7 @@ void Plateau::InvocNull()
 void Plateau::highlight(Case* c, int portee) {
     QColor color = Qt::red;
     if (portee==0) {
-        color=Qt::white;
+        color=Qt::transparent;
         portee=m_largeur*m_hauteur;
         c->setBrush(*new QBrush(color));
     }
@@ -393,22 +393,22 @@ void Plateau::highlight(Case* c, int portee) {
                 cout<<"x2 = "<<plateau[i+c->getX()][j+c->getY()]->getX()<<flush;
                 cout<<", y2 = "<<plateau[i+c->getX()][j+c->getY()]->getY()<<endl<<flush;
                 cout<<"portee = "<<portee<<endl<<endl<<flush;
-                if (color==Qt::white||porteePossible(c, plateau[i+c->getX()][j+c->getY()],portee)) {
+                if (color==Qt::transparent||porteePossible(c, plateau[i+c->getX()][j+c->getY()],portee)) {
                     plateau[i+c->getX()][j+c->getY()]->setBrush(*new QBrush(color));
                 }
             }
             if (c->getX()-i>=0&&c->getY()-j>=0) {
-                if (color==Qt::white||porteePossible(c, plateau[c->getX()-i][c->getY()-j],portee)) {
+                if (color==Qt::transparent||porteePossible(c, plateau[c->getX()-i][c->getY()-j],portee)) {
                     plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
                 }
             }
             if (c->getX()+i<m_largeur&&c->getY()-j>=0) {
-                if (color==Qt::white||porteePossible(c, plateau[c->getX()+i][c->getY()-j],portee)) {
+                if (color==Qt::transparent||porteePossible(c, plateau[c->getX()+i][c->getY()-j],portee)) {
                     plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
                 }
             }
             if (c->getX()-i>=0&&c->getY()+j<m_hauteur) {
-                if (color==Qt::white||porteePossible(c, plateau[c->getX()-i][c->getY()+j],portee)) {
+                if (color==Qt::transparent||porteePossible(c, plateau[c->getX()-i][c->getY()+j],portee)) {
                     plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
                 }
             }
