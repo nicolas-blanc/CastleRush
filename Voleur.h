@@ -6,7 +6,7 @@
  */
 
 #ifndef VOLEUR_H
-#define	VOLEUR_H
+#define        VOLEUR_H
 
 #include "Unite.h"
 
@@ -17,5 +17,4 @@ class Voleur : public Unite
 };
 
 
-#endif	/* VOLEUR_H */
-
+#endif        /* VOLEUR_H */

@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Chevalier.h
  * Author: MouaHH
  *
@@ -6,7 +6,7 @@
  */
 
 #ifndef CHEVALIER_H
-#define	CHEVALIER_H
+#define        CHEVALIER_H
 
 #include "Unite.h"
 
@@ -18,5 +18,4 @@ class Chevalier : public Unite
 
 
 
-#endif	/* CHEVALIER_H */
-
+#endif        /* CHEVALIER_H */

@@ -1,5 +1,5 @@
 #ifndef GUERRIER_H
-#define	GUERRIER_H
+#define        GUERRIER_H
 
 #include "Unite.h"
 
@@ -13,5 +13,4 @@ private:
 
 };
 
-#endif	/* GUERRIER_H */
-
+#endif        /* GUERRIER_H */

@@ -15,4 +15,3 @@ Guerrier::Guerrier(QGraphicsItem * parent, Case* c, Joueur* j)
 
 Guerrier::~Guerrier() {
 }
-

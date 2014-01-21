@@ -30,7 +30,7 @@ public :
     inline Batiment* getBatiment(string nomBatiment) { return v_Batiment[nomBatiment]; }
 
     inline void modifPtAction(int val) { m_PtActionJoueur = m_PtActionJoueur-val; }
-    inline void modifPopulation(int val) { m_Population = m_Population-val; }
+    inline void modifPopulation(int val) { m_Population = m_Population+val; }
 
     inline void setPtAction(int val) { if (val <= getPtActionMax() || val > 0) m_PtActionJoueur = val; else { PtAction ex; throw ex; } }
     inline void setListeBonusJoueur(int indice, int bonus) { m_listeBonusJoueur[indice] = bonus; }

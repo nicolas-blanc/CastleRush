@@ -1,5 +1,5 @@
 #ifndef TOUR_H
-#define	TOUR_H
+#define TOUR_H
 
 #include "Batiment.h"
 #include "AttaqueDeBase.h"
@@ -18,5 +18,4 @@ class Tour : public Batiment
         void attaqueAuto();
 };
 
-#endif	/* TOUR_H */
-
+#endif        /* TOUR_H */

@@ -10,7 +10,7 @@
 
 enum catBatiments {chateau, tour,libre};
 enum catUnite {guerrier, chevalier, voleur, magicien, pretre, archer};
-enum flagsAppli {attente,deplacement};
+enum flagsAppli {attente,deplacement,attaque,invocation,invoquer};
 
 #endif	/* ENUMERATIONS_H */
 
