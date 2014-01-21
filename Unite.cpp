@@ -97,7 +97,6 @@ void Unite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     ((Case*)parentItem())->parent()->allumerButtons();
     ((Case*)parentItem())->parent()->cacheInfoUnite();
     ((Case*)parentItem())->parent()->afficheInfoUnite(this);
-    ((Case*)parentItem())->parent()->setSelect(this);
 }
 
 //Penser � supprimer l'effet quand il arrive � 0 tours

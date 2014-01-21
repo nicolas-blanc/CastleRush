@@ -35,20 +35,22 @@ void MainWindow::handleGen() {
         cout << "Impossible d'ouvrir ou de créer le fichier" << endl;
         exit(0);
     }
-    int hauteur = 10;
-    int largeur = 15;
+    int hauteur = 15;
+    int largeur = 20;
     fichier.write((char*)&largeur, sizeof(int));
     fichier.write((char*)&hauteur, sizeof(int));
 
     catBatiments l = libre;
-    //catBatiments t = tour;
+    catBatiments t = tour;
     catBatiments c = chateau;
     int size = 1;
+    int joueur=-1;
 
     for (int i=0; i<hauteur; i++) {
         for (int j=0; j<largeur; j++) {
             int x=i;
             int y=j;
+            fichier.write((char*)&joueur,sizeof(int));
             fichier.write((char*)&l,sizeof(catBatiments));
             fichier.write((char*)&size,sizeof(int));
             fichier.write((char*)&x,sizeof(int));
@@ -58,6 +60,8 @@ void MainWindow::handleGen() {
 
     size=2;
     int x=7,y=4;
+    joueur = 0;
+    fichier.write((char*)&joueur,sizeof(int));
     fichier.write((char*)&c,sizeof(catBatiments));
     fichier.write((char*)&size,sizeof(int));
     fichier.write((char*)&x,sizeof(int));

@@ -5,6 +5,7 @@
 #include <QBrush>
 #include <math.h>
 #include "Chateau.h"
+#include "enumerations.h"
 
 #define SIZE 36
 
@@ -30,6 +31,7 @@ void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     else if (parent()->getFlag()==deplacement) {
         ((Unite*)(parent()->getSelect()))->deplacer(this);
         parent()->setFlag(attente);
+        parent()->highlight(this);
         this->parent()->update();
     }
     else if (parent()->getFlag()==attaque) {

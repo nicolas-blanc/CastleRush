@@ -44,8 +44,9 @@ Plateau::Plateau(string nomPlateau) : QGraphicsScene() {
         }
 
         while(!isFini(fichierPlateau)) {
-            int size,x,y;
+            int size,x,y,joueur;
             catBatiments type;
+            fichierPlateau.read((char*)&joueur, sizeof(int));
             fichierPlateau.read((char*)&type, sizeof(catBatiments));
             fichierPlateau.read((char*)&size, sizeof(int));
             fichierPlateau.read((char*)&x, sizeof(int));
@@ -173,18 +174,8 @@ bool Plateau::isFini(ifstream& fichier) {
 }
 
 void Plateau::handleDep() {
-    QList<QGraphicsItem *> selection = selectedItems();
-    if (selection.size()>0)
-        setSelect(selection[0]);
+    highlight(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getMouvement()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[mouvement]);
     setFlag(deplacement);
-}
-
-void Plateau::handleInvoc() {
-    QList<QGraphicsItem *> selection = selectedItems();
-    if (selection.size()>0)
-        setSelect(selection[0]);
-    setFlag(invocation);
-    uniteInvocable();
 }
 
 void Plateau::setSelect(QGraphicsItem *c){
@@ -212,7 +203,7 @@ PtAction->setFormat("%v/%m");
 
 void Plateau::afficheInfoUnite(Entite *u)
 {
-    nom = new QLabel("Nom : " + QString::QString(u->Getnom().c_str()));
+    nom = new QLabel("Nom : " + *new QString(u->Getnom().c_str()));
     nom->setGeometry(550, 70, 105, 25);
     addWidget(nom);
     vie = new QLabel("Point de Vie : " + QString::number(u->getVie()));
@@ -353,4 +344,90 @@ void Plateau::deleteUniteInvocable()
     delete vol;
     delete mag;
     delete pret;
+}
+
+void Plateau::highlight(Case* c, int portee) {
+    QColor color = Qt::red;
+    if (portee==0) {
+        color=Qt::white;
+        portee=m_largeur*m_hauteur;
+        c->setBrush(*new QBrush(color));
+    }
+
+    for (int i=0; i<=portee; i++) {
+        for (int j=0; j<=portee-i; j++) {
+            if (i+c->getX()<m_largeur&&j+c->getY()<m_hauteur) {
+                if (color==Qt::white||porteePossible(c, plateau[i+c->getX()][j+c->getY()])) {
+                    plateau[i+c->getX()][j+c->getY()]->setBrush(*new QBrush(color));
+                }
+            }
+            if (c->getX()-i>=0&&c->getY()-j>=0) {
+                if (color==Qt::white||porteePossible(c, plateau[c->getX()-i][c->getY()-j])) {
+                    plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
+                }
+            }
+            if (c->getX()+i<m_largeur&&c->getY()-j>=0) {
+                if (color==Qt::white||porteePossible(c, plateau[c->getX()+i][c->getY()-j])) {
+                    plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
+                }
+            }
+            if (c->getX()-i>=0&&c->getY()+j<m_hauteur) {
+                if (color==Qt::white||porteePossible(c, plateau[c->getX()-i][c->getY()+j])) {
+                    plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
+                }
+            }
+        }
+    }
+}
+
+bool Plateau::porteePossible(Case *c1, Case *c2) {
+    vector<Case*> occupees;
+    vector<Case*> libres;
+    cout<<"c2.x = "<<c2->getX()<<", ";
+    cout<<"c2.y = "<<c2->getY()<<endl;
+    int minX = (c1->getX()<c2->getX()?c1->getX():c2->getX());//7
+    int maxX = (c1->getX()>c2->getX()?c1->getX():c2->getX());//8
+    int minY = (c1->getY()<c2->getY()?c1->getY():c2->getY());//8
+    int maxY = (c1->getY()>c2->getY()?c1->getY():c2->getY());//8
+    for (int i=minX; i<maxX; i++) {
+        for (int j=minY; j<maxY; j++) {
+            if (plateau[i][j]->isOccupee()&&(i!=minX||j!=minY)) {
+                occupees.push_back(plateau[i][j]);
+                    cout<<"obstacle x = "<<i<<", "<<flush;
+                    cout<<"obstacle y = "<<j<<endl<<flush;
+            }
+            else
+                libres.push_back(plateau[i][j]);
+        }
+    }
+
+    bool possible=(occupees.size()==0);
+    for (unsigned int i=0; i<occupees.size()&&!possible; i++) {
+        if (occupees[i]->getX()>c2->getX()) {
+            if (occupees[i]->getY()>c2->getY()) {
+                if (((occupees[i]->getY()-c2->getY())-(occupees[i]->getX()-c2->getX())>0))
+                    possible=true;
+            }
+            else
+                if (((occupees[i]->getY()-c2->getY())+(occupees[i]->getX()-c2->getX())<0))
+                    possible=true;
+                else {
+                    cout<<"x = "<<c2->getX()<<", "<<flush;
+                    cout<<"y = "<<c2->getY()<<endl<<flush;
+                }
+        }
+        if (occupees[i]->getX()<c2->getX()) {
+            if (occupees[i]->getY()>c2->getY()) {
+                if (((occupees[i]->getY()-c2->getY())+(occupees[i]->getX()-c2->getX())>0))
+                    possible=true;
+            }
+            else
+                if (((occupees[i]->getY()-c2->getY())-(occupees[i]->getX()-c2->getX())<0))
+                    possible=true;
+        }
+    }
+
+    cout<<"-----------------"<<endl;
+
+    return possible;
 }

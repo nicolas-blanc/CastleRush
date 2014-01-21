@@ -52,7 +52,6 @@ private :
 private slots :
     void handleDep();
     void handleAtt();
-    void handleInvoc();
     void intInvocGue();
     void intInvocArc();
     void intInvocChe();
@@ -81,6 +80,8 @@ public :
         void eteindreButtons();
         void allumerButtonsBati();
         void eteindreButtonsBati();
+        void highlight(Case* c, int portee=0);
+        bool porteePossible(Case* c1, Case* c2);
 
         inline void setUnitInvoc(int i) { unitInvoc = i;cout<<"set : "<<unitInvoc<<flush;}
         inline int getUnitInvoc() { cout<<"get : "<<unitInvoc<<endl<<flush; return unitInvoc;}

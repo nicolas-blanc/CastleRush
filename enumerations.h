@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   enumerations.h
  * Author: HolyPony
  *
@@ -10,7 +10,8 @@
 
 enum catBatiments {chateau, tour,libre};
 enum catUnite {guerrier, chevalier, voleur, magicien, pretre, archer};
-enum flagsAppli {attente,deplacement,attaque,invocation,invoquer};
+enum flagsAppli {attente,deplacement,attaque,invoquer};
+enum bonusJoueur {population, action, vie, degat, portee, mouvement};
 
 #endif	/* ENUMERATIONS_H */
 
