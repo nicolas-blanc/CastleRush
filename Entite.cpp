@@ -32,9 +32,12 @@ bool Entite::adjacent(Case* c) {
     bool adj=false;
     unsigned int i=0;
     while(i<getPosition().size() && !adj) {
-        adj=(((c->getX()+getPosition()[i]->getX())==0||(c->getX()-getPosition()[i]->getX())==0||(c->getX()-getPosition()[i]->getX())==1||(c->getX()+getPosition()[i]->getX())==1)
-             &&((c->getY()-getPosition()[i]->getY())==0||(c->getY()-getPosition()[i]->getY())==0||(c->getY()-getPosition()[i]->getY())==1||(c->getY()+getPosition()[i]->getY())==1)
-                && !c->isOccupee());
+        adj=(  ((getPosition()[i]->getX()-c->getX()==0)&&(getPosition()[i]->getY()-c->getY()==0))
+             ||((abs(getPosition()[i]->getX()-c->getX()))==1&&(getPosition()[i]->getY()-c->getY()==0))
+             ||((getPosition()[i]->getX()-c->getX()==0)&&(abs(getPosition()[i]->getY()-c->getY())==1)));
+        adj = adj&&!c->isOccupee();
+        cout<<"x = "<<getPosition()[i]->getX()<<flush;
+        cout<<", y = "<<getPosition()[i]->getY()<<endl<<flush;
         i++;
     }
     return adj;
@@ -61,7 +64,6 @@ void Entite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         ((Case*)parentItem())->parent()->setFlag(attente);
         ((Case*)parentItem())->parent()->highlight(((Case*)parentItem()));
     }
-
     ((Case*)parentItem())->parent()->afficheInfoUnite(this);
     ((Case*)parentItem())->parent()->setSelect(this);
 }

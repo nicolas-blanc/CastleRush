@@ -1,5 +1,6 @@
 #include "Plateau.h"
 #include "Batiment.h"
+#include "BatimentBonusStat.h"
 #include "Tour.h"
 #include "Chateau.h"
 #include "BatimentBonusStat.h"
@@ -37,7 +38,7 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     jserveur = joueurs[1];
 
     Batiment* bat;
-
+    int jTaille=joueurs.size();
     ifstream fichierPlateau(nomPlateau.c_str(), ios::in | ios::binary);
         if (fichierPlateau.fail()) { // Si echec de l'ouverture
                 cout << "Impossible d'ouvrir ou de créer le fichier" << endl;
@@ -56,8 +57,6 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
                 this->addItem(plateau[i][j]);
             }
         }
-
-        int jTaille = joueurs.size();
 
         while(!isFini(fichierPlateau)) {
             int size,x,y,joueur;
@@ -79,13 +78,16 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
                 for (int j=0; j<size; j++) {
                     switch (type) {
                         case chateau : {
+                        if (!(i-1)&&!(j-1))
+                        {
                             if(joueur < jTaille && joueur != -1) {
-                                bat = new Chateau(plateau[x+i][y+j],cases,joueurs[joueur],"Chateau");
+                                bat = new Chateau(plateau[x+j][y+i],cases,joueurs[joueur],"Chateau");
                             }
                             else {
-                                bat = new Chateau(plateau[x+i][y+j],cases,"Chateau");
+                                bat = new Chateau(plateau[x+j][y+i],cases,"Chateau");
                             }
-                            break;
+                        }
+                        break;
                         }
                         case tour : {
                             if(joueur < jTaille && joueur != -1) {
@@ -98,7 +100,7 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
                         }
                         case campement : {
                             bat = new BatimentBonusStat(plateau[x+i][y+j],cases,"Campement",-1);
-                                    break;
+                            break;
                             }
                         case village : {
                             bat = new BatimentBonusStat(plateau[x+i][y+j],cases,"Village",-2);
@@ -239,8 +241,8 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     //--------------------------------
     //--------------------------------
 
-    Unite* vol=new Voleur(plateau[7][8],plateau[7][8],jclient);
-    Unite* pret=new Pretre(plateau[6][8],plateau[6][8],jserveur);
+    Unite* vole=new Voleur(plateau[7][8],plateau[7][8],jclient);
+    Unite* pretr=new Pretre(plateau[6][8],plateau[6][8],jserveur);
     //-----------------------------
     //-----------------------------
 
@@ -254,8 +256,9 @@ bool Plateau::isFini(ifstream& fichier) {
 }
 
 void Plateau::handleDep() {
-    if(((Unite*)selected)->getJoueur() == jtour)
+    //if(((Unite*)selected)->getJoueur() == jtour)
     {
+        cout<<"-------------------"<<endl<<flush;
         highlight(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getMouvement()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[mouvement]);
         setFlag(deplacement);
     }
@@ -265,9 +268,7 @@ void Plateau::gestionTour()
 {
     this->setNombreTourJoueur(getNombreTour()%2 + 1);
     this->setNombreTour(getNombreTour()+1);
-    cout <<jtour->getNumero()<<endl;
     jtour = j[1-jtour->getNumero()];
-    cout <<jtour->getNumero()<<endl;
     this->update();
 }
 
@@ -303,7 +304,7 @@ void Plateau::afficheInfoUnite(Entite *u)
     mvt->hide();
     atk->hide();
     nom->show();
-    nom->setText("Nom : " + QString(u->Getnom().c_str()));
+    nom->setText("Type : " + QString(u->Getnom().c_str()));
     vie->show();
     vie->setText("Point de Vie : " + QString::number(u->getVie()));
     if(typeid(*u) == typeid(Chevalier)  ||
@@ -321,12 +322,11 @@ void Plateau::afficheInfoUnite(Entite *u)
 }
 
 void Plateau::handleAtt(){
-    if(((Unite*)selected)->getJoueur() == jtour)
-    {
-    QList<QGraphicsItem *> selection = selectedItems();
-    if (selection.size()>0)
-        setSelect(selection[0]);
-    setFlag(attaque);
+    if(((Unite*)selected)->getJoueur() == jtour) {
+        QList<QGraphicsItem *> selection = selectedItems();
+        if (selection.size()>0)
+            setSelect(selection[0]);
+        setFlag(attaque);
     }
 }
 
@@ -474,10 +474,12 @@ void Plateau::highlight(Case* c, int portee) {
 }
 
 bool Plateau::porteePossible(Case *c1, Case *c2, int portee) {
-    if (c1==NULL)
+    if (c1==NULL) {
         return false;
-    else if ((c1->getX()==c2->getX())&&(c1->getY()==c2->getY()))
+    }
+    else if ((c1->getX()==c2->getX())&&(c1->getY()==c2->getY())) {
         return true;
+    }
     else if (portee==0) {
         return false;
     }
@@ -487,15 +489,14 @@ bool Plateau::porteePossible(Case *c1, Case *c2, int portee) {
     Case* avant=NULL;
     Case* arriere=NULL;
 
-    if (c1->getX()<=c2->getX()&&!plateau[c1->getX()+1][c1->getY()]->isOccupee())
+    if (c1->getX()+1<m_largeur&&c1->getX()<=c2->getX()&&!plateau[c1->getX()+1][c1->getY()]->isOccupee())
         droite=plateau[c1->getX()+1][c1->getY()];
-    if (c1->getX()>=c2->getX()&&!plateau[c1->getX()-1][c1->getY()]->isOccupee())
+    if (c1->getX()-1>=0&&c1->getX()>=c2->getX()&&!plateau[c1->getX()-1][c1->getY()]->isOccupee())
         gauche=plateau[c1->getX()-1][c1->getY()];
-    if (c1->getY()<=c2->getY()&&!plateau[c1->getX()][c1->getY()+1]->isOccupee())
+    if (c1->getY()+1<m_hauteur&&c1->getY()<=c2->getY()&&!plateau[c1->getX()][c1->getY()+1]->isOccupee())
         avant=plateau[c1->getX()][c1->getY()+1];
-    if (c1->getY()>=c2->getY()&&!plateau[c1->getX()][c1->getY()-1]->isOccupee())
+    if (c1->getY()-1>=0&&c1->getY()>=c2->getY()&&!plateau[c1->getX()][c1->getY()-1]->isOccupee())
         arriere=plateau[c1->getX()][c1->getY()-1];
-
 
     return porteePossible(droite,c2,portee-1)||porteePossible(gauche,c2,portee-1)||porteePossible(avant,c2,portee-1)||porteePossible(arriere,c2,portee-1);
 }
