@@ -441,62 +441,112 @@ void Plateau::intInvocVol()
 
 void Plateau::highlight(Case* c, int portee) {
     QColor color = Qt::red;
-    if (portee==0) {
+    if (portee==-1) {
         color=Qt::transparent;
         portee=m_largeur*m_hauteur;
-        c->setBrush(*new QBrush(color));
+        for (int i=0; i<m_largeur; i++)
+            for (int j=0; j<m_hauteur; j++)
+                plateau[i][j]->setBrush(*new QBrush(color));
     }
-
-    for (int i=0; i<=portee; i++) {
-        for (int j=0; j<=portee-i; j++) {
-            if (i+c->getX()<m_largeur&&j+c->getY()<m_hauteur) {
-                if (color==Qt::transparent||porteePossible(c, plateau[i+c->getX()][j+c->getY()],portee)) {
-                    plateau[i+c->getX()][j+c->getY()]->setBrush(*new QBrush(color));
+    else {
+        vector<Case*> chemin;
+        for (int i=0; i<=portee; i++) {
+            for (int j=0; j<=portee-i; j++) {
+                if (i+c->getX()<m_largeur&&j+c->getY()<m_hauteur) {
+                    chemin=cheminDeplacement(c, plateau[c->getX()+i][c->getY()+j],portee);
+                    if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
+                        plateau[i+c->getX()][j+c->getY()]->setBrush(*new QBrush(color));
+                    }
                 }
-            }
-            if (c->getX()-i>=0&&c->getY()-j>=0) {
-                if (color==Qt::transparent||porteePossible(c, plateau[c->getX()-i][c->getY()-j],portee)) {
-                    plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
+                if (c->getX()-i>=0&&c->getY()-j>=0) {
+                    chemin=cheminDeplacement(c, plateau[c->getX()-i][c->getY()-j],portee);
+                    if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
+                        plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
+                    }
                 }
-            }
-            if (c->getX()+i<m_largeur&&c->getY()-j>=0) {
-                if (color==Qt::transparent||porteePossible(c, plateau[c->getX()+i][c->getY()-j],portee)) {
-                    plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
+                if (c->getX()+i<m_largeur&&c->getY()-j>=0) {
+                    chemin=cheminDeplacement(c, plateau[c->getX()+i][c->getY()-j],portee);
+                    if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
+                        plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
+                    }
                 }
-            }
-            if (c->getX()-i>=0&&c->getY()+j<m_hauteur) {
-                if (color==Qt::transparent||porteePossible(c, plateau[c->getX()-i][c->getY()+j],portee)) {
-                    plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
+                if (c->getX()-i>=0&&c->getY()+j<m_hauteur) {
+                    chemin=cheminDeplacement(c, plateau[c->getX()-i][c->getY()+j],portee);
+                    if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
+                        plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
+                    }
                 }
             }
         }
     }
 }
 
-bool Plateau::porteePossible(Case *c1, Case *c2, int portee) {
+vector<Case*> Plateau::cheminDeplacement(Case *c1, Case *c2, int portee) {
     if (c1==NULL) {
-        return false;
+        vector<Case*> v;
+        v.push_back(NULL);
+        return v;
     }
     else if ((c1->getX()==c2->getX())&&(c1->getY()==c2->getY())) {
-        return true;
+        vector<Case*> v;
+        v.push_back(c1);
+        return v;
     }
     else if (portee==0) {
-        return false;
+        vector<Case*> v;
+        v.push_back(NULL);
+        return v;
     }
 
-    Case* gauche=NULL;
-    Case* droite=NULL;
-    Case* avant=NULL;
-    Case* arriere=NULL;
+    vector<vector<Case*> > chemins;
+    vector<Case*> gauche;
+    vector<Case*> droite;
+    vector<Case*> avant;
+    vector<Case*> arriere;
+    droite.push_back(c1);
+    gauche.push_back(c1);
+    avant.push_back(c1);
+    arriere.push_back(c1);
+    chemins.push_back(gauche);
+    chemins.push_back(droite);
+    chemins.push_back(avant);
+    chemins.push_back(arriere);
 
-    if (c1->getX()+1<m_largeur&&c1->getX()<=c2->getX()&&!plateau[c1->getX()+1][c1->getY()]->isOccupee())
-        droite=plateau[c1->getX()+1][c1->getY()];
-    if (c1->getX()-1>=0&&c1->getX()>=c2->getX()&&!plateau[c1->getX()-1][c1->getY()]->isOccupee())
-        gauche=plateau[c1->getX()-1][c1->getY()];
-    if (c1->getY()+1<m_hauteur&&c1->getY()<=c2->getY()&&!plateau[c1->getX()][c1->getY()+1]->isOccupee())
-        avant=plateau[c1->getX()][c1->getY()+1];
-    if (c1->getY()-1>=0&&c1->getY()>=c2->getY()&&!plateau[c1->getX()][c1->getY()-1]->isOccupee())
-        arriere=plateau[c1->getX()][c1->getY()-1];
+    if (c1->getX()+1<m_largeur&&c1->getX()<=c2->getX()&&!plateau[c1->getX()+1][c1->getY()]->isOccupee()) {
+        vector<Case*> res = cheminDeplacement(plateau[c1->getX()+1][c1->getY()],c2,portee-1);
+        for (unsigned int i=0; i<res.size(); i++)
+            chemins[0].push_back(res[i]);
+    }
+    else chemins[0].push_back(NULL);
+    if (c1->getX()-1>=0&&c1->getX()>=c2->getX()&&!plateau[c1->getX()-1][c1->getY()]->isOccupee()) {
+        vector<Case*> res = cheminDeplacement(plateau[c1->getX()-1][c1->getY()],c2,portee-1);
+        for (unsigned int i=0; i<res.size(); i++)
+            chemins[1].push_back(res[i]);
+    }
+    else chemins[1].push_back(NULL);
+    if (c1->getY()+1<m_hauteur&&c1->getY()<=c2->getY()&&!plateau[c1->getX()][c1->getY()+1]->isOccupee()){
+        vector<Case*> res = cheminDeplacement(plateau[c1->getX()][c1->getY()+1],c2,portee-1);
+        for (unsigned int i=0; i<res.size(); i++)
+            chemins[2].push_back(res[i]);
+    }
+    else chemins[2].push_back(NULL);
+    if (c1->getY()-1>=0&&c1->getY()>=c2->getY()&&!plateau[c1->getX()][c1->getY()-1]->isOccupee()){
+        vector<Case*> res = cheminDeplacement(plateau[c1->getX()][c1->getY()-1],c2,portee-1);
+        for (unsigned int i=0; i<res.size(); i++)
+            chemins[3].push_back(res[i]);
+    }
+    else chemins[3].push_back(NULL);
 
-    return porteePossible(droite,c2,portee-1)||porteePossible(gauche,c2,portee-1)||porteePossible(avant,c2,portee-1)||porteePossible(arriere,c2,portee-1);
+    vector<Case*> cheminOK;
+    cheminOK.push_back(NULL);
+
+    for (unsigned int i=0; i<chemins.size(); i++) {
+        cout<<chemins[i].size()<<flush;
+        if ((cheminOK[cheminOK.size()-1]==NULL) || (chemins[i].size()<=cheminOK.size() && (chemins[i][chemins[i].size()-1]!=NULL))) {
+            cheminOK=chemins[i];
+        }
+    }
+
+    return cheminOK;
 }
+
