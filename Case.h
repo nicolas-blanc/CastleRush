@@ -25,7 +25,7 @@ private :
         bool isSelected;
 public :
         Case(int x, int y, QObject* parent);
-        Case(const Case& ) : QGraphicsRectItem(),QObject() {}
+        Case(const Case& ) : QGraphicsRectItem(),QObject() {cout<<"lol"<<flush;}
         //void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         //           QWidget *widget);
         void setOccupant(Entite* occ, bool bat = false);

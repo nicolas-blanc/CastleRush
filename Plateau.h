@@ -21,6 +21,7 @@ private :
         int m_largeur;
         Case*** plateau;
         QGraphicsItem* selected;
+        QGraphicsPixmapItem* background;
         flagsAppli flag;
         QProgressBar *pop;
         QProgressBar *PtAction;
@@ -89,20 +90,21 @@ public :
         void setBoutons(typeElement type, int numJoueur=0);
         void setBoutonsUnite(bool active);
         void highlight(Case* c, int portee=-1);
-        void highlightAttaque(Case* c, int portee=-1);
+        void highlightAttaque(Case* c, int portee=0);
         vector<Case*> cheminDeplacement(Case* c1, Case* c2, int portee);
+        bool porteeAttaquePossible(Case* c1, Case* c2, int portee);
 
         inline void setUnitInvoc(catUnite unite) { unitInvoc = unite;}
         inline catUnite getUnitInvoc() { return unitInvoc;}
 
         Joueur * getJoueurTour(){return jtour;}
+
+
         void setNombreTour(int tour){NombreTour = tour;}
         int getNombreTour(){return NombreTour;}
 
         void setNombreTourJoueur(int tour){NombreTourJoueur = tour;}
         int getNombreTourJoueur(){return NombreTourJoueur;}
-        Unite* getUniteAttaqueTour(Tour* tr);
-
+        Unite * getUniteAttaqueTour(Tour* tr);
 };
-
 #endif

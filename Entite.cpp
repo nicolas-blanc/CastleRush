@@ -51,7 +51,7 @@ void Entite::setPosition(vector<Case *> position) {
     for (unsigned int i=0; i<m_position.size(); i++)
         m_position[i]->setOccupant(this);
     setParentItem(m_position[0]);
-    this->setOffset(OFFSET+(m_position[0]->getX()*SIZE),OFFSET+(m_position[0]->getY()*SIZE));
+    //this->setOffset(OFFSET+(m_position[0]->getX()*SIZE),OFFSET+(m_position[0]->getY()*SIZE));
     setSelected(true);
 }
 
@@ -77,4 +77,5 @@ void Entite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         ((Case*)parentItem())->parent()->updatePopPt();
     }
 }
+
 

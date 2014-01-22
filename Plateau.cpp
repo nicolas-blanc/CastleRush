@@ -49,6 +49,11 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
 
         fichierPlateau.read((char*)&m_largeur ,sizeof(int));
         fichierPlateau.read((char*)&m_hauteur,sizeof(int));
+        QPixmap back("images/background.jpg");
+        background = new QGraphicsPixmapItem();
+        background->setPixmap(back.copy(0,0,SIZE*m_largeur,SIZE*m_hauteur));
+        this->addItem(background);
+
         //-----initialisation du plateau (tableau de Case* à 2 dimensions)
         plateau = new Case**[m_largeur];
         for (int i=0; i< m_largeur; i++) {
@@ -243,6 +248,14 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
 
     setBoutons(carre);
 
+    //--------------------------------
+    //--------------------------------
+
+    Unite* vole=new Voleur(plateau[7][8],plateau[7][8],jclient);
+    Unite* pretr=new Pretre(plateau[6][8],plateau[6][8],jserveur);
+    //-----------------------------
+    //-----------------------------
+
 }
 
 bool Plateau::isFini(ifstream& fichier) {
@@ -269,7 +282,7 @@ void Plateau::gestionTour()
     QMessageBox popup;
     popup.setText("Tour Joueur : " + jtour->getPseudo());
     popup.exec();
-    for(int i =0; i<v_Batiment.size(); i++)
+    for(unsigned int i =0; i<v_Batiment.size(); i++)
     {
         Batiment *batiment = v_Batiment[i];
         if(batiment->Getnom() =="Tour" && batiment->getJoueur() == jtour)
@@ -280,9 +293,9 @@ void Plateau::gestionTour()
     setBoutons(carre);
 
 
-    for(int i = 0; i<j.size();i++)
+    for(unsigned int i = 0; i<j.size();i++)
     {
-        for(int d = 0; d<j[i]->getUnite().size();d++)
+        for(unsigned int d = 0; d<j[i]->getUnite().size();d++)
         {
         if(j[i]->getUnite()[d]->getVie() == 0)
         {
@@ -482,6 +495,8 @@ void Plateau::intInvocVol()
 
     void Plateau::highlight(Case* c, int portee) {
         QColor color = Qt::red;
+        QBrush brush(color);
+        color.setAlpha(126);
         if (portee==-1) {
             color=Qt::transparent;
             portee=m_largeur*m_hauteur;
@@ -596,8 +611,7 @@ void Plateau::intInvocVol()
             portee=(m_hauteur>m_largeur?m_hauteur:m_largeur);
             color=Qt::transparent;
         }
-        int l=0;
-        int h=0;
+
         for (int i=0; i<=portee; i++)
             for (int j=0; j<=portee-i; j++) {
                 if (c->getX()+i<m_largeur&&c->getY()+j<m_hauteur)

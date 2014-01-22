@@ -40,7 +40,6 @@ void MainWindow::handleGen() {
     fichier.write((char*)&largeur, sizeof(int));
     fichier.write((char*)&hauteur, sizeof(int));
 
-    catBatiments l = libre;
     catBatiments t = tour;
     catBatiments m = magie;
     catBatiments ca = campement;

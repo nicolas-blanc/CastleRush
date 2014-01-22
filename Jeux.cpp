@@ -1,7 +1,7 @@
 #include "Jeux.h"
 #include "Chateau.h"
 
-Jeux::Jeux(int nbrJoueur, string nomPlateau)
+Jeux::Jeux(int nbrJoueur, string )
 {
     m_nbJoueur = nbrJoueur;
     m_FinDePartie = false;

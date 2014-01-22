@@ -8,6 +8,17 @@ Pretre::Pretre(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,5,2,1,
     }
     else
         pret=new QPixmap("images/PretresseRouge.png");
-    this->setPixmap(pret->copy(0,0,32,32));
-    this->setOffset(offset().x()+3,offset().y()+3);
+
+    for (int i=0;i<3;i++){
+        this->setImageFace(new QPixmap(pret->copy(i*32,0,32,32)));
+        this->setImageGauche(new QPixmap(pret->copy(i*32,32,32,32)));
+        this->setImageDroite(new QPixmap(pret->copy(i*32,64,32,32)));
+        this->setImageDos(new QPixmap(pret->copy(i*32,96,32,32)));
+    }
+    this->setImageFace(new QPixmap(pret->copy(32,0,32,32)));
+    this->setImageGauche(new QPixmap(pret->copy(32,32,32,32)));
+    this->setImageDroite(new QPixmap(pret->copy(32,64,32,32)));
+    this->setImageDos(new QPixmap(pret->copy(32,96,32,32)));
+
+    this->setPixmap(*(getImageFace()[1]));
 }

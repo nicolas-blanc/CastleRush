@@ -8,6 +8,17 @@ Voleur::Voleur(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,5,2,1,
     }
     else
         vol=new QPixmap("images/VoleurRouge.png");
-    this->setPixmap(vol->copy(0,0,32,32));
-    this->setOffset(offset().x()+3,offset().y()+3);
+
+    for (int i=0;i<3;i++){
+        this->setImageFace(new QPixmap(vol->copy(i*32,0,32,32)));
+        this->setImageGauche(new QPixmap(vol->copy(i*32,32,32,32)));
+        this->setImageDroite(new QPixmap(vol->copy(i*32,64,32,32)));
+        this->setImageDos(new QPixmap(vol->copy(i*32,96,32,32)));
+    }
+    this->setImageFace(new QPixmap(vol->copy(32,0,32,32)));
+    this->setImageGauche(new QPixmap(vol->copy(32,32,32,32)));
+    this->setImageDroite(new QPixmap(vol->copy(32,64,32,32)));
+    this->setImageDos(new QPixmap(vol->copy(32,96,32,32)));
+
+    this->setPixmap(*(getImageFace()[1]));
 }

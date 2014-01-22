@@ -4,9 +4,16 @@
 #include <exception>
 #include <QMessageBox>
 #include <math.h>
+#include <windows.h>
+#include <QTimeLine>
+#include <QPropertyAnimation>
+#include <QSequentialAnimationGroup>
+#include <QParallelAnimationGroup>
+#define SIZE 36
+
 
 Unite::Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned int pop, int vieMax, int vieMin, Case* c, Joueur* j, string nom)
-: Entite(parent, *new vector<Case*>(1,c),j,nom,vieMin,vieMax), v_dep_face(), v_dep_gauche(), v_dep_droite(), v_dep_dos() {
+: QObject(), Entite(parent, *new vector<Case*>(1,c),j,nom,vieMin,vieMax), v_dep_face(), v_dep_gauche(), v_dep_droite(), v_dep_dos() {
     this->setMouvement(mvt);
     this->setCout(ct);
     this->setPopulation(pop);
@@ -19,12 +26,63 @@ void Unite::setAttaqueDeBase() {
     m_AttaqueParDefaut->lierEntite(this);
 }
 
+void Unite::animationDeplacement(vector<Case *> chemin ) {
+    this->setSelected(false);
+     float decalageX,decalageY;
+     Case* caseActu=chemin[0];
+     QSequentialAnimationGroup *group = new QSequentialAnimationGroup();
+     QSequentialAnimationGroup *animPm = new QSequentialAnimationGroup();
+     QParallelAnimationGroup *groupPara = new QParallelAnimationGroup();
+
+     QPointF OS = offset();
+     int anim;
+     int j=1;
+
+     for (unsigned int i=1;i<chemin.size(); i++) {
+         QPropertyAnimation *animation = new QPropertyAnimation(this, "offset");
+         animation->setDuration(200);
+
+         decalageX = (chemin[i]->getX()-caseActu->getX())*SIZE;
+         decalageY = (chemin[i]->getY()-caseActu->getY())*SIZE;
+
+         if (decalageX>0)
+             anim=30;
+         else if (decalageX<0)
+             anim=20;
+         else if (decalageY<0)
+             anim=10;
+         else if (decalageY>0)
+             anim=0;
+
+         QPropertyAnimation *animPix = new QPropertyAnimation(this, "pixmap");
+         animPix->setDuration(200);
+         animPix->setStartValue(anim);
+         animPix->setEndValue(anim+7);
+         animPm->addAnimation(animPix);
+
+         animation->setStartValue(OS);
+         OS=QPointF(OS.x()+decalageX,OS.y()+decalageY);
+         animation->setEndValue(OS);
+         group->addAnimation(animation);
+
+         j++;
+         caseActu=chemin[i];
+     }
+
+     groupPara->addAnimation(group);
+     groupPara->addAnimation(animPm);
+     groupPara->start();
+     this->setSelected(true);
+}
+
 void Unite::deplacer(Case* c) {
     int mvt = this->mouvementDemande(c);
-    if(deplacementPossible(c))
+    vector<Case*> chemin=((Case*)this->parentItem())->parent()->cheminDeplacement(getPosition()[0],c,getMouvement()+getJoueur()->getListeBonusJoueur()[5]);
+    if(chemin[chemin.size()-1]!=NULL)
     {
         if(this->getJoueur()->getPtAction()-mvt >=0)
         {
+            animationDeplacement(chemin);
             vector<Case*> position;
             position.push_back(c);
             this->setPosition(position);
@@ -83,7 +141,6 @@ bool Unite::attaquer(Case* c, Attaque* attaque) {
                         QPixmap *tombe;
                         tombe=new QPixmap("images/Coffin.png");
                         (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
-                        sleep(1);
 
                         c->getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
                         c->setOccupant(NULL);
@@ -105,7 +162,7 @@ bool Unite::attaquer(Case* c) {
 }
 
 void Unite::attaquer(Entite* e) {
-    int i =0;
+    unsigned int i =0;
     bool Attaquer = false;
     while(i<e->getPosition().size() && !Attaquer)
     {
@@ -115,7 +172,7 @@ void Unite::attaquer(Entite* e) {
 }
 
 void Unite::attaquer(Entite* e, Attaque* a) {
-    int i =0;
+    unsigned int i =0;
     bool Attaquer = false;
     while(i<e->getPosition().size() && !Attaquer)
     {
