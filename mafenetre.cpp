@@ -1,4 +1,4 @@
-#include "MaFenetre.h"
+#include "mafenetre.h"
 #include <QVBoxLayout>
 #include <QtGui>
 

@@ -8,6 +8,7 @@ Chateau::Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, Joueur* j, strin
         this->setPixmap(* new QPixmap("images/ChateauBleu.png"));
     else
         this->setPixmap(* new QPixmap("images/ChateauRouge.png"));
+
 }
 
 Chateau::Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, string nom) : Batiment(parent, EnsCase, nom, 0, 20) {

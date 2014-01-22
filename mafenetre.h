@@ -50,7 +50,6 @@ class MaFenetre : public QWidget
     void enleverText()
     {
         PseudoJoueur->setText("");
-        this->windowTitleChanged("pseudo");
     }
 
     void afficherJeux2j()

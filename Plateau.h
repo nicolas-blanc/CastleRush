@@ -9,6 +9,7 @@
 #include "Case.h"
 #include "enumerations.h"
 #include "Entite.h"
+#include "Tour.h"
 #include <QPushButton>
 
 using namespace std;
@@ -88,20 +89,20 @@ public :
         void setBoutons(typeElement type, int numJoueur=0);
         void setBoutonsUnite(bool active);
         void highlight(Case* c, int portee=-1);
-        void highlightAttaque(Case* c, int portee=0);
+        void highlightAttaque(Case* c, int portee=-1);
         vector<Case*> cheminDeplacement(Case* c1, Case* c2, int portee);
-        bool porteeAttaquePossible(Case* c1, Case* c2, int portee);
 
         inline void setUnitInvoc(catUnite unite) { unitInvoc = unite;}
         inline catUnite getUnitInvoc() { return unitInvoc;}
 
         Joueur * getJoueurTour(){return jtour;}
-
-
         void setNombreTour(int tour){NombreTour = tour;}
         int getNombreTour(){return NombreTour;}
 
         void setNombreTourJoueur(int tour){NombreTourJoueur = tour;}
-        int getNombreTourJoueur(){return NombreTourJoueur;}};
+        int getNombreTourJoueur(){return NombreTourJoueur;}
+        Unite* getUniteAttaqueTour(Tour* tr);
+
+};
 
 #endif

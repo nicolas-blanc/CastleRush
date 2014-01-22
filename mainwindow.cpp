@@ -94,6 +94,7 @@ void MainWindow::handleGen() {
     fichier.write((char*)&x,sizeof(int));
     fichier.write((char*)&y,sizeof(int));
     //tour 2
+
     x = 14;
     y = 11;
     fichier.write((char*)&joueur,sizeof(int));

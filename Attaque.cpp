@@ -1,4 +1,4 @@
-#include "attaque.h"
+#include "Attaque.h"
 
 Attaque::Attaque(int portee, int degat, int ptAction) {
     m_Degat = degat;
@@ -30,9 +30,9 @@ void Attaque::lancerAttaque(Case* c) {
 }
 
 int Attaque::getDegat() {
-    return m_Degat + m_Entite->getJoueur()->getListeBonusJoueur()[3] + ((Unite*) m_Entite)->getBonusUnite()[1];
+    return m_Degat + m_Entite->getJoueur()->getListeBonusJoueur()[3];
 }
 
 int Attaque::getPortee() {
-    return m_Portee + m_Entite->getJoueur()->getListeBonusJoueur()[4] + ((Unite*) m_Entite)->getBonusUnite()[2];
+    return m_Portee + m_Entite->getJoueur()->getListeBonusJoueur()[4];
 }

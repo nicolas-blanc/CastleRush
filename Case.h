@@ -25,7 +25,7 @@ private :
         bool isSelected;
 public :
         Case(int x, int y, QObject* parent);
-        Case(const Case& ) : QGraphicsRectItem(),QObject() {cout<<"lol"<<flush;}
+        Case(const Case& ) : QGraphicsRectItem(),QObject() {}
         //void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         //           QWidget *widget);
         void setOccupant(Entite* occ, bool bat = false);
@@ -34,7 +34,6 @@ public :
         void transmettreAttaque(int nbPV);
         bool isOccupee();
         void declencherEffets();
-        inline void ajouterEffet(Effet * effet) { m_effets.push_back(effet); }
         Plateau* parent();
 
         Case& operator=(const Case& ) {return *this;}

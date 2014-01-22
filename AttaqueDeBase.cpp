@@ -3,6 +3,9 @@
 AttaqueDeBase::AttaqueDeBase(int portee)
 : Attaque(portee) {}
 
+AttaqueDeBase::AttaqueDeBase(int portee, int deg)
+: Attaque(portee,deg) {}
+
 void AttaqueDeBase::lancerAttaque(Case* c) {
     c->transmettreAttaque(this->getDegat());
 }

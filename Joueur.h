@@ -13,7 +13,6 @@ using namespace std;
 class Entite;
 class Unite;
 class Batiment;
-class Plateau;
 
 class Joueur {
 public :
@@ -29,9 +28,6 @@ public :
     inline void setPopulationMax(int pop) { m_PopulationMax=pop;}
     inline vector<int> getListeBonusJoueur() { return m_listeBonusJoueur; }
     inline int getListeBonusJoueur(int val) { return m_listeBonusJoueur[val]; }
-    inline vector<Batiment*> getBatiment() { return v_Batiment; }
-    inline void liePlateau(Plateau * plateau) { m_plateau = plateau; }
-    inline Plateau* getPlateau() { return m_plateau; }
 
     inline void modifPtAction(int val) { m_PtActionJoueur = m_PtActionJoueur-val; }
     inline void modifPopulation(int val) { m_Population = m_Population+val;}
@@ -40,13 +36,17 @@ public :
     inline void setListeBonusJoueur(int indice, int bonus) { m_listeBonusJoueur[indice] = bonus; }
     inline void setPopulation(int val) { if (val <= getPopulationMax() || val > 0) m_Population = val; else { Population ex; throw ex; } }
 
-    void setBatiment(Batiment * batiment);
-    void setUnite(Unite * unite);
+    inline void setBatiment(Batiment* home) { v_Batiment.push_back(home); }
+    inline void setChateau(Batiment* home) { v_Batiment.insert(v_Batiment.begin(), home); }
+    inline vector<Batiment*> getBatiment() {return v_Batiment;}
 
-    void deleteBatiment(Batiment* bat);
-    void deleteUnite(Unite * unite);
+    inline void setUnite(Unite* home){v_Unite.push_back(home);}
+    inline vector<Unite*> getUnite(){return v_Unite;}
 
-//    int& operator[] (unsigned int i) {return m_listeBonusJoueur[i];}
+    void deleteUnite(Unite*u);
+    void deleteBatiment(Batiment*b);
+
+    int& operator[] (unsigned int i) {return m_listeBonusJoueur[i];}
     bool operator== (Joueur j) {return m_numero==j.getNumero();}
     void setPseudo(QString pseudo){this->pseudo = pseudo;}
     QString getPseudo(){return pseudo;}
@@ -54,9 +54,8 @@ private :
     QString pseudo;
     int m_couleur;
     int m_numero;
-    Plateau * m_plateau;
-    vector<Unite * > v_Unite;
-    vector<Batiment* > v_Batiment;
+    vector<Unite*> v_Unite;
+    vector<Batiment*> v_Batiment;
     int m_PtActionMax;
     int m_PtActionJoueur;
     int m_PopulationMax;
@@ -76,7 +75,6 @@ private :
 #include "Entite.h"
 #include "Unite.h"
 #include "Batiment.h"
-#include "Plateau.h"
 
 #endif        /* JOUEUR_H */
 

@@ -14,7 +14,6 @@ class Voleur : public Unite
 {
     public:
     Voleur(QGraphicsItem * parent, Case* c, Joueur* j);
-    void initSort();
 };
 
 

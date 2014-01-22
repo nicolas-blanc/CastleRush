@@ -9,7 +9,6 @@ class PointDeVie
         inline int GetMin() { return m_Min; }
         inline int GetMax() { return m_Max + m_Bonus; }
         inline int GetValeur() { return m_Valeur; }
-        inline void setBonus(int bonus) { m_Bonus = bonus; }
         inline void SetValeur(int val) {m_Valeur = val;}
 
         void modifVie(int val);

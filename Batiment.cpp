@@ -4,8 +4,14 @@
 Batiment::Batiment(QGraphicsItem * parent, vector<Case*>& ensCase, Joueur* j, string nom, int vieMin, int vieMax)
 : Entite(parent, ensCase, j, nom, vieMin, vieMax)
 {
-
-    j->setBatiment(this);
+    if(nom == "Chateau")
+    {
+        j->setChateau(this);
+    }
+    else
+    {
+        j->setBatiment(this);
+    }
     for (unsigned int i=0; i<ensCase.size(); i++)
         ensCase[i]->setOccupant(this,true);
 }

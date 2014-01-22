@@ -10,12 +10,12 @@ Unite::Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned
     this->setMouvement(mvt);
     this->setCout(ct);
     this->setPopulation(pop);
-    for (unsigned int i=0; i<6; i++)
-        v_bonus.push_back(0);
+    this->setAttaqueDeBase();
+    j->setUnite(this);
 }
 
-void Unite::setAttaqueDeBase(int portee) {
-    m_AttaqueParDefaut = new AttaqueDeBase(portee);
+void Unite::setAttaqueDeBase() {
+    m_AttaqueParDefaut = new AttaqueDeBase();
     m_AttaqueParDefaut->lierEntite(this);
 }
 
@@ -58,9 +58,9 @@ bool Unite::deplacementPossible(Case* c) {
 }
 
 void Unite::modifierVie(int vie) {
-    Entite::modifierVie(vie);
+    Entite::modifierVie(vie);/*
     if (estMort())
-        this->getJoueur()->deleteUnite(this);
+        this->getJoueur()->deleteUnite(this);*/
 }
 
 bool Unite::attaquer(Case* c, Attaque* attaque) {
@@ -73,12 +73,21 @@ bool Unite::attaquer(Case* c, Attaque* attaque) {
                         attaquer = false;
                     }
                     else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()) {
-                       cout << "erreur Portee" << attaque->getPortee() <<flush;
+                       cout << "erreur Portee," <<flush;
                        attaquer = false;
                     }
                     else
                     {
                     attaque->lancerAttaque(c);
+                    if (((c->getOccupant())->getVie())==0){
+                        QPixmap *tombe;
+                        tombe=new QPixmap("images/Coffin.png");
+                        (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
+                        sleep(1);
+
+                        c->getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
+                        c->setOccupant(NULL);
+                    }
                     this->getJoueur()->modifPtAction(this->getCout());
                     attaquer = true;
                     }
@@ -116,10 +125,14 @@ void Unite::attaquer(Entite* e, Attaque* a) {
 }
 
 int Unite::getMouvement() {
-    return m_mouvement + getJoueur()->getListeBonusJoueur()[5] + v_bonus[3];
+    return m_mouvement;
 }
 
 Unite::~Unite() {
+
+}
+
+void Unite::initSort() {
 
 }
 

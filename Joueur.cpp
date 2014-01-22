@@ -16,28 +16,16 @@ Joueur::Joueur(int couleur, int numero) : m_listeBonusJoueur() {
 Joueur::~Joueur() {
 }
 
-void Joueur::setBatiment(Batiment * batiment) { 
-    v_Batiment.push_back(batiment);
+void Joueur::deleteUnite(Unite*u)
+{
+    vector<Unite*>::iterator it;
+    it = find(getUnite().begin(), getUnite().end(), u);
+    getUnite().erase(it);
 }
 
-void Joueur::setUnite(Unite * unite) {
-    v_Unite.push_back(unite);
-}
-
-void Joueur::deleteBatiment(Batiment* bat) {
-    vector<Batiment*>::iterator it = v_Batiment.begin();
-    int i = 0;
-    while(v_Batiment[i] != bat)
-    { i++; it++; }
-
-    v_Batiment.erase(it);
-}
-
-void Joueur::deleteUnite(Unite * unite) {
-    vector<Unite*>::iterator it = v_Unite.begin();
-    int i = 0;
-    while(v_Unite[i] != unite)
-    { i++; it++; }
-
-    v_Unite.erase(it);
+void Joueur::deleteBatiment(Batiment*b)
+{
+    vector<Batiment*>::iterator it;
+    it = find(getBatiment().begin(), getBatiment().end(), b);
+    getBatiment().erase(it);
 }

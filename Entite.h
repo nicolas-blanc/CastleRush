@@ -32,7 +32,6 @@ class Entite : public QGraphicsPixmapItem
         inline bool estMort() { return m_vie.GetValeur() == 0;}
         bool adjacent(Case* c);
 
-
 //        int& operator[] (unsigned int i) { return m_position[i]; };
     protected:
         string m_nom;

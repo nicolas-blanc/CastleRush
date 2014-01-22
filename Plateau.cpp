@@ -34,8 +34,10 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     mag = NULL;
     pret = NULL;
 
-    jclient = joueurs[0];
-    jserveur = joueurs[1];
+    jserveur = joueurs[0];
+    jserveur->setPseudo("Joueur 1");
+    jclient = joueurs[1];
+    jclient->setPseudo("Joueur 2");
 
     Batiment* bat;
     ifstream fichierPlateau(nomPlateau.c_str(), ios::in | ios::binary);
@@ -113,12 +115,12 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
                         default :
                             break;
                     }
-                    v_Batiment.push_back(bat);
                 }
             }
+            v_Batiment.push_back(bat);
         }
 
-    TOUR = new QLabel("Tour ToTal : " + QString::number(NombreTour) + " -- Tour n°" +QString::number(NombreTourJoueur));
+    TOUR = new QLabel("Tour Total : " + QString::number(NombreTour) + " -- Tour n°" +QString::number(NombreTourJoueur));
     TOUR->setGeometry(SIZE*(m_largeur+1),(-30),180,25);
     addWidget(TOUR);
 
@@ -155,9 +157,8 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     addWidget(fint);
     connect(fint, SIGNAL(released()), this, SLOT(gestionTour()));
 
-    j.push_back(jclient);
-
     j.push_back(jserveur);
+    j.push_back(jclient);
 
     jtour = j[0];
 
@@ -242,18 +243,6 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
 
     setBoutons(carre);
 
-    //--------------------------------
-    //--------------------------------
-
-    Unite* vol=new Voleur(plateau[7][8],plateau[7][8],jclient);
-    Unite* pret=new Pretre(plateau[6][8],plateau[6][8],jserveur);
-    //-----------------------------
-    //-----------------------------
-
-    for (int i = 0; i < joueurs.size(); i++) {
-        joueurs[i]->liePlateau(this);
-    }
-
 }
 
 bool Plateau::isFini(ifstream& fichier) {
@@ -280,13 +269,32 @@ void Plateau::gestionTour()
     QMessageBox popup;
     popup.setText("Tour Joueur : " + jtour->getPseudo());
     popup.exec();
-//    for(int i =0; i<v_Batiment.size(); i++)
-//    {
-//        if(typeid(*(v_Batiment[i]))==typeid(Tour))
-//        {
-//            ((Tour*)v_Batiment[i])->attaqueAuto();
-//        }
-//    }
+    for(int i =0; i<v_Batiment.size(); i++)
+    {
+        Batiment *batiment = v_Batiment[i];
+        if(batiment->Getnom() =="Tour" && batiment->getJoueur() == jtour)
+        {
+            ((Tour*)v_Batiment[i])->attaqueAuto();
+        }
+    }
+    setBoutons(carre);
+
+
+    for(int i = 0; i<j.size();i++)
+    {
+        for(int d = 0; d<j[i]->getUnite().size();d++)
+        {
+        if(j[i]->getUnite()[d]->getVie() == 0)
+        {
+                Unite*u= j[i]->getUnite()[d];
+                Case* c = u->getPosition()[0];
+                c->setOccupant(NULL, false);
+                j[i]->deleteUnite(u);
+                delete u;
+        }
+        }
+    }
+
 }
 
 void Plateau::setSelect(QGraphicsItem *c){
@@ -304,8 +312,6 @@ Plateau::~Plateau() {
 
 void Plateau::updatePopPt()
 {
-    cout << "   " << jtour->getNumero() << endl << flush;
-    cout << "   " << jtour->getPopulation() << endl << flush;
     pop->setMaximum(jtour->getPopulationMax());
     pop->setValue(jtour->getPopulation());
     pop->setFormat("%v/%m");
@@ -576,7 +582,6 @@ void Plateau::intInvocVol()
         cheminOK.push_back(NULL);
 
         for (unsigned int i=0; i<chemins.size(); i++) {
-            cout<<chemins[i].size()<<flush;
             if ((cheminOK[cheminOK.size()-1]==NULL) || (chemins[i].size()<=cheminOK.size() && (chemins[i][chemins[i].size()-1]!=NULL))) {
                 cheminOK=chemins[i];
             }
@@ -585,62 +590,110 @@ void Plateau::intInvocVol()
         return cheminOK;
     }
 
-void Plateau::highlightAttaque(Case* c, int portee) {
-    QColor color = Qt::red;
-    if (portee==0) {
-        color=Qt::transparent;
-        portee=m_largeur*m_hauteur;
-        c->setBrush(*new QBrush(color));
+    void Plateau::highlightAttaque(Case* c, int portee) {
+        QColor color = Qt::red;
+        if (portee==-1) {
+            portee=(m_hauteur>m_largeur?m_hauteur:m_largeur);
+            color=Qt::transparent;
+        }
+        int l=0;
+        int h=0;
+        for (int i=0; i<=portee; i++)
+            for (int j=0; j<=portee-i; j++) {
+                if (c->getX()+i<m_largeur&&c->getY()+j<m_hauteur)
+                    plateau[c->getX()+i][c->getY()+j]->setBrush(*new QBrush(color));
+
+                if (c->getX()-i>=0       &&c->getY()+j<m_hauteur)
+                    plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
+
+                if (c->getX()+i<m_largeur&&c->getY()-j>=0)
+                    plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
+
+                if (c->getX()-i>=0       &&c->getY()-j>=0)
+                    plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
+            }
     }
 
-    for (int i=0; i<=portee; i++) {
-        for (int j=0; j<=portee-i; j++) {
-            if (i+c->getX()<m_largeur&&j+c->getY()<m_hauteur) {
-                if (color==Qt::transparent||porteeAttaquePossible(c, plateau[i+c->getX()][j+c->getY()],portee)) {
-                    plateau[i+c->getX()][j+c->getY()]->setBrush(*new QBrush(color));
+
+
+Unite * Plateau::getUniteAttaqueTour(Tour* tr)
+{
+
+    Unite* danger_entite = NULL;
+    float distance;
+    float distance_danger;
+    vector<Unite*> entite_presentes;
+    Case* ma_position = tr->getPosition()[0];
+    for(int x=0; x<=tr->getAttaque()->getPortee(); x++)
+    {
+        for(int y=0; y<=tr->getAttaque()->getPortee()-x; y++)
+        {
+
+            if (ma_position->getX()+x<m_largeur&&ma_position->getY()+y<m_hauteur)
+            {
+
+                Case* caseoccupee = plateau[ma_position->getX()+x][ma_position->getY()+y];
+                if(caseoccupee->isOccupee())
+                if(caseoccupee->isOccupee()  && (caseoccupee->getOccupant()->Getnom() == "Chevalier"||caseoccupee->getOccupant()->Getnom() == "Archer"||caseoccupee->getOccupant()->Getnom() == "Guerrier"||caseoccupee->getOccupant()->Getnom() == "Magicien"||caseoccupee->getOccupant()->Getnom() == "Pretre"||caseoccupee->getOccupant()->Getnom() == "Voleur"))
+                {
+                    entite_presentes.push_back((Unite*)(caseoccupee->getOccupant()));
                 }
             }
-            if (c->getX()-i>=0&&c->getY()-j>=0) {
-                if (color==Qt::transparent||porteeAttaquePossible(c, plateau[c->getX()-i][c->getY()-j],portee)) {
-                    plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
+
+            if (ma_position->getX()-x>=0&&ma_position->getY()+y<m_hauteur)
+            {
+                Case* caseoccupee = plateau[ma_position->getX()-x][ma_position->getY()+y];
+                if(caseoccupee->isOccupee())
+                if(caseoccupee->isOccupee()  && (caseoccupee->getOccupant()->Getnom() == "Chevalier"||caseoccupee->getOccupant()->Getnom() == "Archer"||caseoccupee->getOccupant()->Getnom() == "Guerrier"||caseoccupee->getOccupant()->Getnom() == "Magicien"||caseoccupee->getOccupant()->Getnom() == "Pretre"||caseoccupee->getOccupant()->Getnom() == "Voleur"))
+                {
+                    entite_presentes.push_back((Unite*)(caseoccupee->getOccupant()));
                 }
             }
-            if (c->getX()+i<m_largeur&&c->getY()-j>=0) {
-                if (color==Qt::transparent||porteeAttaquePossible(c, plateau[c->getX()+i][c->getY()-j],portee)) {
-                    plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
+            if (ma_position->getX()+x<m_largeur&&ma_position->getY()-y>=0)
+            {
+                Case* caseoccupee = plateau[ma_position->getX()+x][ma_position->getY()-y];
+                if(caseoccupee->isOccupee())
+                if(caseoccupee->isOccupee()  && (caseoccupee->getOccupant()->Getnom() == "Chevalier"||caseoccupee->getOccupant()->Getnom() == "Archer"||caseoccupee->getOccupant()->Getnom() == "Guerrier"||caseoccupee->getOccupant()->Getnom() == "Magicien"||caseoccupee->getOccupant()->Getnom() == "Pretre"||caseoccupee->getOccupant()->Getnom() == "Voleur"))
+                {
+                    entite_presentes.push_back((Unite*)(caseoccupee->getOccupant()));
                 }
             }
-            if (c->getX()-i>=0&&c->getY()+j<m_hauteur) {
-                if (color==Qt::transparent||porteeAttaquePossible(c, plateau[c->getX()-i][c->getY()+j],portee)) {
-                    plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
+            if (ma_position->getX()-x>=0&&ma_position->getY()-y>=0)
+            {
+                Case* caseoccupee = plateau[ma_position->getX()-x][ma_position->getY()-y];
+                if(caseoccupee->isOccupee())
+                if(caseoccupee->isOccupee()  && (caseoccupee->getOccupant()->Getnom() == "Chevalier"||caseoccupee->getOccupant()->Getnom() == "Archer"||caseoccupee->getOccupant()->Getnom() == "Guerrier"||caseoccupee->getOccupant()->Getnom() == "Magicien"||caseoccupee->getOccupant()->Getnom() == "Pretre"||caseoccupee->getOccupant()->Getnom() == "Voleur"))
+                {
+                    entite_presentes.push_back((Unite*)(caseoccupee->getOccupant()));
                 }
             }
         }
     }
-}
 
-bool Plateau::porteeAttaquePossible(Case *c1, Case *c2, int portee) {
-    if (c1==NULL)
-        return false;
-    else if ((c1->getX()==c2->getX())&&(c1->getY()==c2->getY()))
-        return true;
-    else if (portee==0) {
-        return false;
+    if(entite_presentes.size()>0)
+    {
+        Unite* u = entite_presentes[0];
+        Case* c =u->getPosition()[0];
+        distance_danger = abs(tr->getJoueur()->getBatiment()[0]->getPosition()[0]->getX()-
+                               c->getX())
+                                + abs(tr->getJoueur()->getBatiment()[0]->getPosition()[0]->getY()-
+                                c->getY());
+        danger_entite = entite_presentes[0];
+        for(unsigned int i =1; i<entite_presentes.size(); i++)
+        {
+            u = entite_presentes[i];
+            c =u->getPosition()[i];
+            distance = abs(tr->getJoueur()->getBatiment()[0]->getPosition()[0]->getX()-
+                    c->getX())
+                     + abs(tr->getJoueur()->getBatiment()[0]->getPosition()[0]->getY()-
+                     c->getY());
+            if(distance<distance_danger)
+            {
+                distance_danger = distance;
+                danger_entite = entite_presentes[i];
+            }
+        }
     }
 
-    Case* gauche=NULL;
-    Case* droite=NULL;
-    Case* avant=NULL;
-    Case* arriere=NULL;
-
-    if (c1->getX()<=c2->getX()&&plateau[c1->getX()+1][c1->getY()]->isOccupee())
-        droite=plateau[c1->getX()+1][c1->getY()];
-    if (c1->getX()>=c2->getX()&&plateau[c1->getX()-1][c1->getY()]->isOccupee())
-        gauche=plateau[c1->getX()-1][c1->getY()];
-    if (c1->getY()<=c2->getY()&&plateau[c1->getX()][c1->getY()+1]->isOccupee())
-        avant=plateau[c1->getX()][c1->getY()+1];
-    if (c1->getY()>=c2->getY()&&plateau[c1->getX()][c1->getY()-1]->isOccupee())
-        arriere=plateau[c1->getX()][c1->getY()-1];
-
-    return porteeAttaquePossible(droite,c2,portee-1)||porteeAttaquePossible(gauche,c2,portee-1)||porteeAttaquePossible(avant,c2,portee-1)||porteeAttaquePossible(arriere,c2,portee-1);
+    return danger_entite;
 }

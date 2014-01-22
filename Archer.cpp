@@ -1,7 +1,6 @@
 #include "Archer.h"
 Archer::Archer(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent, 5,2,1,5,0,c,j,"Archer")
 {
-    this->setAttaqueDeBase(5);
     QPixmap* arch;
     if (j && j->getNumero()==0) {
         arch=new QPixmap("images/ArcherBleu.png");
