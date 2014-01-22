@@ -8,7 +8,7 @@ RegleDuJeu::RegleDuJeu()
     this->setWindowTitle("Regle Du Jeu");
     m_fermer = new QPushButton("Fermer", this);
     m_fermer->move(700,365);
-    QObject::connect(m_fermer, SIGNAL(clicked()), this, SLOT(close()));
+    QObject::connect(m_fermer, SIGNAL(released()), this, SLOT(close()));
 
     //ONGLETREGLES
 
@@ -75,7 +75,7 @@ RegleDuJeu::RegleDuJeu()
     ongletRegles->addTab(DT, "Déroulement");
     ongletRegles->addTab(MAP, "Map");
 
-    QObject::connect(Map, SIGNAL(clicked()), this, SLOT(agrandirMap()));
+    QObject::connect(Map, SIGNAL(released()), this, SLOT(agrandirMap()));
 
     //ONGLETREGLES
 
@@ -155,7 +155,6 @@ RegleDuJeu::RegleDuJeu()
     CampEntrainementIMG = new QPushButton("");
     CampEntrainementIMG->setIcon(QIcon("images/CampEntrainement.png"));
     CampEntrainementIMG->setIconSize(QSize(76,68));
-    CampEntrainementIMG->clicked(false);
     CampEntrainementIMG->setStyleSheet("QPushButton\
     {\
         border: 0px;\
@@ -181,7 +180,6 @@ RegleDuJeu::RegleDuJeu()
     VillageIMG = new QPushButton("");
     VillageIMG->setIcon(QIcon("images/Village.png"));
     VillageIMG->setIconSize(QSize(80,69));
-    VillageIMG->clicked(false);
     VillageIMG->setStyleSheet("QPushButton\
     {\
         border: 0px;\
@@ -208,7 +206,6 @@ RegleDuJeu::RegleDuJeu()
     ChateauBonusIMG = new QPushButton("");
     ChateauBonusIMG->setIcon(QIcon("images/ChateauBonus.png"));
     ChateauBonusIMG->setIconSize(QSize(57,55));
-    ChateauBonusIMG->clicked(false);
     ChateauBonusIMG->setStyleSheet("QPushButton\
     {\
         border: 0px;\
@@ -246,7 +243,6 @@ RegleDuJeu::RegleDuJeu()
     ChateauIMG = new QPushButton("");
     ChateauIMG->setIcon(QIcon("images/Chateau.png"));
     ChateauIMG->setIconSize(QSize(62,64));
-    ChateauIMG->clicked(false);
     ChateauIMG->setStyleSheet("QPushButton\
     {\
         border: 0px;\
@@ -273,7 +269,6 @@ RegleDuJeu::RegleDuJeu()
     TourIMG = new QPushButton("");
     TourIMG->setIcon(QIcon("images/Tour.png"));
     TourIMG->setIconSize(QSize(50,50));
-    TourIMG->clicked(false);
     TourIMG->setStyleSheet("QPushButton\
     {\
         border: 0px;\
@@ -432,8 +427,8 @@ RegleDuJeu::RegleDuJeu()
     Commandes->addTab(IUA, "Info Adversaire");
     Commandes->addTab(CAP, "Capturer");
 
-    QObject::connect(CommandeDeplacementIMG, SIGNAL(clicked()), this, SLOT(agrandirDep()));
-    QObject::connect(CommandeInfoUniteAdverseIMG, SIGNAL(clicked()), this, SLOT(agrandirInfoUnite()));
+    QObject::connect(CommandeDeplacementIMG, SIGNAL(released()), this, SLOT(agrandirDep()));
+    QObject::connect(CommandeInfoUniteAdverseIMG, SIGNAL(released()), this, SLOT(agrandirInfoUnite()));
 
     //ONGLETCOMMANDES
 
@@ -461,7 +456,6 @@ RegleDuJeu::RegleDuJeu()
     ArcherIMG = new QPushButton("");
     ArcherIMG->setIcon(QIcon("images/Archer.png"));
     ArcherIMG->setIconSize(QSize(100,130));
-    ArcherIMG->clicked(false);
     ArcherIMG->setStyleSheet("QPushButton\
     {\
         border: 0px;\
@@ -492,7 +486,6 @@ RegleDuJeu::RegleDuJeu()
     ChevalierIMG = new QPushButton("");
     ChevalierIMG->setIcon(QIcon("images/Chevalier.png"));
     ChevalierIMG->setIconSize(QSize(100,130));
-    ChevalierIMG->clicked(false);
     ChevalierIMG->setStyleSheet("QPushButton\
     {\
         border: 0px;\
@@ -522,7 +515,6 @@ RegleDuJeu::RegleDuJeu()
     GuerrierIMG = new QPushButton("");
     GuerrierIMG->setIcon(QIcon("images/Guerrier.png"));
     GuerrierIMG->setIconSize(QSize(100,130));
-    GuerrierIMG->clicked(false);
     GuerrierIMG->setStyleSheet("QPushButton\
     {\
         border: 0px;\
@@ -552,7 +544,6 @@ RegleDuJeu::RegleDuJeu()
     VoleurIMG = new QPushButton("");
     VoleurIMG->setIcon(QIcon("images/Voleur.png"));
     VoleurIMG->setIconSize(QSize(100,130));
-    VoleurIMG->clicked(false);
     VoleurIMG->setStyleSheet("QPushButton\
     {\
         border: 0px;\
@@ -582,7 +573,6 @@ RegleDuJeu::RegleDuJeu()
     PretreIMG = new QPushButton("");
     PretreIMG->setIcon(QIcon("images/Pretre.png"));
     PretreIMG->setIconSize(QSize(100,130));
-    PretreIMG->clicked(false);
     PretreIMG->setStyleSheet("QPushButton\
     {\
         border: 0px;\
@@ -612,7 +602,6 @@ RegleDuJeu::RegleDuJeu()
     MagicienIMG = new QPushButton("");
     MagicienIMG->setIcon(QIcon("images/Magicien.png"));
     MagicienIMG->setIconSize(QSize(100,130));
-    MagicienIMG->clicked(false);
     MagicienIMG->setStyleSheet("QPushButton\
     {\
         border: 0px;\

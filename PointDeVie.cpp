@@ -1,6 +1,7 @@
 #include "PointDeVie.h"
-
-PointDeVie::PointDeVie(int mini, int maxi)
+#include <iostream>
+using namespace std;
+PointDeVie::PointDeVie(int maxi,int mini)
 {
     m_Min = mini;
     m_Max = maxi;
@@ -9,10 +10,9 @@ PointDeVie::PointDeVie(int mini, int maxi)
 }
 
 void PointDeVie::modifVie(int val) {
-    if ((this->GetValeur() + val) > this->GetMax())
-        m_Valeur = GetMax();
-    else if ((this->GetValeur() + val) < this->GetMin())
-        m_Valeur = m_Min;
-    else
-        this->SetValeur(this->GetValeur() + val);
+    if ((this->GetValeur() - val) > this->GetMax()){
+        m_Valeur = GetMax();}
+    else{
+        this->SetValeur(this->GetValeur() - val);
+    }
 }

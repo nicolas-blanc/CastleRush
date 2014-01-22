@@ -40,8 +40,6 @@ class MaFenetre : public QWidget
     RegleDuJeu regle;
     MainWindow j2;
 
-    QString pseudo;
-
     private slots:
 
     void monAction()
@@ -63,8 +61,7 @@ class MaFenetre : public QWidget
 
     void enregistrerPseudo()
     {
-        pseudo = PseudoJoueur->text();
-        this->setWindowTitle(pseudo);
+        this->setWindowTitle(PseudoJoueur->text());
     }
 
 };

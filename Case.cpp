@@ -30,17 +30,18 @@ void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         ((Unite*)(parent()->getSelect()))->deplacer(this);
         parent()->setFlag(attente);
         parent()->highlight(this);
-        this->parent()->update();
+        this->parent()->updatePopPt();
     }
     else if (parent()->getFlag()==attaque) {
         ((Unite*)(parent()->getSelect()))->attaquer(this);
         parent()->setFlag(attente);
-        this->parent()->update();
+        parent()->highlightAttaque(this);
+        this->parent()->updatePopPt();
     }
     else if (parent()->getFlag()==invoquer){
         Chateau* ch=((Chateau*)(parent()->getSelect()));
         ch->Invoquer(parent()->getUnitInvoc(), this);
-        this->parent()->update();
+        parent()->updatePopPt();
         parent()->setFlag(attente);
     }
 }

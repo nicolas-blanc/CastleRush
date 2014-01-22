@@ -8,7 +8,7 @@ Joueur::Joueur(int couleur, int numero) : m_listeBonusJoueur() {
         m_listeBonusJoueur.push_back(0);
     setPtActionMax(20);
     setPtAction(20);
-    setPopulationMax(100);
+    setPopulationMax(5);
     setPopulation(0);
 
 }

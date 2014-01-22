@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <QString>
 
 #include "ListeException.h"
 
@@ -19,8 +20,8 @@ public :
     virtual ~Joueur();
     inline int getCouleur() { return m_couleur; }
     inline int getNumero() { return m_numero; }
-    inline int getPtAction() { return m_PtActionJoueur; }
-    inline int getPopulation() { return m_Population; }
+    inline int getPtAction() { return m_PtActionJoueur;}
+    inline int getPopulation() { return m_Population;}
     inline int getPtActionMax() { return m_PtActionMax + m_listeBonusJoueur[1]; }
     inline void setPtActionMax(int pt) {m_PtActionMax = pt;}
     inline int getPopulationMax() { return m_PopulationMax + m_listeBonusJoueur[0]; }
@@ -30,7 +31,7 @@ public :
     inline Batiment* getBatiment(string nomBatiment) { return v_Batiment[nomBatiment]; }
 
     inline void modifPtAction(int val) { m_PtActionJoueur = m_PtActionJoueur-val; }
-    inline void modifPopulation(int val) { m_Population = m_Population+val; }
+    inline void modifPopulation(int val) { m_Population = m_Population+val;}
 
     inline void setPtAction(int val) { if (val <= getPtActionMax() || val > 0) m_PtActionJoueur = val; else { PtAction ex; throw ex; } }
     inline void setListeBonusJoueur(int indice, int bonus) { m_listeBonusJoueur[indice] = bonus; }
@@ -44,7 +45,10 @@ public :
 
     int& operator[] (unsigned int i) {return m_listeBonusJoueur[i];}
     bool operator== (Joueur j) {return m_numero==j.getNumero();}
+    void setPseudo(QString pseudo){this->pseudo = pseudo;}
+    QString getPseudo(){return pseudo;}
 private :
+    QString pseudo;
     int m_couleur;
     int m_numero;
     map<string, Unite * > v_Unite;

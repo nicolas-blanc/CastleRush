@@ -11,7 +11,6 @@ Unite::Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned
     this->setCout(ct);
     this->setPopulation(pop);
     this->setAttaqueDeBase();
-
 }
 
 void Unite::setAttaqueDeBase() {
@@ -63,21 +62,56 @@ void Unite::modifierVie(int vie) {
         this->getJoueur()->deleteUnite(this);
 }
 
-void Unite::attaquer(Case* c, Attaque* attaque) {
-    if (getJoueur()->getPtAction()<attaque->getPtAction()) {
-        ManquePtAction ex;
-        throw ex;
+bool Unite::attaquer(Case* c, Attaque* attaque) {
+    bool attaquer;
+
+    if(c->getOccupant()->getJoueur()!= ((Case*)parentItem())->parent()->getJoueurTour())
+    {
+                    if (getJoueur()->getPtAction()<attaque->getPtAction()) {
+                        cout << "erreur PtAction" << flush;
+                        attaquer = false;
+                    }
+                    else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()) {
+                       cout << "erreur Portee" << attaque->getPortee() <<flush;
+                       attaquer = false;
+                    }
+                    else
+                    {
+                    attaque->lancerAttaque(c);
+                    this->getJoueur()->modifPtAction(this->getCout());
+                    attaquer = true;
+                    }
     }
-    Case* cE = getPosition()[0];
-    if ((abs(c->getX() - cE->getX()) + abs(c->getY() - cE->getY())) <= attaque->getPortee()) {
-        ManquePortee ex;
-        throw ex;
+    else
+    {
+        cout << "erreur Attaque Perso" << flush;
+        attaquer = false;
     }
-    attaque->lancerAttaque(c);
+    return attaquer;
 }
 
-void Unite::attaquer(Case* c) {
-    attaquer(c,m_AttaqueParDefaut);
+bool Unite::attaquer(Case* c) {
+    return attaquer(c,m_AttaqueParDefaut);
+}
+
+void Unite::attaquer(Entite* e) {
+    int i =0;
+    bool Attaquer = false;
+    while(i<e->getPosition().size() && !Attaquer)
+    {
+       Attaquer = this->attaquer(e->getPosition()[i]);
+       i++;
+    }
+}
+
+void Unite::attaquer(Entite* e, Attaque* a) {
+    int i =0;
+    bool Attaquer = false;
+    while(i<e->getPosition().size() && !Attaquer)
+    {
+    Attaquer = this->attaquer(e->getPosition()[i],a);
+    i++;
+    }
 }
 
 int Unite::getMouvement() {

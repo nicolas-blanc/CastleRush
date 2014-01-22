@@ -8,12 +8,6 @@ Chateau::Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, Joueur* j, strin
         this->setPixmap(* new QPixmap("images/ChateauBleu.png"));
     else
         this->setPixmap(* new QPixmap("images/ChateauRouge.png"));
-
-    for (int i=0; i<EnsCase.size();i++) {
-        cout<<"pushback x : "<<EnsCase[i]->getX()<<endl<<flush;
-        cout<<"pushback y : "<<EnsCase[i]->getY()<<endl<<flush;
-        cout<<"------------------"<<endl<<flush;
-    }
 }
 
 Chateau::Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, string nom) : Batiment(parent, EnsCase, nom, 0, 20) {
@@ -74,8 +68,7 @@ void Chateau::Invoquer(catUnite unite, Case * c){
     }
 }
 
-
 void Chateau::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     Batiment::mouseReleaseEvent(event);
-    ((Case*)parentItem())->parent()->setBoutons(batChateau);
+    ((Case*)parentItem())->parent()->setBoutons(batChateau,this->getJoueur()->getNumero());
 }

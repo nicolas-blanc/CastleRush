@@ -32,6 +32,8 @@ private :
         QLabel *por;
         QLabel *vie;
 
+        QLabel *TOUR;
+
         QPushButton* att;
         QPushButton* sorts;
         QPushButton* dep;
@@ -79,14 +81,16 @@ public :
         inline QGraphicsItem* getSelect() {return selected;}
         inline void setFlag(flagsAppli f) {flag=f;}
         inline flagsAppli getFlag() {return flag;}
-        void update();
+        void updatePopPt();
         void afficheInfoUnite(Entite *u);
         void cacheInfoUnite();
         void InfoNull();
         void setBoutons(typeElement type, int numJoueur=0);
         void setBoutonsUnite(bool active);
         void highlight(Case* c, int portee=-1);
+        void highlightAttaque(Case* c, int portee=0);
         vector<Case*> cheminDeplacement(Case* c1, Case* c2, int portee);
+        bool porteeAttaquePossible(Case* c1, Case* c2, int portee);
 
         inline void setUnitInvoc(catUnite unite) { unitInvoc = unite;}
         inline catUnite getUnitInvoc() { return unitInvoc;}

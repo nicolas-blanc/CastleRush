@@ -17,6 +17,8 @@ class Tour : public Batiment
         inline AttaqueDeBase getAttaque(){return m_attaque;}
         inline void setAtttaque(AttaqueDeBase atk){m_attaque = atk;}
         void attaqueAuto();
+protected:
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 };
 
 #endif        /* TOUR_H */

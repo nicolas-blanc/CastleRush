@@ -1,6 +1,8 @@
 #ifndef BATIMENT_H
 #define BATIMENT_H
 
+
+
 #include <vector>
 
 #include "Entite.h"
@@ -17,5 +19,4 @@ public:
 protected:
       void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
 };
-#endif	/* BATIMENT_H */
-
+#endif        /* BATIMENT_H */

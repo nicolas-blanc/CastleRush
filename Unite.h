@@ -33,8 +33,8 @@ class Unite : public Entite {
 
         void deplacer(Case* c);
         bool deplacementPossible(Case* c); // /!\ a corriger avec getDepX et getDepY
-        void attaquer(Case* c, Attaque* attaque);
-        void attaquer(Case* c);
+        bool attaquer(Case* c, Attaque* attaque);
+        bool attaquer(Case* c);
         void modifierVie(int vie);
 
         inline void insererEffet(Effet* effet) { this->v_effet.push_back(effet); }
@@ -50,6 +50,9 @@ class Unite : public Entite {
         void setImageGauche(QPixmap im) { v_dep_gauche.push_back(im); }
         void setImageDroite(QPixmap im) { v_dep_droite.push_back(im); }
         void setImageDos(QPixmap im) { v_dep_dos.push_back(im); }
+
+        void attaquer(Entite* e);
+        void attaquer(Entite* e, Attaque* a);
 
     protected:
         string m_nom;

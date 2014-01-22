@@ -16,8 +16,7 @@ Entite::Entite(QGraphicsItem * parent, vector<Case*>& ensCase, Joueur* j, string
 Entite::Entite(QGraphicsItem * parent, vector<Case*>& ensCase, string nom, int vieMin, int vieMax)
 : QGraphicsPixmapItem(parent), m_vie(vieMax,vieMin), m_position(ensCase) {
     Setnom(nom);
-    Setnom("");
-    this->setOffset(OFFSET+(ensCase[0]->getX()*SIZE),OFFSET+(ensCase[0]->getY()*SIZE));
+     this->setOffset(OFFSET+(ensCase[0]->getX()*SIZE),OFFSET+(ensCase[0]->getY()*SIZE));
     for (unsigned int i=0; i<ensCase.size(); i++)
         ensCase[i]->setOccupant(this);
     setFlags(QGraphicsItem::ItemIsSelectable);
@@ -36,8 +35,6 @@ bool Entite::adjacent(Case* c) {
              ||((abs(getPosition()[i]->getX()-c->getX()))==1&&(getPosition()[i]->getY()-c->getY()==0))
              ||((getPosition()[i]->getX()-c->getX()==0)&&(abs(getPosition()[i]->getY()-c->getY())==1)));
         adj = adj&&!c->isOccupee();
-        cout<<"x = "<<getPosition()[i]->getX()<<flush;
-        cout<<", y = "<<getPosition()[i]->getY()<<endl<<flush;
         i++;
     }
     return adj;
@@ -64,6 +61,14 @@ void Entite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         ((Case*)parentItem())->parent()->setFlag(attente);
         ((Case*)parentItem())->parent()->highlight(((Case*)parentItem()));
     }
+    else if (((Case*)parentItem())->parent()->getFlag()==attaque) {
+        ((Unite*)(((Case*)parentItem())->parent()->getSelect()))->attaquer(this);
+        ((Case*)parentItem())->parent()->setFlag(attente);
+        ((Case*)parentItem())->parent()->highlightAttaque((Case*)parentItem());
+        ((Case*)parentItem())->parent()->updatePopPt();
+    }
     ((Case*)parentItem())->parent()->afficheInfoUnite(this);
     ((Case*)parentItem())->parent()->setSelect(this);
 }
+
+

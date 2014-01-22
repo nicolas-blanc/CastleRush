@@ -27,7 +27,7 @@ void Tour::attaqueAuto()
     float distance_danger;
     vector<Entite*> entite_presentent;
     vector<Case*> ma_position = getPosition();
-    for(int x =0; x<ma_position[0]->getX()+m_attaque.getPortee(); x++)
+    for(int x =0; x<(ma_position[0]->getX()+m_attaque.getPortee()); x++)
     {
         for(int y = 0; y<ma_position[0]->getY()+m_attaque.getPortee(); y++)
         {
@@ -46,6 +46,7 @@ void Tour::attaqueAuto()
     danger_entite = entite_presentent[0];
     for(unsigned int i =1; i<entite_presentent.size(); i++)
     {
+        cout << "test " << endl << flush;
         distance = sqrt(((getJoueur()->getBatiment("Chateau")->getPosition()[0]->getX()
                 -entite_presentent[i]->getPosition()[0]->getX())^2)+
                 ((getJoueur()->getBatiment("Chateau")->getPosition()[0]->getY()
@@ -58,4 +59,10 @@ void Tour::attaqueAuto()
     }
 
     attaquer(danger_entite->getPosition()[0]);
+}
+
+void Tour::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    Batiment::mouseReleaseEvent(event);
+    ((Case*)parentItem())->parent()->setBoutons(batTour);
+    cout <<"kbvhjvjhvjvjvjvv :::  " << this->getJoueur()->getNumero() << endl << flush;
 }
