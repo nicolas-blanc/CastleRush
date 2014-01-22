@@ -38,5 +38,8 @@ Batiment::Batiment(QGraphicsItem *parent, Case *c, string nom, int vieMin, int v
 
 void Batiment::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     Entite::mouseReleaseEvent(event);
-    ((Case*)parentItem())->parent()->setBoutons(batiment);
+    if(((Case*)parentItem())->parent()->getFlag()==attente)
+        ((Case*)parentItem())->parent()->setBoutons(batiment);
+    else
+        ((Case*)parentItem())->parent()->setFlag(attente);
 }

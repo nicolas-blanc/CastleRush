@@ -15,7 +15,7 @@ Chateau::Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, string nom) : Ba
         this->setPixmap(* new QPixmap("images/ChateauCentrale.png"));
 }
 
-void Chateau::Invoquer(catUnite unite, Case * c){
+bool Chateau::Invoquer(catUnite unite, Case * c){
     bool invoc_possible = adjacent(c);
     Unite* u;
 
@@ -47,6 +47,7 @@ void Chateau::Invoquer(catUnite unite, Case * c){
         getJoueur()->setUnite(u);
         this->getJoueur()->modifPopulation(u->getPopulation());
         this->getJoueur()->modifPtAction(u->getCout());
+        return true;
     }
     else
     {
@@ -66,6 +67,7 @@ void Chateau::Invoquer(catUnite unite, Case * c){
             cout << "erreur portee"<<flush;
             //throw ManquePortee();
         }
+        return false;
     }
 }
 

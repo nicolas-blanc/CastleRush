@@ -266,7 +266,7 @@ bool Plateau::isFini(ifstream& fichier) {
 }
 
 void Plateau::handleDep() {
-
+        highlight(plateau[0][0]);
         highlight(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getMouvement()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[mouvement]);
         setFlag(deplacement);
 }
@@ -342,16 +342,17 @@ void Plateau::afficheInfoUnite(Entite *u)
     mvt->hide();
     atk->hide();
     nom->show();
-    nom->setText("Nom : " + QString(u->Getnom().c_str()));
+    nom->setText(QString(u->Getnom().c_str()));
     if(typeid(*u) != typeid(BatimentBonusStat) ){
-    vie->show();
-    vie->setText("Point de Vie : " + QString::number(u->getVie()));}
-    if(typeid(*u) == typeid(Chevalier)  ||
-       typeid(*u) == typeid(Pretre)     ||
-       typeid(*u) == typeid(Magicien)   ||
-       typeid(*u) == typeid(Guerrier)   ||
-       typeid(*u) == typeid(Voleur)     ||
-       typeid(*u) == typeid(Archer))
+        vie->show();
+        vie->setText("Point de Vie : " + QString::number(u->getVie()));
+    }
+    else if(typeid(*u) == typeid(Chevalier)  ||
+            typeid(*u) == typeid(Pretre)     ||
+            typeid(*u) == typeid(Magicien)   ||
+            typeid(*u) == typeid(Guerrier)   ||
+            typeid(*u) == typeid(Voleur)     ||
+            typeid(*u) == typeid(Archer))
     {
         mvt->show();
         mvt->setText("Mouvement : " + QString::number(((Unite*)u)->getMouvement()));
@@ -361,6 +362,7 @@ void Plateau::afficheInfoUnite(Entite *u)
 }
 
 void Plateau::handleAtt(){
+    highlight(plateau[0][0]);
     highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getAttaqueParDefaut()->getPortee()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[portee]);
     setFlag(attaque);
 }
@@ -464,169 +466,181 @@ void Plateau::setBoutonsUnite(bool active) {
 
 void Plateau::intInvocGue()
 {
+    for (int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
+        highlight(((Entite*)getSelect())->getPosition()[i],1);
   setUnitInvoc(guerrier);
   setFlag(invoquer);
 }
 void Plateau::intInvocArc()
 {
+    for (int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
+        highlight(((Entite*)getSelect())->getPosition()[i],1);
   setUnitInvoc(archer);
   setFlag(invoquer);
 }
 void Plateau::intInvocChe()
 {
+    for (int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
+        highlight(((Entite*)getSelect())->getPosition()[i],1);
   setUnitInvoc(chevalier);
   setFlag(invoquer);
 }
 void Plateau::intInvocMag()
 {
+    for (int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
+        highlight(((Entite*)getSelect())->getPosition()[i],1);
   setUnitInvoc(magicien);
   setFlag(invoquer);
 }
 void Plateau::intInvocPre()
 {
+    for (int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
+        highlight(((Entite*)getSelect())->getPosition()[i],1);
   setUnitInvoc(pretre);
   setFlag(invoquer);
 }
 void Plateau::intInvocVol()
 {
-  setUnitInvoc(voleur);
-  setFlag(invoquer);
+    for (int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
+        highlight(((Entite*)getSelect())->getPosition()[i],1);
+    setUnitInvoc(voleur);
+    setFlag(invoquer);
 }
 
-    void Plateau::highlight(Case* c, int portee) {
-        QColor color = Qt::red;
-        QBrush brush(color);
-        color.setAlpha(126);
-        if (portee==-1) {
-            color=Qt::transparent;
-            portee=m_largeur*m_hauteur;
-            for (int i=0; i<m_largeur; i++)
-                for (int j=0; j<m_hauteur; j++)
-                    plateau[i][j]->setBrush(*new QBrush(color));
-        }
-        else {
-            vector<Case*> chemin;
-            for (int i=0; i<=portee; i++) {
-                for (int j=0; j<=portee-i; j++) {
-                    if (i+c->getX()<m_largeur&&j+c->getY()<m_hauteur) {
-                        chemin=cheminDeplacement(c, plateau[c->getX()+i][c->getY()+j],portee);
-                        if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
-                            plateau[i+c->getX()][j+c->getY()]->setBrush(*new QBrush(color));
-                        }
+void Plateau::highlight(Case* c, int portee) {
+    QColor color = Qt::red;
+    QBrush brush(color);
+    color.setAlpha(126);
+    if (portee==-1) {
+        color=Qt::transparent;
+        portee=m_largeur*m_hauteur;
+        for (int i=0; i<m_largeur; i++)
+            for (int j=0; j<m_hauteur; j++)
+                plateau[i][j]->setBrush(*new QBrush(color));
+    }
+    else {
+        vector<Case*> chemin;
+        for (int i=0; i<=portee; i++) {
+            for (int j=0; j<=portee-i; j++) {
+                if (i+c->getX()<m_largeur&&j+c->getY()<m_hauteur&&(i+j)) {
+                    chemin=cheminDeplacement(c, plateau[c->getX()+i][c->getY()+j],portee);
+                    if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
+                        plateau[i+c->getX()][j+c->getY()]->setBrush(*new QBrush(color));
                     }
-                    if (c->getX()-i>=0&&c->getY()-j>=0) {
-                        chemin=cheminDeplacement(c, plateau[c->getX()-i][c->getY()-j],portee);
-                        if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
-                            plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
-                        }
+                }
+                if (c->getX()-i>=0&&c->getY()-j>=0&&(i+j)) {
+                    chemin=cheminDeplacement(c, plateau[c->getX()-i][c->getY()-j],portee);
+                    if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
+                        plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
                     }
-                    if (c->getX()+i<m_largeur&&c->getY()-j>=0) {
-                        chemin=cheminDeplacement(c, plateau[c->getX()+i][c->getY()-j],portee);
-                        if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
-                            plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
-                        }
+                }
+                if (c->getX()+i<m_largeur&&c->getY()-j>=0&&(i+j)) {
+                    chemin=cheminDeplacement(c, plateau[c->getX()+i][c->getY()-j],portee);
+                    if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
+                        plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
                     }
-                    if (c->getX()-i>=0&&c->getY()+j<m_hauteur) {
-                        chemin=cheminDeplacement(c, plateau[c->getX()-i][c->getY()+j],portee);
-                        if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
-                            plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
-                        }
+                }
+                if (c->getX()-i>=0&&c->getY()+j<m_hauteur&&(i+j)) {
+                    chemin=cheminDeplacement(c, plateau[c->getX()-i][c->getY()+j],portee);
+                    if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
+                        plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
                     }
                 }
             }
         }
     }
+}
 
-    vector<Case*> Plateau::cheminDeplacement(Case *c1, Case *c2, int portee) {
-        if (c1==NULL) {
-            vector<Case*> v;
-            v.push_back(NULL);
-            return v;
-        }
-        else if ((c1->getX()==c2->getX())&&(c1->getY()==c2->getY())) {
-            vector<Case*> v;
-            v.push_back(c1);
-            return v;
-        }
-        else if (portee==0) {
-            vector<Case*> v;
-            v.push_back(NULL);
-            return v;
-        }
-
-        vector<vector<Case*> > chemins;
-        vector<Case*> gauche;
-        vector<Case*> droite;
-        vector<Case*> avant;
-        vector<Case*> arriere;
-        droite.push_back(c1);
-        gauche.push_back(c1);
-        avant.push_back(c1);
-        arriere.push_back(c1);
-        chemins.push_back(gauche);
-        chemins.push_back(droite);
-        chemins.push_back(avant);
-        chemins.push_back(arriere);
-
-        if (c1->getX()+1<m_largeur&&c1->getX()<=c2->getX()&&!plateau[c1->getX()+1][c1->getY()]->isOccupee()) {
-            vector<Case*> res = cheminDeplacement(plateau[c1->getX()+1][c1->getY()],c2,portee-1);
-            for (unsigned int i=0; i<res.size(); i++)
-                chemins[0].push_back(res[i]);
-        }
-        else chemins[0].push_back(NULL);
-        if (c1->getX()-1>=0&&c1->getX()>=c2->getX()&&!plateau[c1->getX()-1][c1->getY()]->isOccupee()) {
-            vector<Case*> res = cheminDeplacement(plateau[c1->getX()-1][c1->getY()],c2,portee-1);
-            for (unsigned int i=0; i<res.size(); i++)
-                chemins[1].push_back(res[i]);
-        }
-        else chemins[1].push_back(NULL);
-        if (c1->getY()+1<m_hauteur&&c1->getY()<=c2->getY()&&!plateau[c1->getX()][c1->getY()+1]->isOccupee()){
-            vector<Case*> res = cheminDeplacement(plateau[c1->getX()][c1->getY()+1],c2,portee-1);
-            for (unsigned int i=0; i<res.size(); i++)
-                chemins[2].push_back(res[i]);
-        }
-        else chemins[2].push_back(NULL);
-        if (c1->getY()-1>=0&&c1->getY()>=c2->getY()&&!plateau[c1->getX()][c1->getY()-1]->isOccupee()){
-            vector<Case*> res = cheminDeplacement(plateau[c1->getX()][c1->getY()-1],c2,portee-1);
-            for (unsigned int i=0; i<res.size(); i++)
-                chemins[3].push_back(res[i]);
-        }
-        else chemins[3].push_back(NULL);
-
-        vector<Case*> cheminOK;
-        cheminOK.push_back(NULL);
-
-        for (unsigned int i=0; i<chemins.size(); i++) {
-            if ((cheminOK[cheminOK.size()-1]==NULL) || (chemins[i].size()<=cheminOK.size() && (chemins[i][chemins[i].size()-1]!=NULL))) {
-                cheminOK=chemins[i];
-            }
-        }
-
-        return cheminOK;
+vector<Case*> Plateau::cheminDeplacement(Case *c1, Case *c2, int portee) {
+    if (c1==NULL) {
+        vector<Case*> v;
+        v.push_back(NULL);
+        return v;
+    }
+    else if ((c1->getX()==c2->getX())&&(c1->getY()==c2->getY())) {
+        vector<Case*> v;
+        v.push_back(c1);
+        return v;
+    }
+    else if (portee==0) {
+        vector<Case*> v;
+        v.push_back(NULL);
+        return v;
     }
 
-    void Plateau::highlightAttaque(Case* c, int portee) {
-        QColor color = Qt::red;
-        if (portee==-1) {
-            portee=(m_hauteur>m_largeur?m_hauteur:m_largeur);
-            color=Qt::transparent;
-        }
+    vector<vector<Case*> > chemins;
+    vector<Case*> gauche;
+    vector<Case*> droite;
+    vector<Case*> avant;
+    vector<Case*> arriere;
+    droite.push_back(c1);
+    gauche.push_back(c1);
+    avant.push_back(c1);
+    arriere.push_back(c1);
+    chemins.push_back(gauche);
+    chemins.push_back(droite);
+    chemins.push_back(avant);
+    chemins.push_back(arriere);
 
-        for (int i=0; i<=portee; i++)
-            for (int j=0; j<=portee-i; j++) {
-                if (c->getX()+i<m_largeur&&c->getY()+j<m_hauteur)
-                    plateau[c->getX()+i][c->getY()+j]->setBrush(*new QBrush(color));
-
-                if (c->getX()-i>=0       &&c->getY()+j<m_hauteur)
-                    plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
-
-                if (c->getX()+i<m_largeur&&c->getY()-j>=0)
-                    plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
-
-                if (c->getX()-i>=0       &&c->getY()-j>=0)
-                    plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
-            }
+    if (c1->getX()+1<m_largeur&&c1->getX()<=c2->getX()&&!plateau[c1->getX()+1][c1->getY()]->isOccupee()) {
+        vector<Case*> res = cheminDeplacement(plateau[c1->getX()+1][c1->getY()],c2,portee-1);
+        for (unsigned int i=0; i<res.size(); i++)
+            chemins[0].push_back(res[i]);
     }
+    else chemins[0].push_back(NULL);
+    if (c1->getX()-1>=0&&c1->getX()>=c2->getX()&&!plateau[c1->getX()-1][c1->getY()]->isOccupee()) {
+        vector<Case*> res = cheminDeplacement(plateau[c1->getX()-1][c1->getY()],c2,portee-1);
+        for (unsigned int i=0; i<res.size(); i++)
+            chemins[1].push_back(res[i]);
+    }
+    else chemins[1].push_back(NULL);
+    if (c1->getY()+1<m_hauteur&&c1->getY()<=c2->getY()&&!plateau[c1->getX()][c1->getY()+1]->isOccupee()){
+        vector<Case*> res = cheminDeplacement(plateau[c1->getX()][c1->getY()+1],c2,portee-1);
+        for (unsigned int i=0; i<res.size(); i++)
+            chemins[2].push_back(res[i]);
+    }
+    else chemins[2].push_back(NULL);
+    if (c1->getY()-1>=0&&c1->getY()>=c2->getY()&&!plateau[c1->getX()][c1->getY()-1]->isOccupee()){
+        vector<Case*> res = cheminDeplacement(plateau[c1->getX()][c1->getY()-1],c2,portee-1);
+        for (unsigned int i=0; i<res.size(); i++)
+            chemins[3].push_back(res[i]);
+    }
+    else chemins[3].push_back(NULL);
+
+    vector<Case*> cheminOK;
+    cheminOK.push_back(NULL);
+
+    for (unsigned int i=0; i<chemins.size(); i++) {
+        if ((cheminOK[cheminOK.size()-1]==NULL) || (chemins[i].size()<=cheminOK.size() && (chemins[i][chemins[i].size()-1]!=NULL))) {
+            cheminOK=chemins[i];
+        }
+    }
+
+    return cheminOK;
+}
+
+void Plateau::highlightAttaque(Case* c, int portee) {
+    QColor color = Qt::red;
+    if (portee==-1) {
+        portee=(m_hauteur>m_largeur?m_hauteur:m_largeur);
+        color=Qt::transparent;
+    }
+
+    for (int i=0; i<=portee; i++)
+        for (int j=0; j<=portee-i; j++) {
+            if (c->getX()+i<m_largeur&&c->getY()+j<m_hauteur)
+                plateau[c->getX()+i][c->getY()+j]->setBrush(*new QBrush(color));
+
+            if (c->getX()-i>=0       &&c->getY()+j<m_hauteur)
+                plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
+
+            if (c->getX()+i<m_largeur&&c->getY()-j>=0)
+                plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
+
+            if (c->getX()-i>=0       &&c->getY()-j>=0)
+                plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
+        }
+}
 
 
 

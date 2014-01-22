@@ -9,6 +9,7 @@
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
 #include <QParallelAnimationGroup>
+#define min(a,b) ((a)<(b)?(a):(b))
 #define SIZE 36
 
 
@@ -75,9 +76,9 @@ void Unite::animationDeplacement(vector<Case *> chemin ) {
      this->setSelected(true);
 }
 
-void Unite::deplacer(Case* c) {
+bool Unite::deplacer(Case* c) {
     int mvt = this->mouvementDemande(c);
-    vector<Case*> chemin=((Case*)this->parentItem())->parent()->cheminDeplacement(getPosition()[0],c,getMouvement()+getJoueur()->getListeBonusJoueur()[5]);
+    vector<Case*> chemin=((Case*)this->parentItem())->parent()->cheminDeplacement(getPosition()[0],c,min((getMouvement()+getJoueur()->getListeBonusJoueur()[5]),(getJoueur()->getPtAction()+getJoueur()->getListeBonusJoueur()[1])));
     if(chemin[chemin.size()-1]!=NULL)
     {
         if(this->getJoueur()->getPtAction()-mvt >=0)
@@ -88,31 +89,22 @@ void Unite::deplacer(Case* c) {
             this->setPosition(position);
             this->getJoueur()->modifPtAction(mvt);
             ((Plateau*)((Case*)this->parentItem())->parent())->setFlag(attente);
+            return true;
         }
         else
         {
-            QMessageBox popup;
-            popup.setText("Vous n'avez pas assez de point d'action !");
-            popup.exec();
+            return false;
         }
     }
     else
     {
-        QMessageBox popup;
-        popup.setText("Cette unité ne peut se déplacer autant !");
-        popup.exec();
+        return false;
     }
 }
 
 int Unite::mouvementDemande(Case* c)
 {
     return abs(c->getX()-this->getPosition()[0]->getX())+abs(c->getY()-this->getPosition()[0]->getY());
-}
-
-bool Unite::deplacementPossible(Case* c) {
-    return ((getMouvement()+getJoueur()->getListeBonusJoueur()[5]>=
-            abs(c->getX()-this->getPosition()[0]->getX())+abs(c->getY()-this->getPosition()[0]->getY()))
-            && !c->isOccupee());
 }
 
 void Unite::modifierVie(int vie) {
@@ -126,28 +118,28 @@ bool Unite::attaquer(Case* c, Attaque* attaque) {
 
     if(c->getOccupant()->getJoueur()!= ((Case*)parentItem())->parent()->getJoueurTour())
     {
-                    if (getJoueur()->getPtAction()<attaque->getPtAction()) {
-                        cout << "erreur PtAction" << flush;
-                        attaquer = false;
-                    }
-                    else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()) {
-                       cout << "erreur Portee," <<flush;
-                       attaquer = false;
-                    }
-                    else
-                    {
-                    attaque->lancerAttaque(c);
-                    if (((c->getOccupant())->getVie())==0){
-                        QPixmap *tombe;
-                        tombe=new QPixmap("images/Coffin.png");
-                        (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
+        if (getJoueur()->getPtAction()<attaque->getPtAction()) {
+            cout << "erreur PtAction" << flush;
+            attaquer = false;
+        }
+        else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()) {
+           cout << "erreur Portee," <<flush;
+           attaquer = false;
+        }
+        else
+        {
+            attaque->lancerAttaque(c);
+            if (((c->getOccupant())->getVie())==0){
+                QPixmap *tombe;
+                tombe=new QPixmap("images/Coffin.png");
+                (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
 
-                        c->getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
-                        c->setOccupant(NULL);
-                    }
-                    this->getJoueur()->modifPtAction(this->getCout());
-                    attaquer = true;
-                    }
+                c->getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
+                c->setOccupant(NULL);
+            }
+            this->getJoueur()->modifPtAction(this->getCout());
+            attaquer = true;
+        }
     }
     else
     {
@@ -195,7 +187,10 @@ void Unite::initSort() {
 
 void Unite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     Entite::mouseReleaseEvent(event);
-    ((Case*)parentItem())->parent()->setBoutons(unite, getJoueur()->getNumero());
+    if(((Case*)parentItem())->parent()->getFlag()==attente)
+        ((Case*)parentItem())->parent()->setBoutons(unite, getJoueur()->getNumero());
+    else
+        ((Case*)parentItem())->parent()->setFlag(attente);
 }
 
 //Penser � supprimer l'effet quand il arrive � 0 tours

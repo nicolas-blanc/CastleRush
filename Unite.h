@@ -35,8 +35,7 @@ class Unite : public QObject,public Entite {
         virtual void initSort();
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
-        void deplacer(Case* c);
-        bool deplacementPossible(Case* c); // /!\ a corriger avec getDepX et getDepY
+        bool deplacer(Case* c);
         bool attaquer(Case* c, Attaque* attaque);
         bool attaquer(Case* c);
         void modifierVie(int vie);

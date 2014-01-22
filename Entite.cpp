@@ -58,7 +58,6 @@ void Entite::setPosition(vector<Case *> position) {
 void Entite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsPixmapItem::mouseReleaseEvent(event);
     if (((Case*)parentItem())->parent()->getFlag()==deplacement) {
-        ((Case*)parentItem())->parent()->setFlag(attente);
         ((Case*)parentItem())->parent()->highlight(((Case*)parentItem()));
         ((Case*)parentItem())->parent()->afficheInfoUnite(this);
         ((Case*)parentItem())->parent()->setSelect(this);
@@ -67,13 +66,13 @@ void Entite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     else if (((Case*)parentItem())->parent()->getFlag()==attente) {
         ((Case*)parentItem())->parent()->afficheInfoUnite(this);
         ((Case*)parentItem())->parent()->setSelect(this);
-        ((Case*)parentItem())->parent()->setBoutons(unite, getJoueur()->getNumero());
     }
     else if (((Case*)parentItem())->parent()->getFlag()==attaque) {
+        this->setSelected(false);
+        ((Unite*)(((Case*)parentItem())->parent()->getSelect()))->setSelected(true);
         ((Unite*)(((Case*)parentItem())->parent()->getSelect()))->attaquer(this);
-        ((Case*)parentItem())->parent()->setFlag(attente);
         Case* c = (Case*)parentItem();
-        ((Case*)parentItem())->parent()->highlightAttaque(c);
+        ((Case*)parentItem())->parent()->highlight(c);
         ((Case*)parentItem())->parent()->updatePopPt();
     }
 }

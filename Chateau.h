@@ -23,7 +23,7 @@ class Chateau : public Batiment
     public:
     Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, Joueur* j, string nom);
     Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, string nom);
-     void Invoquer(catUnite unite, Case* c);
+    bool Invoquer(catUnite unite, Case* c);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
 };
 

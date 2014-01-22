@@ -22,27 +22,72 @@ Case::Case(int x, int y, QObject* parent) : QGraphicsRectItem(x*SIZE,y*SIZE,SIZE
 void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsRectItem::mouseReleaseEvent(event);
     if (parent()->getFlag()==attente) {
-        this->setSelected(true);
-        this->parent()->setSelect(this);
-        parent()->setBoutons(carre);
+        parent()->highlight(this);
+        if (isOccupee()) {
+            cout<<"test"<<flush;
+            parent()->afficheInfoUnite(getOccupant());
+            parent()->setSelect(getOccupant());
+            if (m_batiment) {
+                cout<<"test2"<<flush;
+                if (getOccupant()->Getnom()=="Chateau")
+                    parent()->setBoutons(batChateau, getOccupant()->getJoueur()->getNumero());
+                else {
+                    if (getOccupant()->getJoueur())
+                        parent()->setBoutons(batiment, getOccupant()->getJoueur()->getNumero());
+                    else
+                        parent()->setBoutons(batiment);
+                }
+            }
+            else
+                parent()->setBoutons(unite, getOccupant()->getJoueur()->getNumero());
+
+        }
+        else {
+            this->setSelected(true);
+            this->parent()->setSelect(this);
+            parent()->setBoutons(carre);
+        }
     }
     else if (parent()->getFlag()==deplacement) {
-        ((Unite*)(parent()->getSelect()))->deplacer(this);
-        parent()->setFlag(attente);
-        parent()->highlight(this);
-        this->parent()->updatePopPt();
+        this->setSelected(false);
+        if (!((Unite*)parent()->getSelect())->deplacer(this)) {
+            parent()->setFlag(attente);
+            this->mouseReleaseEvent(event);
+        }
+        else {
+            parent()->getSelect()->setSelected(true);
+            parent()->setFlag(attente);
+            parent()->highlight(this);
+            this->parent()->updatePopPt();
+        }
     }
     else if (parent()->getFlag()==attaque) {
-        ((Unite*)(parent()->getSelect()))->attaquer(this);
-        parent()->setFlag(attente);
-        parent()->highlightAttaque(this);
-        this->parent()->updatePopPt();
+        if (!isOccupee()) {
+            parent()->setFlag(attente);
+            this->mouseReleaseEvent(event);
+        }
+        else {
+            this->setSelected(false);
+            parent()->getSelect()->setSelected(true);
+            ((Unite*)(parent()->getSelect()))->attaquer(this);
+            parent()->setFlag(attente);
+            parent()->highlight(this);
+            this->parent()->updatePopPt();
+        }
     }
     else if (parent()->getFlag()==invoquer){
+        this->setSelected(false);
         Chateau* ch=((Chateau*)(parent()->getSelect()));
-        ch->Invoquer(parent()->getUnitInvoc(), this);
-        parent()->updatePopPt();
-        parent()->setFlag(attente);
+        if (!ch->Invoquer(parent()->getUnitInvoc(), this)) {
+            parent()->setFlag(attente);
+            this->mouseReleaseEvent(event);
+        }
+        else {
+            parent()->getSelect()->setSelected(true);
+            parent()->highlight(this);
+            parent()->updatePopPt();
+            parent()->setFlag(attente);
+        }
     }
 }
 
