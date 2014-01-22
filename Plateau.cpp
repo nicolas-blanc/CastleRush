@@ -155,11 +155,6 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     addWidget(fint);
     connect(fint, SIGNAL(released()), this, SLOT(gestionTour()));
 
-    jserveur = new Joueur(1,1);
-    jserveur->setPseudo("Joueur2");
-    jclient = new Joueur(1,0);
-    jclient->setPseudo("Joueur1");
-
     j.push_back(jclient);
 
     j.push_back(jserveur);
