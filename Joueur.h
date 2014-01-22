@@ -13,6 +13,7 @@ using namespace std;
 class Entite;
 class Unite;
 class Batiment;
+class Plateau;
 
 class Joueur {
 public :
@@ -28,7 +29,9 @@ public :
     inline void setPopulationMax(int pop) { m_PopulationMax=pop;}
     inline vector<int> getListeBonusJoueur() { return m_listeBonusJoueur; }
     inline int getListeBonusJoueur(int val) { return m_listeBonusJoueur[val]; }
-    inline Batiment* getBatiment(string nomBatiment) { return v_Batiment[nomBatiment]; }
+    inline vector<Batiment*> getBatiment() { return v_Batiment; }
+    inline void liePlateau(Plateau * plateau) { m_plateau = plateau; }
+    inline Plateau* getPlateau() { return m_plateau; }
 
     inline void modifPtAction(int val) { m_PtActionJoueur = m_PtActionJoueur-val; }
     inline void modifPopulation(int val) { m_Population = m_Population+val;}
@@ -43,7 +46,7 @@ public :
     void deleteBatiment(Batiment* bat);
     void deleteUnite(Unite * unite);
 
-    int& operator[] (unsigned int i) {return m_listeBonusJoueur[i];}
+//    int& operator[] (unsigned int i) {return m_listeBonusJoueur[i];}
     bool operator== (Joueur j) {return m_numero==j.getNumero();}
     void setPseudo(QString pseudo){this->pseudo = pseudo;}
     QString getPseudo(){return pseudo;}
@@ -51,8 +54,9 @@ private :
     QString pseudo;
     int m_couleur;
     int m_numero;
-    map<string, Unite * > v_Unite;
-    map<string, Batiment* > v_Batiment;
+    Plateau * m_plateau;
+    vector<Unite * > v_Unite;
+    vector<Batiment* > v_Batiment;
     int m_PtActionMax;
     int m_PtActionJoueur;
     int m_PopulationMax;
@@ -72,6 +76,7 @@ private :
 #include "Entite.h"
 #include "Unite.h"
 #include "Batiment.h"
+#include "Plateau.h"
 
 #endif        /* JOUEUR_H */
 

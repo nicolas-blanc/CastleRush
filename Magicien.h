@@ -14,6 +14,7 @@ class Magicien : public Unite
 {
     public:
     Magicien(QGraphicsItem * parent, Case* c, Joueur* j);
+    void initSort();
 };
 
 

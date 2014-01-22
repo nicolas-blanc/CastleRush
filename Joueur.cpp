@@ -17,17 +17,27 @@ Joueur::~Joueur() {
 }
 
 void Joueur::setBatiment(Batiment * batiment) { 
-    v_Batiment[batiment->Getnom()] = batiment; 
+    v_Batiment.push_back(batiment);
 }
 
 void Joueur::setUnite(Unite * unite) {
-    v_Unite[unite->Getnom()] = unite; 
+    v_Unite.push_back(unite);
 }
 
-void Joueur::deleteBatiment(Batiment* bat) { 
-    v_Batiment.erase(bat->Getnom()); 
+void Joueur::deleteBatiment(Batiment* bat) {
+    vector<Batiment*>::iterator it = v_Batiment.begin();
+    int i = 0;
+    while(v_Batiment[i] != bat)
+    { i++; it++; }
+
+    v_Batiment.erase(it);
 }
 
 void Joueur::deleteUnite(Unite * unite) {
-    v_Unite.erase(unite->Getnom()); 
+    vector<Unite*>::iterator it = v_Unite.begin();
+    int i = 0;
+    while(v_Unite[i] != unite)
+    { i++; it++; }
+
+    v_Unite.erase(it);
 }

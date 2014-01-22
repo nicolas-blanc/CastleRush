@@ -10,11 +10,12 @@ Unite::Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned
     this->setMouvement(mvt);
     this->setCout(ct);
     this->setPopulation(pop);
-    this->setAttaqueDeBase();
+    for (unsigned int i=0; i<6; i++)
+        v_bonus.push_back(0);
 }
 
-void Unite::setAttaqueDeBase() {
-    m_AttaqueParDefaut = new AttaqueDeBase();
+void Unite::setAttaqueDeBase(int portee) {
+    m_AttaqueParDefaut = new AttaqueDeBase(portee);
     m_AttaqueParDefaut->lierEntite(this);
 }
 
@@ -115,14 +116,10 @@ void Unite::attaquer(Entite* e, Attaque* a) {
 }
 
 int Unite::getMouvement() {
-    return m_mouvement;
+    return m_mouvement + getJoueur()->getListeBonusJoueur()[5] + v_bonus[3];
 }
 
 Unite::~Unite() {
-
-}
-
-void Unite::initSort() {
 
 }
 

@@ -68,7 +68,7 @@ bool Case::isOccupee() {
 void Case::declencherEffets() {
     int vectSize = m_effets.size();
     for (int i=0; i<vectSize; i++) {
-        m_effets[i]->getSort()->lancerAttaque(this);
+        m_effets[i]->appliquerEffetUnite(this);
         m_effets[i]->decreaseTour();
     }
 }

@@ -250,6 +250,10 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     //-----------------------------
     //-----------------------------
 
+    for (int i = 0; i < joueurs.size(); i++) {
+        joueurs[i]->liePlateau(this);
+    }
+
 }
 
 bool Plateau::isFini(ifstream& fichier) {

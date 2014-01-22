@@ -10,10 +10,10 @@
 
 #include "Unite.h"
 
-class Chevalier : public Unite
-{
-    public:
+class Chevalier : public Unite {
+public:
     Chevalier(QGraphicsItem * parent, Case* c, Joueur* j);
+    void initSort();
 };
 
 

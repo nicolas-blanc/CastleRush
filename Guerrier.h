@@ -9,8 +9,7 @@ class Guerrier : public Unite {
 public:
     Guerrier(QGraphicsItem * parent, Case* c, Joueur* j);
     virtual ~Guerrier();
-private:
-
+    void initSort();
 };
 
 #endif        /* GUERRIER_H */

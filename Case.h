@@ -34,6 +34,7 @@ public :
         void transmettreAttaque(int nbPV);
         bool isOccupee();
         void declencherEffets();
+        inline void ajouterEffet(Effet * effet) { m_effets.push_back(effet); }
         Plateau* parent();
 
         Case& operator=(const Case& ) {return *this;}

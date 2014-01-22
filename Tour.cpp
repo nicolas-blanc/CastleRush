@@ -21,7 +21,7 @@ void Tour::attaquer(Case* c) {
 
 
 void Tour::attaqueAuto()
-{
+{/*
     Entite* danger_entite;
     float distance;
     float distance_danger;
@@ -59,7 +59,7 @@ void Tour::attaqueAuto()
     }
 
     attaquer(danger_entite->getPosition()[0]);
-}
+*/}
 
 void Tour::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     Batiment::mouseReleaseEvent(event);

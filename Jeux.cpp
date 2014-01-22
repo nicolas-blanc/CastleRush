@@ -6,11 +6,12 @@ Jeux::Jeux(int nbrJoueur, string nomPlateau)
     m_nbJoueur = nbrJoueur;
     m_FinDePartie = false;
 
-    for(int i = 0; i < nbrJoueur; i++)
+    for(int i = 0; i < nbrJoueur; i++) {
         m_Joueur.push_back(new Joueur(i,i));
+    }
 
     setnbTour(0);
-    m_Plateau = new Plateau(m_Joueur);
+    m_Plateau = new Plateau(m_Joueur,nomPlateau);
 }
 
 Jeux::~Jeux()
@@ -54,7 +55,7 @@ void Jeux::partieConsole() {
                     case 6 : u=magicien;break;
                     }
 
-                    ((Chateau*)m_Joueur[(m_nbTour%m_nbJoueur)]->getBatiment("Chateau"))->Invoquer(u,m_Plateau->getCase(x,y)); // a rajouter a plateau => Case * getCase(int x, int y);
+//                    ((Chateau*)m_Joueur[(m_nbTour%m_nbJoueur)]->getBatiment("Chateau"))->Invoquer(u,m_Plateau->getCase(x,y)); // a rajouter a plateau => Case * getCase(int x, int y);
                     afficherGraphiqueConsole();
                 }
                 break;}
@@ -115,6 +116,6 @@ void Jeux::afficherInfos(Unite * ) {
 bool Jeux::testFinDeJeu() {
     bool test = false;
     for(int i = 0; i < m_nbJoueur; i++)
-        test = test || m_Joueur[i]->getBatiment("Chateau")->estMort();
+        test = test || m_Joueur[i]->getBatiment()[0]->estMort();
     return test;
 }
