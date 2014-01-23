@@ -60,9 +60,9 @@ void Entite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsPixmapItem::mouseReleaseEvent(event);
     if (((Case*)parentItem())->parent()->getFlag()==deplacement) {
         ((Case*)parentItem())->parent()->highlight(((Case*)parentItem()));
-        ((Case*)parentItem())->parent()->afficheInfoUnite(this);
         ((Case*)parentItem())->parent()->setSelect(this);
         ((Case*)parentItem())->parent()->setBoutons(unite, getJoueur()->getNumero());
+        ((Case*)parentItem())->parent()->afficheInfoUnite(this);
     }
     else if (((Case*)parentItem())->parent()->getFlag()==attente) {
         ((Case*)parentItem())->parent()->afficheInfoUnite(this);
@@ -76,11 +76,9 @@ void Entite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         ((Case*)parentItem())->parent()->highlight(c);
         ((Case*)parentItem())->parent()->updatePopPt();
     } else if (((Case*)parentItem())->parent()->getFlag()==attaqueSort) {
-        this->setSelected(false);
-        ((Unite*)(((Case*)parentItem())->parent()->getSelect()))->setSelected(true);
         ((Unite*)(((Case*)parentItem())->parent()->getSelect()))->attaquer(this,((Case*)parentItem())->parent()->getChoixSort());
-        Case* c = (Case*)parentItem();
-        ((Case*)parentItem())->parent()->highlight(c);
+        ((Case*)parentItem())->parent()->setFlag(attente);
+        ((Case*)parentItem())->parent()->highlight((Case*)parentItem());
         ((Case*)parentItem())->parent()->updatePopPt();
     }
 }

@@ -24,9 +24,10 @@ private :
         int m_x;
         int m_y;
         bool isSelected;
+        bool glyphe;
 public :
         Case(int x, int y, QObject* parent);
-        Case(const Case& ) : QGraphicsRectItem(),QObject() {cout<<"lol"<<flush;}
+        Case(const Case& ) : QGraphicsRectItem(),QObject() {}
         //void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         //           QWidget *widget);
         void setOccupant(Entite* occ, bool bat = false);
@@ -34,11 +35,14 @@ public :
         inline Entite* getUnite() { if (!(m_batiment)) return m_occupant; else return NULL; }
         void transmettreAttaque(int nbPV);
         bool isOccupee();
+        void declencherEffets();
         Plateau* parent();
+        bool getGlyphe() {return glyphe;}
+        void setGlyphe(bool s) {glyphe = s;}
+        void declencherEffets(Joueur *joueur);
 
         inline void ajouterEffet(Effet * effet) { m_effets.push_back(effet); }
         void enleverEffet(vector<Effet*>::iterator it) { m_effets.erase(it); }
-        void declencherEffets(Joueur *joueur);
         inline bool isEffets() { return m_effets.size() == 0; }
 
         Case& operator=(const Case& ) {return *this;}
@@ -49,5 +53,9 @@ public :
 protected :
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 };
+
+#include "Entite.h"
+#include "Unite.h"
+#include "Effet.h"
 
 #endif

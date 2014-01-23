@@ -5,6 +5,7 @@
 #include <QGraphicsView>
 #include "Jeux.h"
 #include <QMessageBox>
+#include <fstream>
 
 namespace Ui {
 class MainWindow;
@@ -25,6 +26,11 @@ public slots :
 private:
     Ui::MainWindow *ui;
     QMessageBox *popup2;
+    bool is_readable(const std::string & file)
+    {
+        std::ifstream fichier(file.c_str());
+        return !fichier.fail();
+    }
 
     Jeux * m_jeux;
 };

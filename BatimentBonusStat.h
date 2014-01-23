@@ -24,7 +24,7 @@ class BatimentBonusStat : public Batiment
         inline int getNbTours() { return m_NbTours; }
         inline void setNbTours(int nbTours) { m_NbTours = nbTours; }
         inline int rand_a_b(int a, int b) { return rand()%(b-a) +a;}
-        inline void miseAJourBonus(){getJoueur()->setListeBonusJoueur(getStat(), getBonus());}
+        inline void miseAJourBonus();
 
         void modifBonus();
         // Modifie le bonus dans le vector de joueur, en fonction du bonus et du nombre de tours
@@ -33,7 +33,10 @@ class BatimentBonusStat : public Batiment
 
         void randomStat();
 
-        void changementProprio(Joueur j);
+        void changementProprio(Joueur *j);
+
+protected:
+      void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
 
 };
 

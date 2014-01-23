@@ -4,14 +4,13 @@
 #include <string>
 
 #include "Attaque.h"
-
-class Effet;
+#include "Effet.h"
 
 using namespace std;
 
 class Sort : public Attaque {
 public:
-    Sort(Entite * entite,string nom, int degat = 1, int portee = 1, int ptAction = 1);
+    Sort(string nom, int degat = 1, int portee = 1, int ptAction = 1, Entite* ent = NULL);
     virtual void lancerAttaque(Case* c);
     inline string getNom() { return m_nomSort; }
 private:
@@ -20,44 +19,50 @@ private:
 
 class AttaquePuissante : public Sort {
 public:
-    AttaquePuissante(Entite * entite,string nom, int degat, int portee, int ptAction);
+    AttaquePuissante(string nom, int degat, int portee, int ptAction, Entite* ent = NULL);
     void lancerAttaque(Case * c);
+    void animationAttaque(Case *, Case *);
 };
 
 class Charge : public Sort {
 public:
-    Charge(Entite * entite,string nom, int degat, int portee, int ptAction);
+    Charge(string nom, int degat, int portee, int ptAction, Entite* ent = NULL);
     void lancerAttaque(Case * c);
+    void animationAttaque(Case *, Case *);
 };
 
 class AttaqueEmpoisonnee : public Sort {
 public:
-    AttaqueEmpoisonnee(Entite * entite,string nom, int degat, int portee, int ptAction);
+    AttaqueEmpoisonnee(string nom, int degat, int portee, int ptAction, Entite* ent = NULL);
     void lancerAttaque(Case * c);
+    void animationAttaque(Case *, Case *);
 private:
-    Effet * m_effet;
+    DegenVie * m_effet;
 };
 
 class GlypheGel : public Sort {
 public:
-    GlypheGel(Entite * entite,string nom, int portee, int ptAction);
+    GlypheGel(string nom, int portee, int ptAction, Entite* ent = NULL);
     void lancerAttaque(Case * c);
+    void animationAttaque(Case *, Case *);
 private:
-    Effet * m_effet;
+    MalusMouvement * m_effet;
 };
 
 class Soin : public Sort {
 public:
-    Soin(Entite * entite,string nom, int degat, int portee, int ptAction);
+    Soin(string nom, int degat, int portee, int ptAction, Entite* ent = NULL);
     void lancerAttaque(Case * c);
+    void animationAttaque(Case *, Case *);
 };
 
 class Concentration : public Sort {
 public:
-    Concentration(Entite * entite,string nom, int degat, int portee, int ptAction);
+    Concentration(string nom, int degat, int portee, int ptAction, Entite* ent = NULL);
     void lancerAttaque(Case * c);
+    void animationAttaque(Case *, Case *);
 private:
-    Effet * m_effet;
+    BonusDegat * m_effet;
 };
 
 #endif	/* SORT_H */

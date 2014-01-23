@@ -10,7 +10,7 @@
 
 enum catBatiments {chateau, tour, campement, village, magie, libre};
 enum catUnite {guerrier, chevalier, voleur, magicien, pretre, archer};
-enum flagsAppli {attente,deplacement,attaque,invoquer,attaqueSort};
+enum flagsAppli {attente,deplacement,attaque,invoquer,attaqueSort, capture};
 enum bonusJoueur {population, action, vie, degat, portee, mouvement};
 enum typeElement {batTour,batiment, unite, carre, batChateau};
 

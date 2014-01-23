@@ -43,17 +43,7 @@ void Jeux::partieConsole() {
                 cin >> x;
                 cout << "Donnez la coordonn2e Y autour de votre Chateau" << endl;
                 cin >> y;
-                if (unit > 0 && unit < 7) {
-                    catUnite u;
-                    switch (unit) {
-                    case 1 : u=guerrier;break;
-                    case 2 : u=chevalier;break;
-                    case 3 : u=archer;break;
-                    case 4 : u=voleur;break;
-                    case 5 : u=pretre;break;
-                    case 6 : u=magicien;break;
-                    }
-                }
+
                 break;}
             case 2:{
                 //Deplacer/Attaquer une unit�

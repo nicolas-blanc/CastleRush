@@ -29,6 +29,8 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     mvt = NULL;
     atk = NULL;
     vie = NULL;
+    stat = NULL;
+    bonus = NULL;
     arch = NULL;
     guer = NULL;
     chev = NULL;
@@ -52,7 +54,7 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
 
         fichierPlateau.read((char*)&m_largeur ,sizeof(int));
         fichierPlateau.read((char*)&m_hauteur,sizeof(int));
-        QPixmap back("images/background.png");
+        QPixmap back("images/NewBackGround.png");
         background = new QGraphicsPixmapItem();
         background->setPixmap(back.copy(0,0,SIZE*m_largeur,SIZE*m_hauteur));
         this->addItem(background);
@@ -109,15 +111,15 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
                             break;
                         }
                         case campement : {
-                            bat = new BatimentBonusStat(plateau[x+i][y+j],cases,"Campement",-1);
+                            bat = new BatimentBonusStat(plateau[x+i][y+j],cases,"Campement",1);
                                     break;
                             }
                         case village : {
-                            bat = new BatimentBonusStat(plateau[x+i][y+j],cases,"Village",-2);
+                            bat = new BatimentBonusStat(plateau[x+i][y+j],cases,"Village",0);
                             break;
                             }
                         case magie : {
-                            bat = new BatimentBonusStat(plateau[x+i][y+j],cases,"Tour de Magie",-3);
+                            bat = new BatimentBonusStat(plateau[x+i][y+j],cases,"Tour de Magie",2);
                             break;
                         }
                         default :
@@ -154,6 +156,7 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     capt->setToolTip("Permet de capturer le batiment à cote de l'unite selectionne.");
     capt->setGeometry(310,SIZE*(m_hauteur+1),80,25);
     addWidget(capt);
+    connect(capt, SIGNAL(released()), this, SLOT(handleCapt()));
 
     annuler = new QPushButton("Annuler");
     annuler->setToolTip("Permet d'utiliser l'attaque de base de l'unite selectionne.");
@@ -172,9 +175,9 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     jtour = j[0];
 
     pop = new QProgressBar;
-    pop->setGeometry(SIZE*(m_largeur+1), 10, 80, 25);
+    pop->setGeometry(SIZE*(m_largeur+1), 10, 150, 25);
     PtAction = new QProgressBar;
-    PtAction->setGeometry(SIZE*(m_largeur+1), 40, 80, 25);
+    PtAction->setGeometry(SIZE*(m_largeur+1), 40, 150, 25);
 
     addWidget(pop);
 
@@ -250,6 +253,14 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     atk->setGeometry(SIZE*(m_largeur+1), 160, 150, 25);
     addWidget(atk);
 
+    bonus = new QLabel();
+    bonus->setGeometry(SIZE*(m_largeur+1), 100, 150, 25);
+    addWidget(bonus);
+
+    stat = new QLabel();
+    stat->setGeometry(SIZE*(m_largeur+1), 130, 150, 25);
+    addWidget(stat);
+
 
     QSignalMapper * mapper = new QSignalMapper();
 
@@ -264,14 +275,6 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     connect(mapper, SIGNAL(mapped(int)), this, SLOT(handleChoixSort(int)));
 
     setBoutons(carre);
-
-    //--------------------------------
-    //--------------------------------
-
-    Unite* vole=new Voleur(plateau[7][8],plateau[7][8],jclient);
-    Unite* pretr=new Pretre(plateau[6][8],plateau[6][8],jserveur);
-    //-----------------------------
-    //-----------------------------
 
     for (unsigned int i = 0; i < joueurs.size(); i++) {
         joueurs[i]->liePlateau(this);
@@ -294,11 +297,13 @@ void Plateau::handleDep() {
 void Plateau::gestionTour()
 {
     this->setNombreTourJoueur(getNombreTour()/2 + 1);
+    pop->setMaximum(jtour->getPopulationMax()+jtour->getListeBonusJoueur()[0]);
     this->setNombreTour(getNombreTour()+1);
-    jtour->setPtAction(jtour->getPtActionMax());
+    jtour->setPtActionMax(jtour->getPtActionMax()+jtour->getListeBonusJoueur()[1]);
+    jtour->setPtAction(jtour->getPtActionMax()+jtour->getListeBonusJoueur()[1]);
     jtour = j[1-jtour->getNumero()];
     this->updatePopPt();
-    TOUR->setText("Tour ToTal : " + QString::number(NombreTour) + " -- Tour n°" +QString::number(NombreTourJoueur));
+    TOUR->setText("Tour Total : " + QString::number(NombreTour) + " -- Tour n°" +QString::number(NombreTourJoueur));
     QMessageBox popup;
     popup.setText("Tour Joueur : " + jtour->getPseudo());
     popup.exec();
@@ -309,7 +314,39 @@ void Plateau::gestionTour()
         {
             ((Tour*)v_Batiment[i])->attaqueAuto();
         }
+        else if((batiment->Getnom() == "Tour de Magie" || batiment->Getnom() == "Village" || batiment->Getnom() == "Campement") && batiment->getJoueur() == jtour)
+        {
+             ((BatimentBonusStat*)v_Batiment[i])->modifBonus();
+        }
     }
+
+    for(unsigned int i =0; i<((jtour->getUnite()).size()); i++)
+    {
+        vector<Unite *> vect = jtour->getUnite();
+        Unite *unite = vect[i];
+        unite->resetMvt();
+    }
+
+    if(getInvocateur().size() >0)
+    {
+        for(unsigned int i =0; i< getInvocateur().size(); i++)
+        {
+            getBatimentBonus()[i]->changementProprio(getInvocateur()[i]->getJoueur());
+            getInvocateur()[i]->setActif(true);
+            getBatimentBonus()[i]->getJoueur()->setBatiment(getBatimentBonus()[i]);
+        }
+
+
+        while(Invocateurs.size()!=0)
+        {
+            Invocateurs.pop_back();
+        }
+
+        while(BatimentBonus.size() !=0)
+        {
+            BatimentBonus.pop_back();
+        }
+        }
     setBoutons(carre);
 
 
@@ -328,7 +365,7 @@ void Plateau::gestionTour()
         }
     }
 
-    for(int i = 0; i < jtour->getUnite().size(); i++)
+    for(unsigned int i = 0; i < jtour->getUnite().size(); i++)
         jtour->getUnite()[i]->appliquerEffet();
 
     for (int i=0; i< m_largeur; i++)
@@ -352,15 +389,15 @@ Plateau::~Plateau() {
 
 void Plateau::updatePopPt()
 {
-    pop->setMaximum(jtour->getPopulationMax());
-    pop->setValue(jtour->getPopulation());
-    pop->setFormat("%v/%m");
-    pop->setAlignment(Qt::AlignCenter);
+    pop->setMaximum(jtour->getPopulationMax()+jtour->getListeBonusJoueur()[0]);
+     pop->setValue(jtour->getPopulation());
+     pop->setFormat("Population : %v/%m");
+     pop->setAlignment(Qt::AlignCenter);
 
-    PtAction->setValue(jtour->getPtAction());
-    PtAction->setMaximum(jtour->getPtActionMax());
-    PtAction->setFormat("%v/%m");
-    PtAction->setAlignment(Qt::AlignCenter);
+     PtAction->setValue(jtour->getPtAction());
+     PtAction->setMaximum(jtour->getPtActionMax()+jtour->getListeBonusJoueur()[1]);
+     PtAction->setFormat("Points d'action : %v/%m");
+     PtAction->setAlignment(Qt::AlignCenter);
 }
 
 
@@ -374,7 +411,7 @@ void Plateau::afficheInfoUnite(Entite *u)
         vie->show();
         vie->setText("Point de Vie : " + QString::number(u->getVie()));
     }
-    else if(typeid(*u) == typeid(Chevalier)  ||
+   if(typeid(*u) == typeid(Chevalier)  ||
             typeid(*u) == typeid(Pretre)     ||
             typeid(*u) == typeid(Magicien)   ||
             typeid(*u) == typeid(Guerrier)   ||
@@ -386,12 +423,38 @@ void Plateau::afficheInfoUnite(Entite *u)
         atk->show();
         atk->setText("Attaque : " + QString::number(((Unite*)u)->getAttaqueParDefaut()->getDegat()));
     }
+    if((typeid(*u) == typeid(BatimentBonusStat)))
+     {
+         stat->show();
+         if(((BatimentBonusStat*)u)->getStat()==0)
+         stat->setText("Stat : Population");
+         else if(((BatimentBonusStat*)u)->getStat()==1)
+         stat->setText("Stat : Point d'Action");
+
+         if (u->getJoueur()) {
+             if(((BatimentBonusStat*)u)->getStat()==2)
+             stat->setText("Stat : Point de Vie");
+             else if(((BatimentBonusStat*)u)->getStat()==3)
+             stat->setText("Stat : Dégât");
+             else if(((BatimentBonusStat*)u)->getStat()==4)
+             stat->setText("Stat : Portée");
+             else if(((BatimentBonusStat*)u)->getStat()==5)
+             stat->setText("Stat : Mouvement");
+         }
+
+         bonus->show();
+         bonus->setText("Bonus : " + QString::number(((BatimentBonusStat*)u)->getBonus()));
+     }
 }
 
 void Plateau::handleAtt(){
     highlight(plateau[0][0]);
     highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getAttaqueParDefaut()->getPortee()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[portee]);
     setFlag(attaque);
+}
+
+void Plateau::handleCapt(){
+    setFlag(capture);
 }
 
 void Plateau::handleSort() {
@@ -429,6 +492,8 @@ void Plateau::setBoutons(typeElement type, int numJoueur) {
         chev->hide();
         arch->hide();
         capt->hide();
+        stat->hide();
+        bonus->hide();
         for(int i = 0; i < NBSORT; i++)
             v_sort[i]->hide();
         break;
@@ -461,6 +526,8 @@ void Plateau::setBoutons(typeElement type, int numJoueur) {
         arch->hide();
         capt->hide();
         vie->show();
+        stat->hide();
+        bonus->hide();
         for(int i = 0; i < NBSORT; i++)
             v_sort[i]->hide();
         break;
@@ -471,6 +538,8 @@ void Plateau::setBoutons(typeElement type, int numJoueur) {
         sorts->hide();
         capt->hide();
         vie->show();
+        stat->hide();
+        bonus->hide();
         if(numJoueur==this->getJoueurTour()->getNumero())
         {
         guer->show();
@@ -491,6 +560,8 @@ void Plateau::setBoutons(typeElement type, int numJoueur) {
         pret->hide();
         chev->hide();
         arch->hide();
+        stat->hide();
+        bonus->hide();
         att->setEnabled(numJoueur==this->getJoueurTour()->getNumero());
         dep->setEnabled(numJoueur==this->getJoueurTour()->getNumero());
         sorts->setEnabled(numJoueur==this->getJoueurTour()->getNumero());
@@ -510,6 +581,7 @@ void Plateau::setBoutonsUnite(bool active) {
         dep->show();
         sorts->show();
         capt->show();
+        capt->setEnabled(false);
     }
     else {
         att->hide();
@@ -562,43 +634,53 @@ void Plateau::intInvocVol()
     setFlag(invoquer);
 }
 
-void Plateau::highlight(Case* c, int portee) {
-    QColor color = Qt::red;
-    QBrush brush(color);
-    color.setAlpha(126);
+void Plateau::highlight(Case* c, int portee, QColor color) {
+    QColor blue=Qt::blue;
+    blue.setAlpha(126);
     if (portee==-1) {
         color=Qt::transparent;
         portee=m_largeur*m_hauteur;
         for (int i=0; i<m_largeur; i++)
-            for (int j=0; j<m_hauteur; j++)
-                plateau[i][j]->setBrush(*new QBrush(color));
+            for (int j=0; j<m_hauteur; j++) {
+                if (!plateau[i][j]->getGlyphe()) {
+                    plateau[i][j]->setBrush(*new QBrush(color));
+                }
+                else {
+                    plateau[i][j]->setBrush(*new QBrush(blue));
+                }
+            }
     }
     else {
+        color.setAlpha(126);
         vector<Case*> chemin;
         for (int i=0; i<=portee; i++) {
             for (int j=0; j<=portee-i; j++) {
-                if (i+c->getX()<m_largeur&&j+c->getY()<m_hauteur&&(i+j)) {
+                if (i+c->getX()<m_largeur&&j+c->getY()<m_hauteur&&((i+j)||color==blue)) {
                     chemin=cheminDeplacement(c, plateau[c->getX()+i][c->getY()+j],portee);
-                    if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
+                    if ((color==Qt::transparent||chemin[chemin.size()-1]!=NULL)) {
                         plateau[i+c->getX()][j+c->getY()]->setBrush(*new QBrush(color));
+                        if (color==blue){cout<<"test"<<flush;plateau[i+c->getX()][j+c->getY()]->setGlyphe(true);}
                     }
                 }
-                if (c->getX()-i>=0&&c->getY()-j>=0&&(i+j)) {
+                if (c->getX()-i>=0&&c->getY()-j>=0&&((i+j)||color==blue)) {
                     chemin=cheminDeplacement(c, plateau[c->getX()-i][c->getY()-j],portee);
-                    if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
+                    if ((color==Qt::transparent||chemin[chemin.size()-1]!=NULL)) {
                         plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
+                        if (color==blue) {plateau[c->getX()-i][c->getY()-j]->setGlyphe(true);}
                     }
                 }
-                if (c->getX()+i<m_largeur&&c->getY()-j>=0&&(i+j)) {
+                if (c->getX()+i<m_largeur&&c->getY()-j>=0&&((i+j)||color==blue)) {
                     chemin=cheminDeplacement(c, plateau[c->getX()+i][c->getY()-j],portee);
-                    if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
+                    if ((color==Qt::transparent||chemin[chemin.size()-1]!=NULL)) {
                         plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
+                        if (color==blue) {plateau[i+c->getX()][c->getY()-j]->setGlyphe(true);}
                     }
                 }
-                if (c->getX()-i>=0&&c->getY()+j<m_hauteur&&(i+j)) {
+                if (c->getX()-i>=0&&c->getY()+j<m_hauteur&&((i+j)||color==blue)) {
                     chemin=cheminDeplacement(c, plateau[c->getX()-i][c->getY()+j],portee);
-                    if (color==Qt::transparent||chemin[chemin.size()-1]!=NULL) {
+                    if ((color==Qt::transparent||chemin[chemin.size()-1]!=NULL)) {
                         plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
+                        if (color==blue) {plateau[c->getX()-i][j+c->getY()]->setGlyphe(true);}
                     }
                 }
             }
@@ -716,7 +798,6 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
             {
 
                 Case* caseoccupee = plateau[ma_position->getX()+x][ma_position->getY()+y];
-                if(caseoccupee->isOccupee())
                 if(caseoccupee->isOccupee()  && (caseoccupee->getOccupant()->Getnom() == "Chevalier"||caseoccupee->getOccupant()->Getnom() == "Archer"||caseoccupee->getOccupant()->Getnom() == "Guerrier"||caseoccupee->getOccupant()->Getnom() == "Magicien"||caseoccupee->getOccupant()->Getnom() == "Pretre"||caseoccupee->getOccupant()->Getnom() == "Voleur"))
                 {
                     entite_presentes.push_back((Unite*)(caseoccupee->getOccupant()));
@@ -726,7 +807,6 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
             if (ma_position->getX()-x>=0&&ma_position->getY()+y<m_hauteur)
             {
                 Case* caseoccupee = plateau[ma_position->getX()-x][ma_position->getY()+y];
-                if(caseoccupee->isOccupee())
                 if(caseoccupee->isOccupee()  && (caseoccupee->getOccupant()->Getnom() == "Chevalier"||caseoccupee->getOccupant()->Getnom() == "Archer"||caseoccupee->getOccupant()->Getnom() == "Guerrier"||caseoccupee->getOccupant()->Getnom() == "Magicien"||caseoccupee->getOccupant()->Getnom() == "Pretre"||caseoccupee->getOccupant()->Getnom() == "Voleur"))
                 {
                     entite_presentes.push_back((Unite*)(caseoccupee->getOccupant()));
@@ -735,7 +815,6 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
             if (ma_position->getX()+x<m_largeur&&ma_position->getY()-y>=0)
             {
                 Case* caseoccupee = plateau[ma_position->getX()+x][ma_position->getY()-y];
-                if(caseoccupee->isOccupee())
                 if(caseoccupee->isOccupee()  && (caseoccupee->getOccupant()->Getnom() == "Chevalier"||caseoccupee->getOccupant()->Getnom() == "Archer"||caseoccupee->getOccupant()->Getnom() == "Guerrier"||caseoccupee->getOccupant()->Getnom() == "Magicien"||caseoccupee->getOccupant()->Getnom() == "Pretre"||caseoccupee->getOccupant()->Getnom() == "Voleur"))
                 {
                     entite_presentes.push_back((Unite*)(caseoccupee->getOccupant()));
@@ -744,7 +823,6 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
             if (ma_position->getX()-x>=0&&ma_position->getY()-y>=0)
             {
                 Case* caseoccupee = plateau[ma_position->getX()-x][ma_position->getY()-y];
-                if(caseoccupee->isOccupee())
                 if(caseoccupee->isOccupee()  && (caseoccupee->getOccupant()->Getnom() == "Chevalier"||caseoccupee->getOccupant()->Getnom() == "Archer"||caseoccupee->getOccupant()->Getnom() == "Guerrier"||caseoccupee->getOccupant()->Getnom() == "Magicien"||caseoccupee->getOccupant()->Getnom() == "Pretre"||caseoccupee->getOccupant()->Getnom() == "Voleur"))
                 {
                     entite_presentes.push_back((Unite*)(caseoccupee->getOccupant()));
@@ -770,7 +848,7 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
                     c->getX())
                      + abs(tr->getJoueur()->getBatiment()[0]->getPosition()[0]->getY()-
                      c->getY());
-            if(distance<distance_danger)
+            if(distance<distance_danger&&u->getJoueur()->getNumero()!=tr->getJoueur()->getNumero())
             {
                 distance_danger = distance;
                 danger_entite = entite_presentes[i];
@@ -779,4 +857,53 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
     }
 
     return danger_entite;
+}
+
+void Plateau::CapturePossible(Case *c)
+{
+    if(((c->getX()+1<m_largeur)&&(plateau[c->getX()+1][c->getY()]&& plateau[c->getX()+1][c->getY()]->isOccupee()&&(plateau[c->getX()+1][c->getY()]->getOccupant()->Getnom()=="Tour de Magie"
+                                                                                                 ||plateau[c->getX()+1][c->getY()]->getOccupant()->Getnom()=="Campement"
+                                                                                                 ||plateau[c->getX()+1][c->getY()]->getOccupant()->Getnom()=="Village")))
+            || (((c->getX()-1>=0)&&plateau[c->getX()-1][c->getY()]&& plateau[c->getX()-1][c->getY()]->isOccupee()&&(plateau[c->getX()-1][c->getY()]->getOccupant()->Getnom()=="Tour de Magie"
+                                                                                                 ||plateau[c->getX()-1][c->getY()]->getOccupant()->Getnom()=="Campement"
+                                                                                                 ||plateau[c->getX()-1][c->getY()]->getOccupant()->Getnom()=="Village")))
+            || (((c->getY()+1<m_hauteur)&&plateau[c->getX()][c->getY()+1]&& plateau[c->getX()][c->getY()+1]->isOccupee()&&(plateau[c->getX()][c->getY()+1]->getOccupant()->Getnom()=="Tour de Magie"
+                                                                                                 ||plateau[c->getX()][c->getY()+1]->getOccupant()->Getnom()=="Campement"
+                                                                                                 ||plateau[c->getX()][c->getY()+1]->getOccupant()->Getnom()=="Village")))
+            || ((c->getY()-1>=0)&&(plateau[c->getX()][c->getY()-1]&& plateau[c->getX()][c->getY()-1]->isOccupee()&&(plateau[c->getX()][c->getY()-1]->getOccupant()->Getnom()=="Tour de Magie"
+                                                                                                 ||plateau[c->getX()][c->getY()-1]->getOccupant()->Getnom()=="Campement"
+                                                                                                 ||plateau[c->getX()][c->getY()-1]->getOccupant()->Getnom()=="Village"))))
+    {
+        capt->setEnabled(true);
+    }
+    else
+    {
+        capt->setEnabled(false);
+    }
+
+}
+
+void Plateau::finDuJeu()
+{
+
+    for(int x =0; x<m_largeur;x++)
+        for(int y =0; y<m_hauteur;y++)
+        {
+            plateau[x][y]->setFlag(QGraphicsItem::ItemIsSelectable,false);
+        }
+    cout<<"test"<<flush;
+    for(unsigned int i =0; i<j.size();i++)
+    {
+        for(unsigned int a =0; a<j[i]->getUnite().size(); a++)
+        {
+            j[i]->getUnite()[a]->setFlag(QGraphicsItem::ItemIsSelectable,false);
+        }
+    }
+
+    for(unsigned int i =0; i<v_Batiment.size();i++)
+    {
+        v_Batiment[i]->setFlag(QGraphicsItem::ItemIsSelectable,false);
+    }
+
+    this->setBoutons(carre);
 }

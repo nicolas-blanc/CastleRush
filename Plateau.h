@@ -6,11 +6,9 @@
 #include <string>
 #include <QGraphicsScene>
 #include <QProgressBar>
-#include <QPushButton>
-
-#include "Sort.h"
 #include "enumerations.h"
 #include "Case.h"
+#include <QPushButton>
 
 using namespace std;
 
@@ -20,6 +18,7 @@ class Batiment;
 class Joueur;
 class Attaque;
 class Unite;
+class BatimentBonusStat;
 class Plateau : public QGraphicsScene {
     Q_OBJECT
 private :
@@ -39,6 +38,8 @@ private :
         QLabel *atk;
         QLabel *por;
         QLabel *vie;
+        QLabel *stat;
+        QLabel *bonus;
 
         vector<QPushButton*> v_sort;
         Sort * choixSort;
@@ -67,11 +68,15 @@ private :
 
         int NombreTour;
         int NombreTourJoueur;
+
+        vector<Unite*> Invocateurs;
+        vector<BatimentBonusStat*> BatimentBonus;
 private slots :
     void gestionTour();
     void handleDep();
     void handleAtt();
     void handleSort();
+    void handleCapt();
     void handleChoixSort(int i);
     void intInvocGue();
     void intInvocArc();
@@ -99,7 +104,7 @@ public :
         void InfoNull();
         void setBoutons(typeElement type, int numJoueur=0);
         void setBoutonsUnite(bool active);
-        void highlight(Case* c, int portee=-1);
+        void highlight(Case* c, int portee=-1, QColor color=Qt::red);
         void highlightAttaque(Case* c, int portee=0);
         vector<Case*> cheminDeplacement(Case* c1, Case* c2, int portee);
         bool porteeAttaquePossible(Case* c1, Case* c2, int portee);
@@ -109,7 +114,7 @@ public :
 
         Joueur * getJoueurTour(){return jtour;}
 
-        inline Sort* getChoixSort() { return choixSort; }
+        inline Sort * getChoixSort() { return choixSort; }
 
         void setNombreTour(int tour){NombreTour = tour;}
         int getNombreTour(){return NombreTour;}
@@ -117,6 +122,16 @@ public :
         void setNombreTourJoueur(int tour){NombreTourJoueur = tour;}
         int getNombreTourJoueur(){return NombreTourJoueur;}
         Unite * getUniteAttaqueTour(Tour* tr);
+
+        void CapturePossible(Case* c);
+
+         inline vector<Unite*> getInvocateur(){return Invocateurs;}
+         inline vector<BatimentBonusStat*> getBatimentBonus(){return BatimentBonus;}
+
+         inline void setInvocateur(Unite*u){Invocateurs.push_back(u);}
+         inline void setBatimentBonus(BatimentBonusStat* batiment){BatimentBonus.push_back(batiment);}
+
+         void finDuJeu();
 };
 #include "Tour.h"
 #include "Entite.h"

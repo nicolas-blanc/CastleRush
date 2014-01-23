@@ -2,7 +2,7 @@
 
 Voleur::Voleur(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,5,2,1,5,0,c,j,"Voleur")
 {
-    Unite::setAttaqueDeBase(this);
+    this->setAttaqueDeBase();
     this->initSort();
     QPixmap* vol;
     if (j && j->getNumero()==0) {
@@ -26,5 +26,5 @@ Voleur::Voleur(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,5,2,1,
 }
 
 void Voleur::initSort() {
-    v_sort["Coup Empoisonné"] = new AttaqueEmpoisonnee(this,"Coup Empoisonné",1,1,3);
+    v_sort["Coup Empoisonné"] = new AttaqueEmpoisonnee("Coup Empoisonné",1,1,3,this);
 }

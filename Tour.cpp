@@ -19,7 +19,7 @@ Tour::Tour(QGraphicsItem* parent, Case* c, string nom)
 }
 
 void Tour::setAttaqueDeBase() {
-    m_attaque = new AttaqueDeBase(this,2,1);
+    m_attaque = new AttaqueDeBase(2,1,this);
 }
 
 

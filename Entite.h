@@ -27,7 +27,7 @@ class Entite : public QGraphicsPixmapItem
         inline vector<Case*> getPosition() { return m_position; }
         void setPosition(vector<Case*> position);
         inline void setJoueur(Joueur* j) {m_Joueur=j;}
-        inline Joueur* getJoueur() { return m_Joueur; }
+        inline Joueur* getJoueur() {return m_Joueur;}
         void modifierVie(int vie);
         inline bool estMort() { return m_vie.GetValeur() == 0;}
         bool adjacent(Case* c);

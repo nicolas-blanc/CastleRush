@@ -40,6 +40,7 @@ public:
 private:
     int m_bonus;
 };
+#include "Case.h"
 
 #endif	/* EFFET_H */
 

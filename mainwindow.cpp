@@ -1,7 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <fstream>
 #include "enumerations.h"
+#include <iostream>
+#include <fstream>
+
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,22 +17,16 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::handleJouer() {
-    try{
-        m_jeux = new Jeux(2);
+    m_jeux = new Jeux(2);
     QGraphicsView* view = new QGraphicsView(m_jeux->getPlateau());
     this->hide();
     view->show();
-    }
-    catch(exception &e)
-    {
-        popup2 = new QMessageBox(this);
-        popup2->setText("deplacement impossible");
-        popup2->exec();
-    }
 }
 
 void MainWindow::handleGen() {
-    fstream fichier("plateau1.data", ios_base::in | ios_base::out | ios_base::trunc | ios_base::binary);
+    if(!is_readable("plateau1.data"))
+    {
+        fstream fichier("plateau1.data", ios_base::in | ios_base::out | ios_base::trunc | ios_base::binary);
 
     if (fichier.fail()) { // Si echec de l'ouverture
         cout << "Impossible d'ouvrir ou de créer le fichier" << endl;
@@ -49,16 +46,16 @@ void MainWindow::handleGen() {
     int size = 1;
     int joueur = -1;
     //Campement
-    int x = 2;
-    int y = 12;
+    int x = 17;
+    int y = 1;
     fichier.write((char*)&joueur,sizeof(int));
     fichier.write((char*)&ca,sizeof(catBatiments));
     fichier.write((char*)&size,sizeof(int));
     fichier.write((char*)&x,sizeof(int));
     fichier.write((char*)&y,sizeof(int));
     //village
-    x = 17;
-    y = 1;
+    x = 2;
+    y = 12;
     fichier.write((char*)&joueur,sizeof(int));
     fichier.write((char*)&v,sizeof(catBatiments));
     fichier.write((char*)&size,sizeof(int));
@@ -132,10 +129,12 @@ void MainWindow::handleGen() {
     fichier.write((char*)&x,sizeof(int));
     fichier.write((char*)&y,sizeof(int));
 
-    QMessageBox popup(this);
-    popup.setText("Plateau généré");
-    popup.exec();
+         popup2 = new QMessageBox;
+         popup2->setText("Plateau Généré");
+         popup2->exec();
+
     fichier.close();
+    }
 }
 
 MainWindow::~MainWindow()

@@ -2,11 +2,11 @@
 #include "Entite.h"
 #include "Case.h"
 
-Attaque::Attaque(Entite *entite, int portee, int degat, int ptAction) {
+Attaque::Attaque(int portee, int degat, int ptAction, Entite* ent) : QObject(), atk()  {
     m_Degat = degat;
     m_Portee = portee;
     m_PtAction = ptAction;
-    m_Entite = entite;
+    m_Entite = ent;
 }
 
 /*void Attaque::lancerAttaque(Case* c){

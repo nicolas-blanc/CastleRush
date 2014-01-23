@@ -58,6 +58,7 @@ void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             this->mouseReleaseEvent(event);
         }
         else {
+            parent()->CapturePossible(this);
             parent()->getSelect()->setSelected(true);
             parent()->setFlag(attente);
             parent()->highlight(this);
@@ -120,7 +121,7 @@ bool Case::isOccupee() {
 
 void Case::declencherEffets(Joueur *joueur) {
     vector<Effet*>::iterator it = m_effets.begin();
-    for(int i = 0; i < m_effets.size() ;i++) {
+    for(unsigned int i = 0; i < m_effets.size() ;i++) {
         if(isOccupee() && !(m_batiment))
         m_effets[i]->appliquerEffetUnite(this);
         if(m_effets[i]->getJoueur() == joueur)

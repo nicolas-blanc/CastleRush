@@ -2,7 +2,7 @@
 
 Chevalier::Chevalier(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,1,2,1,5,0,c,j,"Chevalier")
 {
-    Unite::setAttaqueDeBase(this);
+    this->setAttaqueDeBase();
     this->initSort();
 
     QPixmap* chev;
@@ -29,5 +29,5 @@ Chevalier::Chevalier(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,
 }
 
 void Chevalier::initSort() {
-    v_sort["Charge"] = new Charge(this,"Charge",3,1,3);
+    v_sort["Charge"] = new Charge("Charge",3,1,3,this);
 }

@@ -2,6 +2,7 @@
 #include <math.h>
 #include <QPixmap>
 #include "Plateau.h"
+#include "QMessageBox"
 
 Chateau::Chateau(QGraphicsItem* parent, vector<Case*>& EnsCase, Joueur* j, string nom) : Batiment(parent, EnsCase, j, nom, 0, 20) {
     if (j && j->getNumero()==0)
@@ -51,21 +52,23 @@ bool Chateau::Invoquer(catUnite unite, Case * c){
     }
     else
     {
-        delete(u);
+        c->setOccupant(NULL);
+        delete u;
         if(this->getJoueur()->getPopulation()+u->getPopulation() >= getJoueur()->getPopulationMax())
         {
-            cout << "erreur pop"<<flush;
-            //throw ManquePopulation();
+            QMessageBox popup;
+            popup.setText("Vous n'avez pas assez de point de population!");
+            popup.exec();
         }
         else if (this->getJoueur()->getPtAction()-u->getCout()<0)
         {
-            cout << "erreur Pt"<<flush;
-            //throw ManquePtAction();
+            QMessageBox popup;
+            popup.setText("Vous n'avez pas assez de point d'action!");
+            popup.exec();
         }
         else
         {
             cout << "erreur portee"<<flush;
-            //throw ManquePortee();
         }
         return false;
     }

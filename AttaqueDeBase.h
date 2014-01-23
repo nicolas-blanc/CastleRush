@@ -6,8 +6,11 @@
 
 class AttaqueDeBase : public Attaque {
 public:
-    AttaqueDeBase(Entite *entite,int portee, int deg);
+
+    AttaqueDeBase(int portee = 1, Entite* ent = NULL);
+    AttaqueDeBase(int portee, int deg, Entite* ent = NULL);
     void lancerAttaque(Case* c);
+    void animationAttaque(Case* c1, Case* c2);
 };
 #endif	/* ATTAQUEDEBASE_H */
 
