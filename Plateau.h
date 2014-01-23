@@ -34,6 +34,9 @@ private :
         QLabel *por;
         QLabel *vie;
 
+        vector<QPushButton*> v_sort;
+        Attaque * choixSort;
+
         QLabel *TOUR;
 
         QPushButton* att;
@@ -58,11 +61,12 @@ private :
 
         int NombreTour;
         int NombreTourJoueur;
-
 private slots :
     void gestionTour();
     void handleDep();
     void handleAtt();
+    void handleSort();
+    void handleChoixSort(int i);
     void intInvocGue();
     void intInvocArc();
     void intInvocChe();
@@ -99,6 +103,7 @@ public :
 
         Joueur * getJoueurTour(){return jtour;}
 
+        inline Attaque * getChoixSort() { return choixSort; }
 
         void setNombreTour(int tour){NombreTour = tour;}
         int getNombreTour(){return NombreTour;}

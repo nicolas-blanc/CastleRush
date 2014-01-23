@@ -13,9 +13,11 @@
 #include <QString>
 #include <typeinfo>
 #include <QMessageBox>
+#include <QSignalMapper>
 
 
 #define SIZE 36
+#define NBSORT 2
 
 
 Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() {
@@ -34,11 +36,12 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     mag = NULL;
     pret = NULL;
 
+    for(int i = 0; i < NBSORT; i++)
+        v_sort.push_back(NULL);
     jserveur = joueurs[0];
     jserveur->setPseudo("Joueur 1");
     jclient = joueurs[1];
     jclient->setPseudo("Joueur 2");
-
     Batiment* bat;
     ifstream fichierPlateau(nomPlateau.c_str(), ios::in | ios::binary);
         if (fichierPlateau.fail()) { // Si echec de l'ouverture
@@ -139,6 +142,7 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     sorts->setToolTip("Permet de lancer les sorts de l'unité");
     sorts->setGeometry(110,SIZE*(m_hauteur+1),80,25);
     addWidget(sorts);
+    connect(sorts,SIGNAL(released()),this,SLOT(handleSort()));
 
     dep = new QPushButton("Deplacer");
     dep->setToolTip("Permet de deplacer l'unite selectionne.");
@@ -246,6 +250,19 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     atk->setGeometry(SIZE*(m_largeur+1), 160, 150, 25);
     addWidget(atk);
 
+
+    QSignalMapper * mapper = new QSignalMapper();
+
+    for(int i = 0; i < NBSORT; i++) {
+        v_sort[i] = new QPushButton("Sort");
+        v_sort[i]->setGeometry(SIZE*(m_largeur+1), 220+i*30, 150, 25);
+        addWidget(v_sort[i]);
+        connect(v_sort[i],SIGNAL(released()),mapper, SLOT(map()));
+        mapper->setMapping(v_sort[i],i);
+    }
+
+    connect(mapper, SIGNAL(mapped(int)), this, SLOT(handleChoixSort(int)));
+
     setBoutons(carre);
 
     //--------------------------------
@@ -256,6 +273,9 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     //-----------------------------
     //-----------------------------
 
+    for (int i = 0; i < joueurs.size(); i++) {
+        joueurs[i]->liePlateau(this);
+    }
 }
 
 bool Plateau::isFini(ifstream& fichier) {
@@ -367,6 +387,22 @@ void Plateau::handleAtt(){
     setFlag(attaque);
 }
 
+void Plateau::handleSort() {
+    int i = 0;
+    map <string,Sort*> v_sortMap = ((Unite*)selected)->getSort();
+    for( map <string,Sort*>::iterator it = v_sortMap.begin(); it != v_sortMap.end(); it++) {
+        v_sort[i]->show();
+        v_sort[i]->setText(QString((it->second->getNom()).c_str()));
+        i++;
+    }
+}
+
+void Plateau::handleChoixSort(int i) {
+    highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getSort(i)->getPortee());
+    choixSort = ((Unite*)selected)->getSort(i);
+    setFlag(attaqueSort);
+}
+
 void Plateau::setBoutons(typeElement type, int numJoueur) {
     switch (type) {
     case (carre) : {
@@ -384,6 +420,8 @@ void Plateau::setBoutons(typeElement type, int numJoueur) {
         chev->hide();
         arch->hide();
         capt->hide();
+        for(int i = 0; i < NBSORT; i++)
+            v_sort[i]->hide();
         break;
     }
     case (batiment) : {
@@ -398,6 +436,8 @@ void Plateau::setBoutons(typeElement type, int numJoueur) {
         arch->hide();
         capt->hide();
         vie->hide();
+        for(int i = 0; i < NBSORT; i++)
+            v_sort[i]->hide();
         break;
     }
     case (batTour) : {
@@ -412,6 +452,8 @@ void Plateau::setBoutons(typeElement type, int numJoueur) {
         arch->hide();
         capt->hide();
         vie->show();
+        for(int i = 0; i < NBSORT; i++)
+            v_sort[i]->hide();
         break;
     }
     case (batChateau) : {
@@ -429,6 +471,8 @@ void Plateau::setBoutons(typeElement type, int numJoueur) {
         chev->show();
         arch->show();
         }
+        for(int i = 0; i < NBSORT; i++)
+            v_sort[i]->hide();
         break;
     }
     case (unite) : {
@@ -443,6 +487,8 @@ void Plateau::setBoutons(typeElement type, int numJoueur) {
         sorts->setEnabled(numJoueur==this->getJoueurTour()->getNumero());
         capt->setEnabled(numJoueur==this->getJoueurTour()->getNumero());
         setBoutonsUnite(getJoueurTour()->getNumero() == numJoueur);
+        for(int i = 0; i < NBSORT; i++)
+            v_sort[i]->hide();
         break;
     }
     }

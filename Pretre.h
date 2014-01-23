@@ -14,6 +14,7 @@ class Pretre : public Unite
 {
     public:
     Pretre(QGraphicsItem * parent, Case* c, Joueur* j);
+    void initSort();
 };
 
 

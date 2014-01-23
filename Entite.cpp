@@ -1,5 +1,6 @@
 #include "Entite.h"
 #include "Plateau.h"
+
 #define SIZE 36
 #define OFFSET 0
 
@@ -74,7 +75,13 @@ void Entite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         Case* c = (Case*)parentItem();
         ((Case*)parentItem())->parent()->highlight(c);
         ((Case*)parentItem())->parent()->updatePopPt();
+    } else if (((Case*)parentItem())->parent()->getFlag()==attaqueSort) {
+        ((Unite*)(((Case*)parentItem())->parent()->getSelect()))->attaquer(this,((Case*)parentItem())->parent()->getChoixSort());
+        ((Case*)parentItem())->parent()->setFlag(attente);
+        ((Case*)parentItem())->parent()->highlightAttaque((Case*)parentItem());
+        ((Case*)parentItem())->parent()->updatePopPt();
     }
-}
+    ((Case*)parentItem())->parent()->afficheInfoUnite(this);
+    ((Case*)parentItem())->parent()->setSelect(this);
 
 

@@ -2,6 +2,9 @@
 
 Chevalier::Chevalier(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,1,2,1,5,0,c,j,"Chevalier")
 {
+    this->setAttaqueDeBase();
+    this->initSort();
+
     QPixmap* chev;
 
     if (j && j->getNumero()==0) {
@@ -23,4 +26,8 @@ Chevalier::Chevalier(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,
     this->setImageDos(new QPixmap(chev->copy(36,108,36,36)));
 
     this->setPixmap(*(getImageFace()[1]));
+}
+
+void Chevalier::initSort() {
+    v_sort["Charge"] = new Charge("Charge",3,1,3);
 }

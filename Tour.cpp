@@ -1,7 +1,8 @@
 #include "Tour.h"
-#include <math.h>
 #include "Case.h"
 #include "Plateau.h"
+
+#include <math.h>
 
 Tour::Tour(QGraphicsItem* parent, Case* c, Joueur* j, string nom)
 : Batiment(parent, c, j, nom, 0, 10)

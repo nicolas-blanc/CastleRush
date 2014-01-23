@@ -1,14 +1,12 @@
 #ifndef BATIMENT_H
 #define BATIMENT_H
 
-
-
 #include <vector>
 
-#include "Entite.h"
-#include "Joueur.h"
-
 using namespace std;
+
+class Entite;
+class Joueur;
 
 class Batiment : public Entite {
 public:
@@ -19,4 +17,8 @@ public:
 protected:
       void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
 };
+
+#include "Entite.h"
+#include "Joueur.h"
+
 #endif        /* BATIMENT_H */

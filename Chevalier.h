@@ -14,6 +14,7 @@ class Chevalier : public Unite
 {
     public:
     Chevalier(QGraphicsItem * parent, Case* c, Joueur* j);
+    void initSort();
 };
 
 

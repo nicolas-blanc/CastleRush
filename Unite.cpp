@@ -18,12 +18,13 @@ Unite::Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned
     this->setMouvement(mvt);
     this->setCout(ct);
     this->setPopulation(pop);
-    this->setAttaqueDeBase();
+    for (unsigned int i=0; i<6; i++)
+         v_bonus.push_back(0);
     j->setUnite(this);
 }
 
-void Unite::setAttaqueDeBase() {
-    m_AttaqueParDefaut = new AttaqueDeBase();
+void Unite::setAttaqueDeBase(int portee = 1) {
+    m_AttaqueParDefaut = new AttaqueDeBase(portee);
     m_AttaqueParDefaut->lierEntite(this);
 }
 
@@ -174,14 +175,10 @@ void Unite::attaquer(Entite* e, Attaque* a) {
 }
 
 int Unite::getMouvement() {
-    return m_mouvement;
+    return m_mouvement + getJoueur()->getListeBonusJoueur()[5] + v_bonus[3];
 }
 
 Unite::~Unite() {
-
-}
-
-void Unite::initSort() {
 
 }
 
@@ -193,4 +190,9 @@ void Unite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         ((Case*)parentItem())->parent()->setFlag(attente);
 }
 
-//Penser � supprimer l'effet quand il arrive � 0 tours
+Sort* Unite::getSort(int sort) {
+    map <string,Sort*>::iterator it = v_sort.begin();
+    for(int i = 0; i < sort; i++)
+        it++;
+    return it->second;
+}

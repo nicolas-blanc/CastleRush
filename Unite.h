@@ -32,7 +32,9 @@ class Unite : public QObject,public Entite {
         inline void setPopulation(int val) { if (val >= 0) m_population = val; } // a modif exception
         inline AttaqueDeBase* getAttaqueParDefaut() { return m_AttaqueParDefaut; }
         inline Sort* getSort(string nomSort) { return v_sort[nomSort]; }
-        virtual void initSort();
+        Sort* getSort(int sort);
+        inline map <string,Sort*> getSort() { return v_sort; }
+        virtual void initSort() {}
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
         bool deplacer(Case* c);
@@ -40,7 +42,10 @@ class Unite : public QObject,public Entite {
         bool attaquer(Case* c);
         void modifierVie(int vie);
 
-        inline void insererEffet(Effet* effet) { this->v_effet.push_back(effet); }
+        inline void modifBonus(int bonus, int effet) { v_bonus[bonus] = effet; }
+        inline vector<int> getBonusUnite() { return v_bonus; }
+
+        inline void ajouterEffet(Effet* effet) { this->v_effet.push_back(effet); }
         void enleverEffet(Effet* effet);
         int mouvementDemande(Case* c);
 
@@ -71,7 +76,16 @@ class Unite : public QObject,public Entite {
         AttaqueDeBase* m_AttaqueParDefaut;
         map <string,Sort*> v_sort;
         vector <Effet*> v_effet;
+        vector<int> v_bonus;
+            /* 0 - point de vie
+             * 1 - degat
+             * 2 - portée
+             * 3 - mouvement
+             * 4 - Invisble
+             * 5 - Paralysie
+             */
 
+        void setAttaqueDeBase(int portee = 1);
         vector <QPixmap*> v_dep_face;
         vector <QPixmap*> v_dep_gauche;
         vector <QPixmap*> v_dep_droite;
@@ -79,7 +93,6 @@ class Unite : public QObject,public Entite {
     private:
         //inline int getDepX(Case c) { int dep = c.getX() - Entite::getPosition()[0].getX(); return abs(dep); };
         //inline int getDepY(Case c) { int dep = c.getY() - Entite::getPosition()[0].getY(); return abs(dep); };
-        void setAttaqueDeBase();
 };
 #include "AttaqueDeBase.h"
 #include "Sort.h"

@@ -30,9 +30,9 @@ void Attaque::lancerAttaque(Case* c) {
 }
 
 int Attaque::getDegat() {
-    return m_Degat + m_Entite->getJoueur()->getListeBonusJoueur()[3];
+    return m_Degat + m_Entite->getJoueur()->getListeBonusJoueur()[3] + ((Unite*) m_Entite)->getBonusUnite()[1];
 }
 
 int Attaque::getPortee() {
-    return m_Portee + m_Entite->getJoueur()->getListeBonusJoueur()[4];
+    return m_Portee + m_Entite->getJoueur()->getListeBonusJoueur()[4] + ((Unite*) m_Entite)->getBonusUnite()[2];
 }

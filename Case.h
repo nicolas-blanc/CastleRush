@@ -36,6 +36,8 @@ public :
         void declencherEffets();
         Plateau* parent();
 
+        inline void ajouterEffet(Effet * effet) { m_effets.push_back(effet); }
+
         Case& operator=(const Case& ) {return *this;}
 
         inline int getX() { return m_x; }

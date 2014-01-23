@@ -2,6 +2,8 @@
 
 Magicien::Magicien(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,5,2,1,5,0,c,j,"Magicien")
 {
+    this->setAttaqueDeBase(2);
+    this->initSort();
     QPixmap* mage;
     if (j && j->getNumero()==0) {
         mage=new QPixmap("images/MagicienneBleu.png");
@@ -21,4 +23,8 @@ Magicien::Magicien(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,5,
     this->setImageDos(new QPixmap(mage->copy(32,96,32,32)));
 
     this->setPixmap(*(getImageFace()[1]));
+}
+
+void Magicien::initSort() {
+    v_sort["Glyphe de Gel"] = new GlypheGel("Glyphe de Gel",3,4);
 }

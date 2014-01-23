@@ -1,5 +1,5 @@
-    #ifndef JOUEUR_H
-#define        JOUEUR_H
+#ifndef JOUEUR_H
+#define JOUEUR_H
 
 #include <vector>
 #include <map>
@@ -10,6 +10,7 @@
 
 using namespace std;
 
+class Plateau;
 class Entite;
 class Unite;
 class Batiment;
@@ -36,9 +37,12 @@ public :
     inline void setListeBonusJoueur(int indice, int bonus) { m_listeBonusJoueur[indice] = bonus; }
     inline void setPopulation(int val) { if (val <= getPopulationMax() || val > 0) m_Population = val; else { Population ex; throw ex; } }
 
+    inline void liePlateau(Plateau * plateau) { m_plateau = plateau; }
+    inline Plateau* getPlateau() { return m_plateau; }
+
+    inline vector<Batiment*> getBatiment() { return v_Batiment; }
     inline void setBatiment(Batiment* home) { v_Batiment.push_back(home); }
     inline void setChateau(Batiment* home) { v_Batiment.insert(v_Batiment.begin(), home); }
-    inline vector<Batiment*> getBatiment() {return v_Batiment;}
 
     inline void setUnite(Unite* home){v_Unite.push_back(home);}
     inline vector<Unite*> getUnite(){return v_Unite;}
@@ -54,6 +58,7 @@ private :
     QString pseudo;
     int m_couleur;
     int m_numero;
+    Plateau * m_plateau;
     vector<Unite*> v_Unite;
     vector<Batiment*> v_Batiment;
     int m_PtActionMax;
@@ -72,6 +77,7 @@ private :
 
 };
 
+#include "Plateau.h"
 #include "Entite.h"
 #include "Unite.h"
 #include "Batiment.h"

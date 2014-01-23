@@ -1,12 +1,10 @@
 #ifndef TOUR_H
 #define TOUR_H
 
-#include "Batiment.h"
-#include "AttaqueDeBase.h"
-#include "Attaque.h"
+class Batiment;
+class AttaqueDeBase;
 
-class Tour : public Batiment
-{
+class Tour : public Batiment {
     private :
         AttaqueDeBase *m_attaque;
         void setAttaqueDeBase();
@@ -21,5 +19,8 @@ class Tour : public Batiment
 protected:
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 };
+
+#include "Batiment.h"
+#include "AttaqueDeBase.h"
 
 #endif        /* TOUR_H */

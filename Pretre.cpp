@@ -2,6 +2,8 @@
 
 Pretre::Pretre(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,5,2,1,5,0,c,j,"Pretre")
 {
+    this->setAttaqueDeBase();
+    this->initSort();
     QPixmap* pret;
     if (j && j->getNumero()==0) {
         pret=new QPixmap("images/PretresseBleu.png");
@@ -21,4 +23,8 @@ Pretre::Pretre(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,5,2,1,
     this->setImageDos(new QPixmap(pret->copy(32,96,32,32)));
 
     this->setPixmap(*(getImageFace()[1]));
+}
+
+void Pretre::initSort() {
+    v_sort["Soin"] = new Soin("Soin",-2,3,3);
 }

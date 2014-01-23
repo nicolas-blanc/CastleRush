@@ -75,6 +75,11 @@ void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             this->parent()->updatePopPt();
         }
     }
+    else if (parent()->getFlag()==attaqueSort) {
+        ((Unite*)(parent()->getSelect()))->attaquer(this,parent()->getChoixSort());
+        parent()->setFlag(attente);
+        parent()->highlightAttaque(this);
+    }
     else if (parent()->getFlag()==invoquer){
         this->setSelected(false);
         Chateau* ch=((Chateau*)(parent()->getSelect()));
@@ -113,7 +118,7 @@ bool Case::isOccupee() {
 void Case::declencherEffets() {
     int vectSize = m_effets.size();
     for (int i=0; i<vectSize; i++) {
-        m_effets[i]->getSort()->lancerAttaque(this);
+        m_effets[i]->appliquerEffetUnite(this);
         m_effets[i]->decreaseTour();
     }
 }
