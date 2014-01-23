@@ -105,7 +105,7 @@ public :
         void setBoutons(typeElement type, int numJoueur=0);
         void setBoutonsUnite(bool active);
         void highlight(Case* c, int portee=-1, QColor color=Qt::red);
-        void highlightAttaque(Case* c, int portee=0);
+        void highlightAttaque(Case* c, int portee=0, QColor = Qt::red);
         vector<Case*> cheminDeplacement(Case* c1, Case* c2, int portee);
         bool porteeAttaquePossible(Case* c1, Case* c2, int portee);
 

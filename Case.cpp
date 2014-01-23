@@ -19,6 +19,7 @@ Case::Case(int x, int y, QObject* parent) : QGraphicsRectItem(x*SIZE,y*SIZE,SIZE
     m_occupant=NULL;
     m_batiment = false;
     isSelected = false;
+    glyphe = false;
     setFlags(QGraphicsItem::ItemIsSelectable);
 }
 
@@ -82,7 +83,7 @@ void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     else if (parent()->getFlag()==attaqueSort) {
         ((Unite*)(parent()->getSelect()))->attaquer(this,parent()->getChoixSort());
         parent()->setFlag(attente);
-        parent()->highlightAttaque(this);
+        parent()->highlight(this);
     }
     else if (parent()->getFlag()==invoquer){
         this->setSelected(false);
@@ -123,9 +124,7 @@ void Case::declencherEffets(Joueur *joueur) {
     vector<Effet*>::iterator it = m_effets.begin();
     for(unsigned int i = 0; i < m_effets.size() ;i++) {
         if(isOccupee() && !(m_batiment)) {
-            cout<<"lol1"<<flush;
             m_effets[i]->appliquerEffetUnite(this);
-            cout<<"lol2"<<flush;
         }
         if(m_effets[i]->getJoueur() == joueur)
             if(m_effets[i]->decreaseTour())

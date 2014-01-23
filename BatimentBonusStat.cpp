@@ -28,15 +28,12 @@ void BatimentBonusStat::modifBonus() {
             setBonus(getBonus() + getNbTours()/2);
             break;
         case 2:
-            setBonus(getBonus() + getNbTours()/4);
-            break;
-        case 3:
             setBonus(getBonus() + getNbTours()/6);
             break;
-        case 4:
+        case 3:
             setBonus(getBonus() + getNbTours()/4);
             break;
-        case 5:
+        case 4:
             setBonus(getBonus() + getNbTours()/3);
             break;
         default:
@@ -61,9 +58,6 @@ void BatimentBonusStat::Bonus() {
             setBonus(1);
             break;
         case 4:
-            setBonus(1);
-            break;
-        case 5:
             setBonus(2);
             break;
         default:
@@ -74,7 +68,7 @@ void BatimentBonusStat::Bonus() {
 }
 
 void BatimentBonusStat::randomStat() {
-    setStat(rand_a_b(2, 6));
+    setStat(rand_a_b(2, 5));
 }
 
 void BatimentBonusStat::changementProprio(Joueur *j) {
@@ -99,9 +93,11 @@ void BatimentBonusStat::mouseReleaseEvent(QGraphicsSceneMouseEvent *)
     {
         if((((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtActionMax()/2) <= ((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtActionMax())
         {
+
         ((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->setPtAction(((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtActionMax()/2);
         ((Case*)parentItem())->parent()->setInvocateur(((Unite*)((Case*)parentItem())->parent()->getSelect()));
         ((Case*)parentItem())->parent()->setBatimentBonus(this);
+        ((Case*)parentItem())->parent()->updatePopPt();
         ((Unite*)((Case*)parentItem())->parent()->getSelect())->setActif(false);
         ((Case*)parentItem())->parent()->setFlag(attente);
         }

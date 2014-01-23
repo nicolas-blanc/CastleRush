@@ -45,7 +45,6 @@ bool Chateau::Invoquer(catUnite unite, Case * c){
             && this->getJoueur()->getPtAction()-u->getCout()>=0
             && invoc_possible)
     {
-        getJoueur()->setUnite(u);
         this->getJoueur()->modifPopulation(u->getPopulation());
         this->getJoueur()->modifPtAction(u->getCout());
         return true;

@@ -12,7 +12,9 @@ PointDeVie::PointDeVie(int maxi,int mini)
 void PointDeVie::modifVie(int val) {
     if ((this->GetValeur() - val) > this->GetMax()){
         m_Valeur = GetMax();}
-    else{
+    else if ((this->GetValeur()-val) <this->GetMin()){
+        m_Valeur = GetMin();}
+    else {
         this->SetValeur(this->GetValeur() - val);
     }
 }

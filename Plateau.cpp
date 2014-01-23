@@ -54,7 +54,7 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
 
         fichierPlateau.read((char*)&m_largeur ,sizeof(int));
         fichierPlateau.read((char*)&m_hauteur,sizeof(int));
-        QPixmap back("images/NewBackGround.png");
+        QPixmap back("images/BackgroundV4.jpg");
         background = new QGraphicsPixmapItem();
         background->setPixmap(back.copy(0,0,SIZE*m_largeur,SIZE*m_hauteur));
         this->addItem(background);
@@ -290,7 +290,7 @@ bool Plateau::isFini(ifstream& fichier) {
 
 void Plateau::handleDep() {
         highlight(plateau[0][0]);
-        highlight(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getMouvement()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[mouvement]);
+        highlight(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getMouvement()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[4]);
         setFlag(deplacement);
 }
 
@@ -303,9 +303,9 @@ void Plateau::gestionTour()
     jtour->setPtAction(jtour->getPtActionMax()+jtour->getListeBonusJoueur()[1]);
     jtour = j[1-jtour->getNumero()];
     this->updatePopPt();
-    TOUR->setText("Tour Total : " + QString::number(NombreTour) + " -- Tour n°" +QString::number(NombreTourJoueur));
+    TOUR->setText("Tours total : " + QString::number(NombreTour) + " -- Tour n°" +QString::number(NombreTourJoueur));
     QMessageBox popup;
-    popup.setText("Tour Joueur : " + jtour->getPseudo());
+    popup.setText("Tour joueur : " + jtour->getPseudo());
     popup.exec();
     for(unsigned int i =0; i<v_Batiment.size(); i++)
     {
@@ -346,7 +346,7 @@ void Plateau::gestionTour()
         {
             BatimentBonus.pop_back();
         }
-        }
+    }
     setBoutons(carre);
 
 
@@ -354,14 +354,14 @@ void Plateau::gestionTour()
     {
         for(unsigned int d = 0; d<j[i]->getUnite().size();d++)
         {
-        if(j[i]->getUnite()[d]->getVie() == 0)
-        {
-                Unite*u= j[i]->getUnite()[d];
-                Case* c = u->getPosition()[0];
-                c->setOccupant(NULL, false);
-                j[i]->deleteUnite(u);
-                u->setPixmap(QPixmap(""));
-        }
+            if(j[i]->getUnite()[d]->getVie() == 0)
+            {
+                    Unite*u= j[i]->getUnite()[d];
+                    Case* c = u->getPosition()[0];
+                    c->setOccupant(NULL, false);
+                    j[i]->deleteUnite(u);
+                    u->setPixmap(QPixmap(""));
+            }
         }
     }
 
@@ -419,9 +419,9 @@ void Plateau::afficheInfoUnite(Entite *u)
             typeid(*u) == typeid(Archer))
     {
         mvt->show();
-        mvt->setText("Mouvement : " + QString::number(((Unite*)u)->getMouvement()));
+        mvt->setText("Mouvement : " + QString::number(((Unite*)u)->getMouvement()+u->getJoueur()->getListeBonusJoueur()[4]));
         atk->show();
-        atk->setText("Attaque : " + QString::number(((Unite*)u)->getAttaqueParDefaut()->getDegat()));
+        atk->setText("Attaque : " + QString::number(((Unite*)u)->getAttaqueParDefaut()->getDegat()+((Unite*)u)->getJoueur()->getListeBonusJoueur()[2]));
     }
     if((typeid(*u) == typeid(BatimentBonusStat)))
      {
@@ -449,7 +449,7 @@ void Plateau::afficheInfoUnite(Entite *u)
 
 void Plateau::handleAtt(){
     highlight(plateau[0][0]);
-    highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getAttaqueParDefaut()->getPortee()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[portee]);
+    highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getAttaqueParDefaut()->getPortee()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[3]);
     setFlag(attaque);
 }
 
@@ -470,7 +470,7 @@ void Plateau::handleSort() {
 void Plateau::handleChoixSort(int i) {
 
     highlight(plateau[0][0]);
-    highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getSort(i)->getPortee()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[portee]);
+    highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getSort(i)->getPortee()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[3]);
     choixSort = ((Unite*)selected)->getSort(i);
     setFlag(attaqueSort);
 }
@@ -655,30 +655,30 @@ void Plateau::highlight(Case* c, int portee, QColor color) {
         vector<Case*> chemin;
         for (int i=0; i<=portee; i++) {
             for (int j=0; j<=portee-i; j++) {
-                if (i+c->getX()<m_largeur&&j+c->getY()<m_hauteur&&((i+j)||color==blue)) {
+                if ((i+c->getX()<m_largeur&&j+c->getY()<m_hauteur&&(i+j))||color==blue) {
                     chemin=cheminDeplacement(c, plateau[c->getX()+i][c->getY()+j],portee);
-                    if ((color==Qt::transparent||chemin[chemin.size()-1]!=NULL)) {
+                    if ((color==Qt::transparent||chemin[chemin.size()-1]!=NULL)||color==blue) {
                         plateau[i+c->getX()][j+c->getY()]->setBrush(*new QBrush(color));
-                        if (color==blue){cout<<"test"<<flush;plateau[i+c->getX()][j+c->getY()]->setGlyphe(true);}
+                        if (color==blue){plateau[i+c->getX()][j+c->getY()]->setGlyphe(true);}
                     }
                 }
-                if (c->getX()-i>=0&&c->getY()-j>=0&&((i+j)||color==blue)) {
+                if ((c->getX()-i>=0&&c->getY()-j>=0&&((i+j)||color==blue))) {
                     chemin=cheminDeplacement(c, plateau[c->getX()-i][c->getY()-j],portee);
-                    if ((color==Qt::transparent||chemin[chemin.size()-1]!=NULL)) {
+                    if ((color==Qt::transparent||chemin[chemin.size()-1]!=NULL)||color==blue) {
                         plateau[c->getX()-i][c->getY()-j]->setBrush(*new QBrush(color));
                         if (color==blue) {plateau[c->getX()-i][c->getY()-j]->setGlyphe(true);}
                     }
                 }
-                if (c->getX()+i<m_largeur&&c->getY()-j>=0&&((i+j)||color==blue)) {
+                if ((c->getX()+i<m_largeur&&c->getY()-j>=0&&((i+j)||color==blue))) {
                     chemin=cheminDeplacement(c, plateau[c->getX()+i][c->getY()-j],portee);
-                    if ((color==Qt::transparent||chemin[chemin.size()-1]!=NULL)) {
+                    if ((color==Qt::transparent||chemin[chemin.size()-1]!=NULL)||color==blue) {
                         plateau[c->getX()+i][c->getY()-j]->setBrush(*new QBrush(color));
                         if (color==blue) {plateau[i+c->getX()][c->getY()-j]->setGlyphe(true);}
                     }
                 }
-                if (c->getX()-i>=0&&c->getY()+j<m_hauteur&&((i+j)||color==blue)) {
+                if ((c->getX()-i>=0&&c->getY()+j<m_hauteur&&((i+j)||color==blue))) {
                     chemin=cheminDeplacement(c, plateau[c->getX()-i][c->getY()+j],portee);
-                    if ((color==Qt::transparent||chemin[chemin.size()-1]!=NULL)) {
+                    if ((color==Qt::transparent||chemin[chemin.size()-1]!=NULL)||color==blue) {
                         plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
                         if (color==blue) {plateau[c->getX()-i][j+c->getY()]->setGlyphe(true);}
                     }
@@ -756,8 +756,7 @@ vector<Case*> Plateau::cheminDeplacement(Case *c1, Case *c2, int portee) {
     return cheminOK;
 }
 
-void Plateau::highlightAttaque(Case* c, int portee) {
-    QColor color = Qt::red;
+void Plateau::highlightAttaque(Case* c, int portee, QColor color) {
     if (portee==-1) {
         portee=(m_hauteur>m_largeur?m_hauteur:m_largeur);
         color=Qt::transparent;
@@ -765,8 +764,9 @@ void Plateau::highlightAttaque(Case* c, int portee) {
 
     for (int i=0; i<=portee; i++)
         for (int j=0; j<=portee-i; j++) {
-            if (c->getX()+i<m_largeur&&c->getY()+j<m_hauteur)
+            if (c->getX()+i<m_largeur&&c->getY()+j<m_hauteur) {
                 plateau[c->getX()+i][c->getY()+j]->setBrush(*new QBrush(color));
+            }
 
             if (c->getX()-i>=0       &&c->getY()+j<m_hauteur)
                 plateau[c->getX()-i][c->getY()+j]->setBrush(*new QBrush(color));
@@ -783,15 +783,14 @@ void Plateau::highlightAttaque(Case* c, int portee) {
 
 Unite * Plateau::getUniteAttaqueTour(Tour* tr)
 {
-
     Unite* danger_entite = NULL;
     float distance;
     float distance_danger;
     vector<Unite*> entite_presentes;
     Case* ma_position = tr->getPosition()[0];
-    for(int x=0; x<=tr->getAttaque()->getPortee(); x++)
+    for(int x=0; x<=tr->getAttaque()->getPortee()+tr->getJoueur()->getListeBonusJoueur()[3]; x++)
     {
-        for(int y=0; y<=tr->getAttaque()->getPortee()-x; y++)
+        for(int y=0; y<=tr->getAttaque()->getPortee()+tr->getJoueur()->getListeBonusJoueur()[3]-x; y++)
         {
 
             if (ma_position->getX()+x<m_largeur&&ma_position->getY()+y<m_hauteur)
@@ -804,7 +803,7 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
                 }
             }
 
-            if (ma_position->getX()-x>=0&&ma_position->getY()+y<m_hauteur)
+            if (x!=0&&ma_position->getX()-x>=0&&ma_position->getY()+y<m_hauteur)
             {
                 Case* caseoccupee = plateau[ma_position->getX()-x][ma_position->getY()+y];
                 if(caseoccupee->isOccupee()  && (caseoccupee->getOccupant()->Getnom() == "Chevalier"||caseoccupee->getOccupant()->Getnom() == "Archer"||caseoccupee->getOccupant()->Getnom() == "Guerrier"||caseoccupee->getOccupant()->Getnom() == "Magicien"||caseoccupee->getOccupant()->Getnom() == "Pretre"||caseoccupee->getOccupant()->Getnom() == "Voleur"))
@@ -820,7 +819,7 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
                     entite_presentes.push_back((Unite*)(caseoccupee->getOccupant()));
                 }
             }
-            if (ma_position->getX()-x>=0&&ma_position->getY()-y>=0)
+            if (x!=0&&ma_position->getX()-x>=0&&ma_position->getY()-y>=0)
             {
                 Case* caseoccupee = plateau[ma_position->getX()-x][ma_position->getY()-y];
                 if(caseoccupee->isOccupee()  && (caseoccupee->getOccupant()->Getnom() == "Chevalier"||caseoccupee->getOccupant()->Getnom() == "Archer"||caseoccupee->getOccupant()->Getnom() == "Guerrier"||caseoccupee->getOccupant()->Getnom() == "Magicien"||caseoccupee->getOccupant()->Getnom() == "Pretre"||caseoccupee->getOccupant()->Getnom() == "Voleur"))
@@ -848,7 +847,6 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
                     c->getX())
                      + abs(tr->getJoueur()->getBatiment()[0]->getPosition()[0]->getY()-
                      c->getY());
-            cout<<tr->getJoueur()->getNumero()<<", "<<u->getJoueur()->getNumero()<<flush;
             if(distance<distance_danger&&u->getJoueur()->getNumero()!=tr->getJoueur()->getNumero())
             {
                 distance_danger = distance;
@@ -894,7 +892,6 @@ void Plateau::finDuJeu()
         {
             plateau[x][y]->setFlag(QGraphicsItem::ItemIsSelectable,false);
         }
-    cout<<"test"<<flush;
     for(unsigned int i =0; i<j.size();i++)
     {
         for(unsigned int a =0; a<j[i]->getUnite().size(); a++)
@@ -909,4 +906,5 @@ void Plateau::finDuJeu()
     }
 
     this->setBoutons(carre);
+    fint->hide();
 }

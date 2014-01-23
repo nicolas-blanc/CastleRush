@@ -24,7 +24,7 @@ AttaquePuissante::AttaquePuissante(string nom, int degat, int portee, int ptActi
 void AttaquePuissante::lancerAttaque(Case *c)
 {
     animationAttaque(m_Entite->getPosition()[0],c);
-    c->transmettreAttaque(this->getDegat());
+    c->transmettreAttaque(this->getDegat()+c->getUnite()->getJoueur()->getListeBonusJoueur()[2]);
 }
 
 void AttaquePuissante::animationAttaque(Case *c1, Case *c2) {
@@ -82,10 +82,10 @@ void Charge::lancerAttaque(Case *c) {
     int x = c->getX() - m_Entite->getPosition()[0]->getX();
     int y = c->getY() - m_Entite->getPosition()[0]->getY();
 
-    c->transmettreAttaque(this->getDegat());
+    c->transmettreAttaque(this->getDegat()+c->getUnite()->getJoueur()->getListeBonusJoueur()[2]);
     animationAttaque(m_Entite->getPosition()[0],c);
-    m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+x,c->getY()+y)->transmettreAttaque(this->getDegat()-1);
-    m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+(2*x),c->getY()+(2*y))->transmettreAttaque(this->getDegat()-1);
+    m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+x,c->getY()+y)->transmettreAttaque(this->getDegat()+c->getUnite()->getJoueur()->getListeBonusJoueur()[2]-1);
+    m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+(2*x),c->getY()+(2*y))->transmettreAttaque(this->getDegat()+c->getUnite()->getJoueur()->getListeBonusJoueur()[2]-1);
 }
 
 void Charge::animationAttaque(Case *c1, Case *c2) {
@@ -133,6 +133,11 @@ void Charge::animationAttaque(Case *c1, Case *c2) {
 
 AttaqueEmpoisonnee::AttaqueEmpoisonnee(string nom, int degat, int portee, int ptAction, Entite* ent) : Sort(nom,degat,portee,ptAction,ent) {
     m_effet = new DegenVie(ent->getJoueur(),2,1);
+    QPixmap* atq = new QPixmap("images/Empoisonnee1-2.png");
+    for (int j=0; j<3; j++)
+        for (int i=0; i<5; i++)
+            this->setImageAttaque(new QPixmap(atq->copy(50*i,j*50,50,50)));
+    ((Case*)m_Entite->parentItem())->parent()->addItem(&atk);
 }
 
 void AttaqueEmpoisonnee::lancerAttaque(Case *c) {
@@ -144,7 +149,46 @@ void AttaqueEmpoisonnee::lancerAttaque(Case *c) {
 }
 
 void AttaqueEmpoisonnee::animationAttaque(Case *c1, Case *c2) {
+    QSequentialAnimationGroup *group = new QSequentialAnimationGroup();
+    float decalageX = (c2->getX()-c1->getX())*SIZE/2;
+    float decalageY = (c2->getY()-c1->getY())*SIZE/2;
 
+    QPropertyAnimation *setoff = new QPropertyAnimation(this, "offsetAtk");
+    setoff->setDuration(1);
+    setoff->setStartValue(QPointF(m_Entite->offset().x()+decalageX,m_Entite->offset().y()+decalageY));
+    setoff->setEndValue(QPointF(m_Entite->offset().x()+decalageX,m_Entite->offset().y()+decalageY));
+    group->addAnimation(setoff);
+
+    QPropertyAnimation *placement = new QPropertyAnimation(this, "pixmap");
+    placement->setDuration(1);
+    int anim;
+    if (decalageX>0)
+        anim=30;
+    else if (decalageX<0)
+        anim=20;
+    else if (decalageY<0)
+        anim=10;
+    else if (decalageY>0)
+        anim=0;
+    placement->setStartValue(anim+1);
+    placement->setEndValue(anim+1);
+    group->addAnimation(placement);
+
+    //for (int k=0; k<2; k++)
+        for (unsigned int i=0; i<getImageAttaque().size(); i++) {
+            QPropertyAnimation *animPix = new QPropertyAnimation(this, "pixmap");
+            animPix->setDuration(50);
+            animPix->setStartValue(i);
+            animPix->setEndValue(i);
+            group->addAnimation(animPix);
+        }
+    QPropertyAnimation *animPix = new QPropertyAnimation(this, "pixmap");
+    animPix->setDuration(1);
+    animPix->setStartValue(-1);
+    animPix->setEndValue(-1);
+    group->addAnimation(animPix);
+
+    group->start();
 }
 
 GlypheGel::GlypheGel(string nom, int portee, int ptAction, Entite* ent) : Sort(nom,0,portee,ptAction,ent) {
@@ -164,6 +208,7 @@ void GlypheGel::lancerAttaque(Case *c) {
     m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+1,c->getY())->ajouterEffet(m_effet);
     m_Entite->getJoueur()->getPlateau()->getCase(c->getX(),c->getY()-1)->ajouterEffet(m_effet);
     m_Entite->getJoueur()->getPlateau()->getCase(c->getX(),c->getY()+1)->ajouterEffet(m_effet);
+    m_Entite->getJoueur()->getPlateau()->highlight(c);
     m_Entite->getJoueur()->getPlateau()->highlight(c,1,Qt::blue);
 }
 
@@ -220,7 +265,7 @@ Soin::Soin(string nom, int degat, int portee, int ptAction, Entite* ent) : Sort(
 
 void Soin::lancerAttaque(Case *c) {
     animationAttaque(m_Entite->getPosition()[0],c);
-    c->transmettreAttaque(this->getDegat());
+    c->transmettreAttaque(this->getDegat()+c->getUnite()->getJoueur()->getListeBonusJoueur()[2]);
 }
 
 void Soin::animationAttaque(Case *c1, Case *c2) {

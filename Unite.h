@@ -45,7 +45,8 @@ class Unite : public QObject,public Entite {
         inline void modifBonus(int bonus, int effet) { v_bonus[bonus] = effet; }
         inline vector<int> getBonusUnite() { return v_bonus; }
 
-        inline void ajouterEffet(Effet* effet) { this->v_effet.push_back(effet); }
+        inline void ajouterEffet(Effet* effet) {
+            cout<<"LOL"<<flush;this->v_effet.push_back(effet); }
         void enleverEffet(vector <Effet*>::iterator it) { v_effet.erase(it); }
         void appliquerEffet();
 

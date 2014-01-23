@@ -80,7 +80,7 @@ void Unite::animationDeplacement(vector<Case *> chemin ) {
 
 bool Unite::deplacer(Case* c) {
     int mvt = this->mouvementDemande(c);
-    vector<Case*> chemin=((Case*)this->parentItem())->parent()->cheminDeplacement(getPosition()[0],c,min((getMouvement()+getJoueur()->getListeBonusJoueur()[5]),(getJoueur()->getPtAction()+getJoueur()->getListeBonusJoueur()[1])));
+    vector<Case*> chemin=((Case*)this->parentItem())->parent()->cheminDeplacement(getPosition()[0],c,min((getMouvement()+getJoueur()->getListeBonusJoueur()[4]),(getJoueur()->getPtAction()+getJoueur()->getListeBonusJoueur()[4])));
     if(chemin[chemin.size()-1]!=NULL)
     {
         if(this->getJoueur()->getPtAction()-mvt >=0)
@@ -130,7 +130,7 @@ bool Unite::attaquer(Case* c, AttaqueDeBase* attaque) {
             cout << "erreur PtAction" << flush;
             attaquer = false;
         }
-        else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()) {
+        else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()+this->getJoueur()->getListeBonusJoueur()[3]) {
            cout << "erreur Portee," <<flush;
            attaquer = false;
         }
@@ -146,7 +146,7 @@ bool Unite::attaquer(Case* c, AttaqueDeBase* attaque) {
                 c->getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
                 c->setOccupant(NULL);
             }
-            else if(c->isOccupee() && c->getOccupant()->Getnom()== "Chateau")
+            else if(c->isOccupee() && c->getOccupant()->Getnom()== "Chateau" && c->getOccupant()->getVie()==0)
             {
                 QPixmap *tombe;
                 tombe=new QPixmap("images/ChateauDetruit.png");
@@ -159,7 +159,7 @@ bool Unite::attaquer(Case* c, AttaqueDeBase* attaque) {
                 this->getPosition()[0]->parent()->finDuJeu();
 
             }
-            else if(c->isOccupee() && c->getOccupant()->Getnom() == "Tour")
+            else if(c->isOccupee() && c->getOccupant()->Getnom() == "Tour" && c->getOccupant()->getVie()==0)
             {
                 QPixmap *tombe;
                 tombe=new QPixmap("images/TourDetruite.png");
@@ -190,7 +190,7 @@ bool Unite::attaquer(Case* c, Sort* attaque) {
                 cout << "erreur PtAction" << flush;
                 attaquer = false;
             }
-            else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()) {
+            else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()+this->getJoueur()->getListeBonusJoueur()[3]) {
                cout << "erreur Portee," <<flush;
                attaquer = false;
             }
@@ -268,12 +268,12 @@ Unite::~Unite() {
 void Unite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if(getActif())
     {
-    Entite::mouseReleaseEvent(event);
-    ((Case*)parentItem())->parent()->CapturePossible(this->getPosition()[0]);
-    if(((Case*)parentItem())->parent()->getFlag()==attente)
-        ((Case*)parentItem())->parent()->setBoutons(unite, getJoueur()->getNumero());
-    else
-        ((Case*)parentItem())->parent()->setFlag(attente);
+        Entite::mouseReleaseEvent(event);
+        ((Case*)parentItem())->parent()->CapturePossible(this->getPosition()[0]);
+        if(((Case*)parentItem())->parent()->getFlag()==attente)
+            ((Case*)parentItem())->parent()->setBoutons(unite, getJoueur()->getNumero());
+        else
+            ((Case*)parentItem())->parent()->setFlag(attente);
     }
     else
     {

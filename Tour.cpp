@@ -28,8 +28,7 @@ void Tour::attaquer(Case* c) {
 }
 
 
-void Tour::attaqueAuto()
-{
+void Tour::attaqueAuto() {
     Unite* u = ((Case*)parentItem())->parent()->getUniteAttaqueTour(this);
     if(u != NULL && u->getJoueur()->getNumero()!=this->getJoueur()->getNumero())
     {

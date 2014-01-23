@@ -27,7 +27,7 @@ AttaqueDeBase::AttaqueDeBase(int portee, int deg, Entite* ent)
 
 void AttaqueDeBase::lancerAttaque(Case* c) {
     animationAttaque(m_Entite->getPosition()[0],c);
-    c->transmettreAttaque(this->getDegat());
+    c->transmettreAttaque(this->getDegat()+c->getUnite()->getJoueur()->getListeBonusJoueur()[2]);
 }
 
 void AttaqueDeBase::animationAttaque(Case* c1, Case* c2) {
@@ -59,7 +59,7 @@ void AttaqueDeBase::animationAttaque(Case* c1, Case* c2) {
     for (int k=0; k<3; k++)
         for (unsigned int i=0; i<getImageAttaque().size(); i++) {
             QPropertyAnimation *animPix = new QPropertyAnimation(this, "pixmap");
-            animPix->setDuration(10);
+            animPix->setDuration(30);
             animPix->setStartValue(i);
             animPix->setEndValue(i);
             group->addAnimation(animPix);
