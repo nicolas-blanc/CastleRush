@@ -122,8 +122,11 @@ bool Case::isOccupee() {
 void Case::declencherEffets(Joueur *joueur) {
     vector<Effet*>::iterator it = m_effets.begin();
     for(unsigned int i = 0; i < m_effets.size() ;i++) {
-        if(isOccupee() && !(m_batiment))
-        m_effets[i]->appliquerEffetUnite(this);
+        if(isOccupee() && !(m_batiment)) {
+            cout<<"lol1"<<flush;
+            m_effets[i]->appliquerEffetUnite(this);
+            cout<<"lol2"<<flush;
+        }
         if(m_effets[i]->getJoueur() == joueur)
             if(m_effets[i]->decreaseTour())
                 enleverEffet(it);

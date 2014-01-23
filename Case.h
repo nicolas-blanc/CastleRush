@@ -40,10 +40,11 @@ public :
         bool getGlyphe() {return glyphe;}
         void setGlyphe(bool s) {glyphe = s;}
         void declencherEffets(Joueur *joueur);
+        bool contientBatiment() {return m_batiment;}
 
         inline void ajouterEffet(Effet * effet) { m_effets.push_back(effet); }
         void enleverEffet(vector<Effet*>::iterator it) { m_effets.erase(it); }
-        inline bool isEffets() { return m_effets.size() == 0; }
+        inline bool isEffets() { return m_effets.size() != 0; }
 
         Case& operator=(const Case& ) {return *this;}
 

@@ -158,10 +158,10 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     addWidget(capt);
     connect(capt, SIGNAL(released()), this, SLOT(handleCapt()));
 
-    annuler = new QPushButton("Annuler");
+    /*annuler = new QPushButton("Annuler");
     annuler->setToolTip("Permet d'utiliser l'attaque de base de l'unite selectionne.");
     annuler->setGeometry(410,SIZE*(m_hauteur+1),80,25);
-    addWidget(annuler);
+    addWidget(annuler);*/
 
     fint = new QPushButton("Fin de tour");
     fint->setToolTip("Permet d'utiliser l'attaque de base de l'unite selectionne.");
@@ -848,6 +848,7 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
                     c->getX())
                      + abs(tr->getJoueur()->getBatiment()[0]->getPosition()[0]->getY()-
                      c->getY());
+            cout<<tr->getJoueur()->getNumero()<<", "<<u->getJoueur()->getNumero()<<flush;
             if(distance<distance_danger&&u->getJoueur()->getNumero()!=tr->getJoueur()->getNumero())
             {
                 distance_danger = distance;
@@ -855,6 +856,8 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
             }
         }
     }
+
+    //if (danger_entite->getJoueur()->getNumero()==tr->getJoueur()->getNumero()) danger_entite=NULL;
 
     return danger_entite;
 }

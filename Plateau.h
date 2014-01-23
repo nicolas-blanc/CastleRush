@@ -50,7 +50,7 @@ private :
         QPushButton* sorts;
         QPushButton* dep;
         QPushButton* capt;
-        QPushButton* annuler;
+        //QPushButton* annuler;
         QPushButton* fint;
         QPushButton* invoc;
 

@@ -22,6 +22,7 @@ void Effet::appliquerEffetCase(Case * c) {
 DegenVie::DegenVie(Joueur * joueur, int nbTour, int malus) : Effet(joueur,nbTour) { m_malus = malus; }
 
 void DegenVie::appliquerEffetUnite(Case *c) {
+    cout<<"LOL"<<flush;
     c->getUnite()->modifierVie(m_malus);
 }
 

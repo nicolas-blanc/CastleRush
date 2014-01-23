@@ -182,9 +182,9 @@ bool Unite::attaquer(Case* c, AttaqueDeBase* attaque) {
 
 bool Unite::attaquer(Case* c, Sort* attaque) {
     bool attaquer;
-    if(c->getUnite() != NULL) {
+    if(!c->contientBatiment()) {
         bool sortOk = (attaque->getNom() == "Concentration" || attaque->getNom() == "Soin" || attaque->getNom() == "Glyphe de Gel");
-        if(c->getOccupant()->getJoueur() != ((Case*)parentItem())->parent()->getJoueurTour() || attaque->getDegat() < 0 || sortOk)
+        if(sortOk || (c->isOccupee()&&c->getOccupant()->getJoueur() != ((Case*)parentItem())->parent()->getJoueurTour()) || attaque->getDegat() < 0)
         {
             if (getJoueur()->getPtAction()<attaque->getPtAction()) {
                 cout << "erreur PtAction" << flush;
@@ -198,7 +198,7 @@ bool Unite::attaquer(Case* c, Sort* attaque) {
             {
                 attaque->lancerAttaque(c);
                 cout<<"test2"<<flush;
-                if (((c->getOccupant())->getVie())==0){
+                if (c->isOccupee()&&((c->getOccupant())->getVie())==0){
                     QPixmap *tombe;
                     tombe=new QPixmap("images/Coffin.png");
                     (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
