@@ -10,7 +10,7 @@ BatimentBonusStat::BatimentBonusStat(QGraphicsItem* parent, vector<Case*>& ensCa
     } else if (nom == "Campement") {
         this->setPixmap(* new QPixmap("images/Village1.png"));
     } else {
-        this->setPixmap(* new QPixmap("images/Village2.png"));
+        this->setPixmap(* new QPixmap("images/Campement.png"));
     }
 }
 

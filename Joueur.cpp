@@ -20,14 +20,14 @@ Joueur::~Joueur() {
 
 void Joueur::deleteUnite(Unite*u)
 {
-    vector<Unite*>::iterator it;
-    it = find(getUnite().begin(), getUnite().end(), u);
-    getUnite().erase(it);
+    vector<Unite*>::iterator it = v_Unite.begin();
+    it = find(it,v_Unite.end(),u);
+    v_Unite.erase(it);
 }
 
 void Joueur::deleteBatiment(Batiment*b)
 {
-    vector<Batiment*>::iterator it;
-    it = find(getBatiment().begin(), getBatiment().end(), b);
-    getBatiment().erase(it);
+    vector<Batiment*>::iterator it = v_Batiment.begin();
+    it = find(it, v_Batiment.end(), b);
+    v_Batiment.erase(it);
 }

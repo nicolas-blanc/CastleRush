@@ -196,39 +196,45 @@ bool Unite::attaquer(Case* c, AttaqueDeBase *attaque) {
 
 bool Unite::attaquer(Case* c, Sort* attaque) {
     bool attaquer;
-    bool sortSoiMeme = (attaque->getNom() == "Concentration" || attaque->getNom() == "Soin");
-    if(c->getOccupant()->getJoueur()!= ((Case*)parentItem())->parent()->getJoueurTour() || attaque->getDegat() < 0 || sortSoiMeme)
-    {
-        if (getJoueur()->getPtAction()<attaque->getPtAction()) {
-            cout << "erreur PtAction" << flush;
-            attaquer = false;
-        }
-        else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()) {
-           cout << "erreur Portee," <<flush;
-           attaquer = false;
+    if(c->getUnite() != NULL) {
+        bool sortOk = (attaque->getNom() == "Concentration" || attaque->getNom() == "Soin" || attaque->getNom() == "Glyphe de Gel");
+        if(c->getOccupant()->getJoueur() != ((Case*)parentItem())->parent()->getJoueurTour() || attaque->getDegat() < 0 || sortOk)
+        {
+            if (getJoueur()->getPtAction()<attaque->getPtAction()) {
+                cout << "erreur PtAction" << flush;
+                attaquer = false;
+            }
+            else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()) {
+               cout << "erreur Portee," <<flush;
+               attaquer = false;
+            }
+            else
+            {
+                attaque->lancerAttaque(c);
+                cout<<"test2"<<flush;
+                if (((c->getOccupant())->getVie())==0){
+                    QPixmap *tombe;
+                    tombe=new QPixmap("images/Coffin.png");
+                    (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
+
+                    c->getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
+                    c->setOccupant(NULL);
+                }
+                this->getJoueur()->modifPtAction(this->getCout());
+                attaquer = true;
+            }
         }
         else
         {
-            attaque->lancerAttaque(c);
-            cout<<"test2"<<flush;
-            if (((c->getOccupant())->getVie())==0){
-                QPixmap *tombe;
-                tombe=new QPixmap("images/Coffin.png");
-                (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
-
-                c->getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
-                c->setOccupant(NULL);
-            }
-            this->getJoueur()->modifPtAction(this->getCout());
-            attaquer = true;
+            cout << "erreur Attaque Perso" << flush;
+            attaquer = false;
         }
-    }
-    else
+        return attaquer;
+    } else
     {
-        cout << "erreur Attaque Perso" << flush;
+        cout << "erreur Sort batiment" << flush;
         attaquer = false;
     }
-    return attaquer;
 }
 
 bool Unite::attaquer(Case* c) {

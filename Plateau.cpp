@@ -52,7 +52,7 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
 
         fichierPlateau.read((char*)&m_largeur ,sizeof(int));
         fichierPlateau.read((char*)&m_hauteur,sizeof(int));
-        QPixmap back("images/background.jpg");
+        QPixmap back("images/background.png");
         background = new QGraphicsPixmapItem();
         background->setPixmap(back.copy(0,0,SIZE*m_largeur,SIZE*m_hauteur));
         this->addItem(background);
