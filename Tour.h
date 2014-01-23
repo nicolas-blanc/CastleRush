@@ -1,7 +1,8 @@
 #ifndef TOUR_H
 #define TOUR_H
 
-class Batiment;
+#include "Batiment.h"
+
 class AttaqueDeBase;
 
 class Tour : public Batiment {
@@ -20,7 +21,6 @@ protected:
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 };
 
-#include "Batiment.h"
 #include "AttaqueDeBase.h"
 
 #endif        /* TOUR_H */

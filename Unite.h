@@ -2,7 +2,6 @@
 #define UNITE_H
 
 #include "Entite.h"
-#include "Effet.h"
 #include "Attaque.h"
 #include "Case.h"
 

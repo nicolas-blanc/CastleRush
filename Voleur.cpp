@@ -26,5 +26,5 @@ Voleur::Voleur(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,5,2,1,
 }
 
 void Voleur::initSort() {
-    v_sort["Coup Empoisonné"] = AttaqueEmpoisonnee("Coup Empoisonné",1,1,3);
+    v_sort["Coup Empoisonné"] = new AttaqueEmpoisonnee("Coup Empoisonné",1,1,3);
 }

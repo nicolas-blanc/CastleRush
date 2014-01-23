@@ -398,6 +398,7 @@ void Plateau::handleSort() {
 }
 
 void Plateau::handleChoixSort(int i) {
+    cout<<i<<endl<<flush;
     highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getSort(i)->getPortee());
     choixSort = ((Unite*)selected)->getSort(i);
     setFlag(attaqueSort);

@@ -2,6 +2,7 @@
 #define	ATTAQUEDEBASE_H
 
 #include "Attaque.h"
+#include "Case.h"
 
 class AttaqueDeBase : public Attaque {
 public:

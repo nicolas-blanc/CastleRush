@@ -1,4 +1,5 @@
 #include "Sort.h"
+#include "Plateau.h"
 
 Sort::Sort(string nom, int degat, int portee, int ptAction) : Attaque(portee,degat,ptAction) {
     m_nomSort = nom;
@@ -21,7 +22,6 @@ void Charge::lancerAttaque(Case *c) {
     c->transmettreAttaque(this->getDegat());
     m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+x,c->getY()+y)->transmettreAttaque(this->getDegat());
     m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+(2*x),c->getY()+(2*y))->transmettreAttaque(this->getDegat());
-
 }
 
 AttaqueEmpoisonnee::AttaqueEmpoisonnee(string nom, int degat, int portee, int ptAction) : Sort(nom,degat,portee,ptAction) {

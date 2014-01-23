@@ -1,4 +1,6 @@
 #include "Attaque.h"
+#include "Entite.h"
+#include "Case.h"
 
 Attaque::Attaque(int portee, int degat, int ptAction) {
     m_Degat = degat;

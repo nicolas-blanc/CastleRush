@@ -5,7 +5,8 @@
 
 using namespace std;
 
-class Entite;
+#include "Entite.h"
+
 class Joueur;
 
 class Batiment : public Entite {
@@ -18,7 +19,6 @@ protected:
       void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
 };
 
-#include "Entite.h"
 #include "Joueur.h"
 
 #endif        /* BATIMENT_H */

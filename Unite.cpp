@@ -23,7 +23,7 @@ Unite::Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned
     j->setUnite(this);
 }
 
-void Unite::setAttaqueDeBase(int portee = 1) {
+void Unite::setAttaqueDeBase(int portee) {
     m_AttaqueParDefaut = new AttaqueDeBase(portee);
     m_AttaqueParDefaut->lierEntite(this);
 }

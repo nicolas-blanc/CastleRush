@@ -30,8 +30,6 @@ public:
     void lierEntite(Entite* ent) { m_Entite = ent; }
 };
 
-#include "Entite.h"
-#include "Case.h"
 
 #endif	/* ATTAQUE_H */
 

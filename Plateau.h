@@ -6,14 +6,18 @@
 #include <string>
 #include <QGraphicsScene>
 #include <QProgressBar>
-#include "Case.h"
 #include "enumerations.h"
-#include "Entite.h"
-#include "Tour.h"
+#include "Case.h"
 #include <QPushButton>
 
 using namespace std;
 
+class Tour;
+class Entite;
+class Batiment;
+class Joueur;
+class Attaque;
+class Unite;
 class Plateau : public QGraphicsScene {
     Q_OBJECT
 private :
@@ -112,4 +116,6 @@ public :
         int getNombreTourJoueur(){return NombreTourJoueur;}
         Unite * getUniteAttaqueTour(Tour* tr);
 };
+#include "Tour.h"
+#include "Entite.h"
 #endif

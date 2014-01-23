@@ -1,4 +1,6 @@
 #include "Joueur.h"
+#include "Batiment.h"
+#include "Plateau.h"
 
 Joueur::Joueur(int couleur, int numero) : m_listeBonusJoueur() {
     m_couleur = couleur;

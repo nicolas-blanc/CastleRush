@@ -11,7 +11,7 @@ class Effet {
         Effet(int tour);
         bool decreaseTour();
 
-        virtual void appliquerEffetUnite(Case * c) {}
+        virtual void appliquerEffetUnite(Case * ) {}
         void appliquerEffetCase(Case *c);
 };
 

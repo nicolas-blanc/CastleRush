@@ -81,7 +81,6 @@ void Entite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         ((Case*)parentItem())->parent()->highlightAttaque((Case*)parentItem());
         ((Case*)parentItem())->parent()->updatePopPt();
     }
-    ((Case*)parentItem())->parent()->afficheInfoUnite(this);
-    ((Case*)parentItem())->parent()->setSelect(this);
+}
 
 

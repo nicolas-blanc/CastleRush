@@ -77,10 +77,8 @@ private :
 
 };
 
-#include "Plateau.h"
 #include "Entite.h"
 #include "Unite.h"
-#include "Batiment.h"
 
 #endif        /* JOUEUR_H */
 
