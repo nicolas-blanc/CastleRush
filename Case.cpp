@@ -1,11 +1,14 @@
 #include "Case.h"
+#include "Entite.h"
+#include "Unite.h"
 #include "Effet.h"
 #include "Plateau.h"
+#include "Chateau.h"
+#include "enumerations.h"
+#include "Joueur.h"
 #include <QtGui>
 #include <QBrush>
 #include <math.h>
-#include "Chateau.h"
-#include "enumerations.h"
 
 #define SIZE 36
 
@@ -115,13 +118,14 @@ bool Case::isOccupee() {
     return (m_occupant != NULL);
 }
 
-void Case::declencherEffets() {
+void Case::declencherEffets(Joueur *joueur) {
     vector<Effet*>::iterator it = m_effets.begin();
     for(int i = 0; i < m_effets.size() ;i++) {
+        if(isOccupee() && !(m_batiment))
         m_effets[i]->appliquerEffetUnite(this);
-        if(m_effets[i]->decreaseTour())
-            enleverEffet(it);
+        if(m_effets[i]->getJoueur() == joueur)
+            if(m_effets[i]->decreaseTour())
+                enleverEffet(it);
         it++;
     }
 }
-

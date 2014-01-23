@@ -103,6 +103,7 @@ void MainWindow::handleGen() {
     fichier.write((char*)&y,sizeof(int));
 
     size = 2;
+    //chateau
     x = 17;
     y = 11;
     fichier.write((char*)&joueur,sizeof(int));
@@ -112,6 +113,7 @@ void MainWindow::handleGen() {
     fichier.write((char*)&y,sizeof(int));
 
     joueur = 0;
+    //chateau
     x = 1;
     y = 1;
     fichier.write((char*)&joueur,sizeof(int));
@@ -121,6 +123,7 @@ void MainWindow::handleGen() {
     fichier.write((char*)&y,sizeof(int));
 
     joueur = -1;
+    //Tour de magie
     x = 9;
     y = 6;
     fichier.write((char*)&joueur,sizeof(int));

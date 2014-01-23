@@ -1,15 +1,17 @@
 #ifndef EFFET_H
 #define	EFFET_H
 
-
+class Joueur;
 class Case;
 
 class Effet {
     private :
         int m_nbTour;
+        Joueur * m_joueur;
     public :
-        Effet(int tour);
+        Effet(Joueur * joueur,int tour);
         bool decreaseTour();
+        inline Joueur * getJoueur() { return m_joueur; }
 
         virtual void appliquerEffetUnite(Case * ) {}
         void appliquerEffetCase(Case *c);
@@ -17,7 +19,7 @@ class Effet {
 
 class DegenVie : public Effet {
 public:
-    DegenVie(int nbTour, int malus);
+    DegenVie(Joueur * joueur,int nbTour, int malus);
     void appliquerEffetUnite(Case *c);
 private:
     int m_malus;
@@ -25,7 +27,7 @@ private:
 
 class MalusMouvement : public Effet {
 public:
-    MalusMouvement(int nbTour, int malus);
+    MalusMouvement(Joueur * joueur,int nbTour, int malus);
     void appliquerEffetUnite(Case *c);
 private:
     int m_malus;
@@ -33,12 +35,11 @@ private:
 
 class BonusDegat : public Effet {
 public:
-    BonusDegat(int nbTour, int bonus);
+    BonusDegat(Joueur *joueur, int nbTour, int bonus);
     void appliquerEffetUnite(Case * c);
 private:
     int m_bonus;
 };
-#include "Case.h"
 
 #endif	/* EFFET_H */
 

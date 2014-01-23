@@ -1,5 +1,6 @@
 #include "Sort.h"
 #include "Plateau.h"
+#include "Effet.h"
 
 Sort::Sort(Entite *entite, string nom, int degat, int portee, int ptAction) : Attaque(entite,portee,degat,ptAction) {
     m_nomSort = nom;
@@ -25,7 +26,7 @@ void Charge::lancerAttaque(Case *c) {
 }
 
 AttaqueEmpoisonnee::AttaqueEmpoisonnee(Entite *entite, string nom, int degat, int portee, int ptAction) : Sort(entite,nom,degat,portee,ptAction) {
-    m_effet = new DegenVie(2,1);
+    m_effet = new DegenVie(entite->getJoueur(),2,1);
 }
 
 void AttaqueEmpoisonnee::lancerAttaque(Case *c) {
@@ -36,7 +37,7 @@ void AttaqueEmpoisonnee::lancerAttaque(Case *c) {
 }
 
 GlypheGel::GlypheGel(Entite *entite, string nom, int portee, int ptAction) : Sort(entite,nom,portee,0,ptAction) {
-    m_effet = new MalusMouvement(3,2);
+    m_effet = new MalusMouvement(entite->getJoueur(),3,2);
 }
 
 void GlypheGel::lancerAttaque(Case *c) {
@@ -53,7 +54,7 @@ void Soin::lancerAttaque(Case *c) {
 }
 
 Concentration::Concentration(Entite *entite, string nom, int degat, int portee, int ptAction) : Sort(entite,nom,degat,portee,ptAction) {
-    m_effet = new BonusDegat(2,1);
+    m_effet = new BonusDegat(entite->getJoueur(),2,1);
 }
 
 void Concentration::lancerAttaque(Case *c) {

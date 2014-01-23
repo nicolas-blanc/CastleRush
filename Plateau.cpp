@@ -328,10 +328,13 @@ void Plateau::gestionTour()
         }
     }
 
-    for(int i = 0; i < jtour->getUnite().size(); i++) {
+    for(int i = 0; i < jtour->getUnite().size(); i++)
         jtour->getUnite()[i]->appliquerEffet();
-    }
 
+    for (int i=0; i< m_largeur; i++)
+        for (int j=0; j<m_hauteur; j++)
+            if(plateau[i][j]->isEffets())
+                plateau[i][j]->declencherEffets(jtour);
 }
 
 void Plateau::setSelect(QGraphicsItem *c){

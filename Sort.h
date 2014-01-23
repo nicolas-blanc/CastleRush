@@ -4,7 +4,8 @@
 #include <string>
 
 #include "Attaque.h"
-#include "Effet.h"
+
+class Effet;
 
 using namespace std;
 
@@ -34,7 +35,7 @@ public:
     AttaqueEmpoisonnee(Entite * entite,string nom, int degat, int portee, int ptAction);
     void lancerAttaque(Case * c);
 private:
-    DegenVie * m_effet;
+    Effet * m_effet;
 };
 
 class GlypheGel : public Sort {
@@ -42,7 +43,7 @@ public:
     GlypheGel(Entite * entite,string nom, int portee, int ptAction);
     void lancerAttaque(Case * c);
 private:
-    MalusMouvement * m_effet;
+    Effet * m_effet;
 };
 
 class Soin : public Sort {
@@ -56,7 +57,7 @@ public:
     Concentration(Entite * entite,string nom, int degat, int portee, int ptAction);
     void lancerAttaque(Case * c);
 private:
-    BonusDegat * m_effet;
+    Effet * m_effet;
 };
 
 #endif	/* SORT_H */

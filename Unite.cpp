@@ -302,5 +302,4 @@ void Unite::appliquerEffet() {
             enleverEffet(it);
         it++;
     }
-    getPosition()[0]->declencherEffets();
 }

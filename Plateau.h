@@ -6,9 +6,11 @@
 #include <string>
 #include <QGraphicsScene>
 #include <QProgressBar>
+#include <QPushButton>
+
+#include "Sort.h"
 #include "enumerations.h"
 #include "Case.h"
-#include <QPushButton>
 
 using namespace std;
 
