@@ -17,7 +17,7 @@ protected:
     Entite * m_Entite;
     
 public:
-    Attaque(int portee, int degat = 1, int ptAction = 1);
+    Attaque(Entite * entite,int portee, int degat = 1, int ptAction = 1);
     inline void setDegat(int degat) { m_Degat = degat;}
     int getDegat();
     inline void setPortee(int portee) { m_Portee = portee; }
@@ -28,6 +28,7 @@ public:
     virtual void lancerAttaque(Case* c);
     void Attaquer();
     void lierEntite(Entite* ent) { m_Entite = ent; }
+    Entite* getEntite() { return m_Entite; }
 };
 
 

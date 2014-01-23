@@ -8,6 +8,7 @@
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
 #include <QParallelAnimationGroup>
+
 #define min(a,b) ((a)<(b)?(a):(b))
 #define SIZE 36
 
@@ -29,9 +30,8 @@ Unite::Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned
     ((Case*)parentItem())->parent()->addItem(&atk);
 }
 
-void Unite::setAttaqueDeBase(int portee) {
-    m_AttaqueParDefaut = new AttaqueDeBase(portee);
-    m_AttaqueParDefaut->lierEntite(this);
+void Unite::setAttaqueDeBase(Entite * entite,int portee,int degat) {
+    m_AttaqueParDefaut = new AttaqueDeBase(entite,portee,degat);
 }
 
 void Unite::animationDeplacement(vector<Case *> chemin ) {
@@ -158,9 +158,8 @@ void Unite::animationAttaque(Case* c1, Case* c2) {
     group->start();
 }
 
-bool Unite::attaquer(Case* c, Attaque* attaque) {
+bool Unite::attaquer(Case* c, AttaqueDeBase *attaque) {
     bool attaquer;
-
     if(c->getOccupant()->getJoueur()!= ((Case*)parentItem())->parent()->getJoueurTour())
     {
         if (getJoueur()->getPtAction()<attaque->getPtAction()) {
@@ -195,6 +194,43 @@ bool Unite::attaquer(Case* c, Attaque* attaque) {
     return attaquer;
 }
 
+bool Unite::attaquer(Case* c, Sort* attaque) {
+    bool attaquer;
+    bool sortSoiMeme = (attaque->getNom() == "Concentration" || attaque->getNom() == "Soin");
+    if(c->getOccupant()->getJoueur()!= ((Case*)parentItem())->parent()->getJoueurTour() || attaque->getDegat() < 0 || sortSoiMeme)
+    {
+        if (getJoueur()->getPtAction()<attaque->getPtAction()) {
+            cout << "erreur PtAction" << flush;
+            attaquer = false;
+        }
+        else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()) {
+           cout << "erreur Portee," <<flush;
+           attaquer = false;
+        }
+        else
+        {
+            attaque->lancerAttaque(c);
+            cout<<"test2"<<flush;
+            if (((c->getOccupant())->getVie())==0){
+                QPixmap *tombe;
+                tombe=new QPixmap("images/Coffin.png");
+                (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
+
+                c->getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
+                c->setOccupant(NULL);
+            }
+            this->getJoueur()->modifPtAction(this->getCout());
+            attaquer = true;
+        }
+    }
+    else
+    {
+        cout << "erreur Attaque Perso" << flush;
+        attaquer = false;
+    }
+    return attaquer;
+}
+
 bool Unite::attaquer(Case* c) {
     return attaquer(c,m_AttaqueParDefaut);
 }
@@ -209,7 +245,17 @@ void Unite::attaquer(Entite* e) {
     }
 }
 
-void Unite::attaquer(Entite* e, Attaque* a) {
+void Unite::attaquer(Entite* e, AttaqueDeBase* a) {
+    unsigned int i =0;
+    bool Attaquer = false;
+    while(i<e->getPosition().size() && !Attaquer)
+    {
+    Attaquer = this->attaquer(e->getPosition()[i],a);
+    i++;
+    }
+}
+
+void Unite::attaquer(Entite* e, Sort* a) {
     unsigned int i =0;
     bool Attaquer = false;
     while(i<e->getPosition().size() && !Attaquer)
@@ -240,4 +286,15 @@ Sort* Unite::getSort(int sort) {
     for(int i = 0; i < sort; i++)
         it++;
     return it->second;
+}
+
+void Unite::appliquerEffet() {
+    vector<Effet*>::iterator it = v_effet.begin();
+    for(int i = 0; i < v_effet.size() ;i++) {
+        v_effet[i]->appliquerEffetUnite(getPosition()[0]);
+        if(v_effet[i]->decreaseTour())
+            enleverEffet(it);
+        it++;
+    }
+    getPosition()[0]->declencherEffets();
 }

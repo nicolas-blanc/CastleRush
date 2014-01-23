@@ -38,7 +38,8 @@ class Unite : public QObject,public Entite {
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
         bool deplacer(Case* c);
-        bool attaquer(Case* c, Attaque* attaque);
+        bool attaquer(Case* c, AttaqueDeBase *attaque);
+        bool attaquer(Case* c, Sort *attaque);
         bool attaquer(Case* c);
         void modifierVie(int vie);
 
@@ -46,7 +47,9 @@ class Unite : public QObject,public Entite {
         inline vector<int> getBonusUnite() { return v_bonus; }
 
         inline void ajouterEffet(Effet* effet) { this->v_effet.push_back(effet); }
-        void enleverEffet(Effet* effet);
+        void enleverEffet(vector <Effet*>::iterator it) { v_effet.erase(it); }
+        void appliquerEffet();
+
         int mouvementDemande(Case* c);
 
         vector<QPixmap*> getImageFace() { return v_dep_face; }
@@ -64,7 +67,8 @@ class Unite : public QObject,public Entite {
         void animationAttaque(Case* c1, Case* c2);
 
         void attaquer(Entite* e);
-        void attaquer(Entite* e, Attaque* a);
+        void attaquer(Entite* e, AttaqueDeBase* a);
+        void attaquer(Entite* e, Sort* a);
 
         QPointF getMyOffset() const {return this->offset();}
         Q_SLOT void setMyOffset(QPointF off) {this->setOffset(off.x(),off.y());}
@@ -90,7 +94,7 @@ class Unite : public QObject,public Entite {
              * 5 - Paralysie
              */
 
-        void setAttaqueDeBase(int portee = 1);
+        virtual void setAttaqueDeBase(Entite * entite,int portee = 1,int degat = 1);
         vector <QPixmap*> v_dep_face;
         vector <QPixmap*> v_dep_gauche;
         vector <QPixmap*> v_dep_droite;

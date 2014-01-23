@@ -37,6 +37,7 @@ public :
         Plateau* parent();
 
         inline void ajouterEffet(Effet * effet) { m_effets.push_back(effet); }
+        void enleverEffet(vector<Effet*>::iterator it) { m_effets.erase(it); }
 
         Case& operator=(const Case& ) {return *this;}
 

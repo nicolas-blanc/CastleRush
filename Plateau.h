@@ -39,7 +39,7 @@ private :
         QLabel *vie;
 
         vector<QPushButton*> v_sort;
-        Attaque * choixSort;
+        Sort * choixSort;
 
         QLabel *TOUR;
 
@@ -107,7 +107,7 @@ public :
 
         Joueur * getJoueurTour(){return jtour;}
 
-        inline Attaque * getChoixSort() { return choixSort; }
+        inline Sort* getChoixSort() { return choixSort; }
 
         void setNombreTour(int tour){NombreTour = tour;}
         int getNombreTour(){return NombreTour;}

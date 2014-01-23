@@ -1,10 +1,7 @@
 #include "AttaqueDeBase.h"
 
-AttaqueDeBase::AttaqueDeBase(int portee)
-: Attaque(portee) {}
-
-AttaqueDeBase::AttaqueDeBase(int portee, int deg)
-: Attaque(portee,deg) {}
+AttaqueDeBase::AttaqueDeBase(Entite *entite,int portee, int deg)
+: Attaque(entite,portee,deg) {}
 
 void AttaqueDeBase::lancerAttaque(Case* c) {
     //animationAttaque()

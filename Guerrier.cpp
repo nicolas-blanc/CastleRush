@@ -3,7 +3,7 @@
 Guerrier::Guerrier(QGraphicsItem * parent, Case* c, Joueur* j)
 :Unite(parent,5,2,3,7,0,c,j,"Guerrier")
 {
-    this->setAttaqueDeBase();
+    Unite::setAttaqueDeBase(this);
     this->initSort();
     QPixmap* guer;
     if (j && j->getNumero()==0) {
@@ -30,6 +30,6 @@ Guerrier::~Guerrier() {
 }
 
 void Guerrier::initSort() {
-    v_sort["Attaque Puissante"] = new AttaquePuissante("Attaque Puissante",2,1,3);
-    v_sort["Charge"] = new Charge("Charge",2,1,3);
+    v_sort["Attaque Puissante"] = new AttaquePuissante(this,"Attaque Puissante",2,1,3);
+    v_sort["Charge"] = new Charge(this,"Charge",2,1,3);
 }

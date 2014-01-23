@@ -116,10 +116,12 @@ bool Case::isOccupee() {
 }
 
 void Case::declencherEffets() {
-    int vectSize = m_effets.size();
-    for (int i=0; i<vectSize; i++) {
+    vector<Effet*>::iterator it = m_effets.begin();
+    for(int i = 0; i < m_effets.size() ;i++) {
         m_effets[i]->appliquerEffetUnite(this);
-        m_effets[i]->decreaseTour();
+        if(m_effets[i]->decreaseTour())
+            enleverEffet(it);
+        it++;
     }
 }
 

@@ -2,11 +2,11 @@
 #include "Entite.h"
 #include "Case.h"
 
-Attaque::Attaque(int portee, int degat, int ptAction) {
+Attaque::Attaque(Entite *entite, int portee, int degat, int ptAction) {
     m_Degat = degat;
     m_Portee = portee;
     m_PtAction = ptAction;
-    m_Entite = NULL;
+    m_Entite = entite;
 }
 
 /*void Attaque::lancerAttaque(Case* c){
@@ -32,7 +32,7 @@ void Attaque::lancerAttaque(Case* c) {
 }
 
 int Attaque::getDegat() {
-    return m_Degat;// m_Entite->getJoueur()->getListeBonusJoueur()[3] + ((Unite*) m_Entite)->getBonusUnite()[1];
+    return m_Degat;// + m_Entite->getJoueur()->getListeBonusJoueur()[3] + ((Unite*) m_Entite)->getBonusUnite()[1];
 }
 
 int Attaque::getPortee() {

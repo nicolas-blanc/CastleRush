@@ -328,6 +328,10 @@ void Plateau::gestionTour()
         }
     }
 
+    for(int i = 0; i < jtour->getUnite().size(); i++) {
+        jtour->getUnite()[i]->appliquerEffet();
+    }
+
 }
 
 void Plateau::setSelect(QGraphicsItem *c){
@@ -398,11 +402,10 @@ void Plateau::handleSort() {
 }
 
 void Plateau::handleChoixSort(int i) {
-    cout<<"lol1"<<endl<<flush;
-    highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getSort(i)->getPortee());
-    cout<<"lol2"<<endl<<flush;
+
+    highlight(plateau[0][0]);
+    highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getSort(i)->getPortee()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[portee]);
     choixSort = ((Unite*)selected)->getSort(i);
-    cout<<"lol3"<<endl<<flush;
     setFlag(attaqueSort);
 }
 

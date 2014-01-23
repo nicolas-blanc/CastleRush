@@ -1,7 +1,7 @@
 #include "Archer.h"
 Archer::Archer(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent, 5,2,1,5,0,c,j,"Archer")
 {
-    this->setAttaqueDeBase(5);
+    setAttaqueDeBase(this,5);
     this->initSort();
     QPixmap* arch;
     if (j && j->getNumero()==0) {
@@ -25,5 +25,5 @@ Archer::Archer(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent, 5,2,1
 }
 
 void Archer::initSort() {
-    v_sort["Concentration"] = new Concentration("Concentration",1,0,2);
+    v_sort["Concentration"] = new Concentration(this,"Concentration",1,0,2);
 }

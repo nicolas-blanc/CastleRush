@@ -76,9 +76,11 @@ void Entite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         ((Case*)parentItem())->parent()->highlight(c);
         ((Case*)parentItem())->parent()->updatePopPt();
     } else if (((Case*)parentItem())->parent()->getFlag()==attaqueSort) {
+        this->setSelected(false);
+        ((Unite*)(((Case*)parentItem())->parent()->getSelect()))->setSelected(true);
         ((Unite*)(((Case*)parentItem())->parent()->getSelect()))->attaquer(this,((Case*)parentItem())->parent()->getChoixSort());
-        ((Case*)parentItem())->parent()->setFlag(attente);
-        ((Case*)parentItem())->parent()->highlightAttaque((Case*)parentItem());
+        Case* c = (Case*)parentItem();
+        ((Case*)parentItem())->parent()->highlight(c);
         ((Case*)parentItem())->parent()->updatePopPt();
     }
 }
