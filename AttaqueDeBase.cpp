@@ -7,5 +7,6 @@ AttaqueDeBase::AttaqueDeBase(int portee, int deg)
 : Attaque(portee,deg) {}
 
 void AttaqueDeBase::lancerAttaque(Case* c) {
+    //animationAttaque()
     c->transmettreAttaque(this->getDegat());
 }

@@ -4,7 +4,6 @@
 #include <exception>
 #include <QMessageBox>
 #include <math.h>
-#include <windows.h>
 #include <QTimeLine>
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
@@ -14,13 +13,20 @@
 
 
 Unite::Unite(QGraphicsItem * parent, unsigned int mvt, unsigned int ct, unsigned int pop, int vieMax, int vieMin, Case* c, Joueur* j, string nom)
-: QObject(), Entite(parent, *new vector<Case*>(1,c),j,nom,vieMin,vieMax), v_dep_face(), v_dep_gauche(), v_dep_droite(), v_dep_dos() {
+: QObject(), Entite(parent, *new vector<Case*>(1,c),j,nom,vieMin,vieMax), atk(), v_dep_face(), v_dep_gauche(), v_dep_droite(), v_dep_dos() {
     this->setMouvement(mvt);
     this->setCout(ct);
     this->setPopulation(pop);
     for (unsigned int i=0; i<6; i++)
          v_bonus.push_back(0);
     j->setUnite(this);
+
+    QPixmap* atq = new QPixmap("images/Attack5-2.png");
+    for (int i=0; i<5; i++)
+        this->setImageAttaque(new QPixmap(atq->copy(50*i,0,50,50)));
+    this->setImageAttaque(new QPixmap(atq->copy(0,50,50,50)));
+    this->setImageAttaque(new QPixmap(atq->copy(50,50,50,50)));
+    ((Case*)parentItem())->parent()->addItem(&atk);
 }
 
 void Unite::setAttaqueDeBase(int portee) {
@@ -114,6 +120,44 @@ void Unite::modifierVie(int vie) {
         this->getJoueur()->deleteUnite(this);*/
 }
 
+void Unite::animationAttaque(Case* c1, Case* c2) {
+    QSequentialAnimationGroup *group = new QSequentialAnimationGroup();
+    float decalageX = (c2->getX()-c1->getX())*SIZE/2;
+    float decalageY = (c2->getY()-c1->getY())*SIZE/2;
+
+    QPropertyAnimation *setoff = new QPropertyAnimation(this, "offsetAtk");
+    setoff->setDuration(1);
+    setoff->setStartValue(QPointF(offset().x()+decalageX,offset().y()+decalageY));
+    setoff->setEndValue(QPointF(offset().x()+decalageX,offset().y()+decalageY));
+    group->addAnimation(setoff);
+
+    QPropertyAnimation *placement = new QPropertyAnimation(this, "pixmap");
+    placement->setDuration(1);
+    int anim;
+    if (decalageX>0)
+        anim=30;
+    else if (decalageX<0)
+        anim=20;
+    else if (decalageY<0)
+        anim=10;
+    else if (decalageY>0)
+        anim=0;
+    placement->setStartValue(anim+1);
+    placement->setEndValue(anim+1);
+    group->addAnimation(placement);
+
+    for (int i=0; i<2; i++) {
+        QPropertyAnimation *animPix = new QPropertyAnimation(this, "pixmap");
+        animPix->setDuration(200);
+        animPix->setStartValue(40);
+        animPix->setEndValue(50);
+        group->addAnimation(animPix);
+    }
+
+
+    group->start();
+}
+
 bool Unite::attaquer(Case* c, Attaque* attaque) {
     bool attaquer;
 
@@ -129,6 +173,7 @@ bool Unite::attaquer(Case* c, Attaque* attaque) {
         }
         else
         {
+            animationAttaque(m_position[0], c);
             attaque->lancerAttaque(c);
             if (((c->getOccupant())->getVie())==0){
                 QPixmap *tombe;

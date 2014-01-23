@@ -49,16 +49,16 @@ void MainWindow::handleGen() {
     int size = 1;
     int joueur = -1;
     //Campement
-    int x = 5;
-    int y = 5;
+    int x = 2;
+    int y = 12;
     fichier.write((char*)&joueur,sizeof(int));
     fichier.write((char*)&ca,sizeof(catBatiments));
     fichier.write((char*)&size,sizeof(int));
     fichier.write((char*)&x,sizeof(int));
     fichier.write((char*)&y,sizeof(int));
     //village
-    x = 14;
-    y = 8;
+    x = 17;
+    y = 1;
     fichier.write((char*)&joueur,sizeof(int));
     fichier.write((char*)&v,sizeof(catBatiments));
     fichier.write((char*)&size,sizeof(int));

@@ -273,7 +273,7 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     //-----------------------------
     //-----------------------------
 
-    for (int i = 0; i < joueurs.size(); i++) {
+    for (unsigned int i = 0; i < joueurs.size(); i++) {
         joueurs[i]->liePlateau(this);
     }
 }
@@ -323,7 +323,7 @@ void Plateau::gestionTour()
                 Case* c = u->getPosition()[0];
                 c->setOccupant(NULL, false);
                 j[i]->deleteUnite(u);
-                delete u;
+                u->setPixmap(QPixmap(""));
         }
         }
     }
@@ -398,9 +398,11 @@ void Plateau::handleSort() {
 }
 
 void Plateau::handleChoixSort(int i) {
-    cout<<i<<endl<<flush;
+    cout<<"lol1"<<endl<<flush;
     highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getSort(i)->getPortee());
+    cout<<"lol2"<<endl<<flush;
     choixSort = ((Unite*)selected)->getSort(i);
+    cout<<"lol3"<<endl<<flush;
     setFlag(attaqueSort);
 }
 
@@ -513,42 +515,42 @@ void Plateau::setBoutonsUnite(bool active) {
 
 void Plateau::intInvocGue()
 {
-    for (int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
+    for (unsigned int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
         highlight(((Entite*)getSelect())->getPosition()[i],1);
   setUnitInvoc(guerrier);
   setFlag(invoquer);
 }
 void Plateau::intInvocArc()
 {
-    for (int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
+    for (unsigned int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
         highlight(((Entite*)getSelect())->getPosition()[i],1);
   setUnitInvoc(archer);
   setFlag(invoquer);
 }
 void Plateau::intInvocChe()
 {
-    for (int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
+    for (unsigned int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
         highlight(((Entite*)getSelect())->getPosition()[i],1);
   setUnitInvoc(chevalier);
   setFlag(invoquer);
 }
 void Plateau::intInvocMag()
 {
-    for (int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
+    for (unsigned int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
         highlight(((Entite*)getSelect())->getPosition()[i],1);
   setUnitInvoc(magicien);
   setFlag(invoquer);
 }
 void Plateau::intInvocPre()
 {
-    for (int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
+    for (unsigned int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
         highlight(((Entite*)getSelect())->getPosition()[i],1);
   setUnitInvoc(pretre);
   setFlag(invoquer);
 }
 void Plateau::intInvocVol()
 {
-    for (int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
+    for (unsigned int i=0; i<((Entite*)getSelect())->getPosition().size(); i++)
         highlight(((Entite*)getSelect())->getPosition()[i],1);
     setUnitInvoc(voleur);
     setFlag(invoquer);
