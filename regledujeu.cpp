@@ -47,35 +47,8 @@ RegleDuJeu::RegleDuJeu()
     DT->setLayout(vbox5);
     //Déroulement d'un Tour
 
-    //Map
-    MAP= new QWidget;
-    QGridLayout *vbox29 = new QGridLayout;
-    Map = new QPushButton("");
-    Map->setIcon(QIcon("images/Plateau.JPG"));
-    Map->setIconSize(QSize(190,169));
-    Map->setMaximumSize(QSize(190,169));
-    Map->setToolTip("Agrandir");
-    Map->setCursor(Qt::PointingHandCursor);
-    Map->setStyleSheet("QPushButton\
-    {\
-        border: 0px;\
-        background: none;\
-        color: gray;\
-    }\
-    \
-    QPushButton:checked\
-    {\
-        color: black;\
-    }");
-    vbox29->addWidget(Map);
-    MAP->setLayout(vbox29);
-    //Map
-
     ongletRegles->addTab(IJ, "Fonctionnement");
     ongletRegles->addTab(DT, "Déroulement");
-    ongletRegles->addTab(MAP, "Map");
-
-    QObject::connect(Map, SIGNAL(released()), this, SLOT(agrandirMap()));
 
     //ONGLETREGLES
 
@@ -153,7 +126,7 @@ RegleDuJeu::RegleDuJeu()
     vbox17->addWidget(CampEntrainement);
 
     CampEntrainementIMG = new QPushButton("");
-    CampEntrainementIMG->setIcon(QIcon("images/CampEntrainement.png"));
+    CampEntrainementIMG->setIcon(QIcon("images/Campement.png"));
     CampEntrainementIMG->setIconSize(QSize(76,68));
     CampEntrainementIMG->setStyleSheet("QPushButton\
     {\
@@ -204,7 +177,7 @@ RegleDuJeu::RegleDuJeu()
     vbox19->addWidget(ChateauBonus);
 
     ChateauBonusIMG = new QPushButton("");
-    ChateauBonusIMG->setIcon(QIcon("images/ChateauBonus.png"));
+    ChateauBonusIMG->setIcon(QIcon("images/ChateauCentral.png"));
     ChateauBonusIMG->setIconSize(QSize(57,55));
     ChateauBonusIMG->setStyleSheet("QPushButton\
     {\
@@ -241,7 +214,7 @@ RegleDuJeu::RegleDuJeu()
     vbox20->addWidget(Chateau);
 
     ChateauIMG = new QPushButton("");
-    ChateauIMG->setIcon(QIcon("images/Chateau.png"));
+    ChateauIMG->setIcon(QIcon("images/ChateauBleu.png"));
     ChateauIMG->setIconSize(QSize(62,64));
     ChateauIMG->setStyleSheet("QPushButton\
     {\
@@ -267,7 +240,7 @@ RegleDuJeu::RegleDuJeu()
     vbox21->addWidget(Tour);
 
     TourIMG = new QPushButton("");
-    TourIMG->setIcon(QIcon("images/Tour.png"));
+    TourIMG->setIcon(QIcon("images/Tour1.png"));
     TourIMG->setIconSize(QSize(50,50));
     TourIMG->setStyleSheet("QPushButton\
     {\
@@ -356,25 +329,6 @@ RegleDuJeu::RegleDuJeu()
 
     vbox11->addWidget(CommandeDeplacement);
 
-    CommandeDeplacementIMG = new QPushButton("");
-    CommandeDeplacementIMG->setIcon(QIcon("images/deplacer.png"));
-    CommandeDeplacementIMG->setIconSize(QSize(190,169));
-    CommandeDeplacementIMG->setMaximumSize(QSize(190,169));
-    CommandeDeplacementIMG->setToolTip("Agrandir");
-    CommandeDeplacementIMG->setCursor(Qt::PointingHandCursor);
-    CommandeDeplacementIMG->setStyleSheet("QPushButton\
-    {\
-        border: 0px;\
-        background: none;\
-        color: gray;\
-    }\
-    \
-    QPushButton:checked\
-    {\
-        color: black;\
-    }");
-    vbox11->addWidget(CommandeDeplacementIMG);
-
     DEP->setLayout(vbox11);
     //Déplacements
 
@@ -383,25 +337,6 @@ RegleDuJeu::RegleDuJeu()
     QGridLayout *vbox12 = new QGridLayout;
     CommandeInfoUniteAdverse = new QLabel("- Un clic sur une unité adverse vous permet d’obtenir ses statistiques(point de vie, portée, ...).");
     vbox12->addWidget(CommandeInfoUniteAdverse);
-
-    CommandeInfoUniteAdverseIMG = new QPushButton("");
-    CommandeInfoUniteAdverseIMG->setIcon(QIcon("images/infoAdversaire.png"));
-    CommandeInfoUniteAdverseIMG->setIconSize(QSize(190,169));
-    CommandeInfoUniteAdverseIMG->setMaximumSize(QSize(190,169));
-    CommandeInfoUniteAdverseIMG->setToolTip("Agrandir");
-    CommandeInfoUniteAdverseIMG->setCursor(Qt::PointingHandCursor);
-    CommandeInfoUniteAdverseIMG->setStyleSheet("QPushButton\
-    {\
-        border: 0px;\
-        background: none;\
-        color: gray;\
-    }\
-    \
-    QPushButton:checked\
-    {\
-        color: black;\
-    }");
-    vbox12->addWidget(CommandeInfoUniteAdverseIMG);
 
     IUA->setLayout(vbox12);
     //Informations Unité Adverse
@@ -426,9 +361,6 @@ RegleDuJeu::RegleDuJeu()
     Commandes->addTab(DEP, "Déplacement");
     Commandes->addTab(IUA, "Info Adversaire");
     Commandes->addTab(CAP, "Capturer");
-
-    QObject::connect(CommandeDeplacementIMG, SIGNAL(released()), this, SLOT(agrandirDep()));
-    QObject::connect(CommandeInfoUniteAdverseIMG, SIGNAL(released()), this, SLOT(agrandirInfoUnite()));
 
     //ONGLETCOMMANDES
 

@@ -1,6 +1,6 @@
 #include "Chevalier.h"
 
-Chevalier::Chevalier(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,1,2,1,5,0,c,j,"Chevalier")
+Chevalier::Chevalier(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,6,2,1,5,0,c,j,"Chevalier")
 {
     this->setAttaqueDeBase();
     this->initSort();
@@ -17,8 +17,8 @@ Chevalier::Chevalier(QGraphicsItem * parent, Case* c, Joueur* j) : Unite(parent,
     for (int i=0;i<3;i++){
         this->setImageFace(new QPixmap(chev->copy(i*36,0,36,36)));
         this->setImageGauche(new QPixmap(chev->copy(i*36,36,36,36)));
-        this->setImageDroite(new QPixmap(chev->copy(i*36,64,36,36)));
-        this->setImageDos(new QPixmap(chev->copy(i*36,96,36,36)));
+        this->setImageDroite(new QPixmap(chev->copy(i*36,72,36,36)));
+        this->setImageDos(new QPixmap(chev->copy(i*36,108,36,36)));
     }
     this->setImageFace(new QPixmap(chev->copy(36,0,36,36)));
     this->setImageGauche(new QPixmap(chev->copy(36,36,36,36)));

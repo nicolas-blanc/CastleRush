@@ -27,7 +27,7 @@ public :
     inline void setPtActionMax(int pt) {m_PtActionMax = pt;}
     inline int getPopulationMax() { return m_PopulationMax;}
     inline void setPopulationMax(int pop) { m_PopulationMax=pop;}
-    inline vector<int> getListeBonusJoueur() { return m_listeBonusJoueur; }
+    inline vector<int> getListeBonusJoueur() { return m_listeBonusJoueur;}
     inline int getListeBonusJoueur(int val) { return m_listeBonusJoueur[val]; }
 
     inline void modifPtAction(int val) { m_PtActionJoueur = m_PtActionJoueur-val; }

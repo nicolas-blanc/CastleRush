@@ -16,6 +16,7 @@ Entite::Entite(QGraphicsItem * parent, vector<Case*>& ensCase, Joueur* j, string
 
 Entite::Entite(QGraphicsItem * parent, vector<Case*>& ensCase, string nom, int vieMin, int vieMax)
 : QGraphicsPixmapItem(parent), m_vie(vieMax,vieMin), m_position(ensCase) {
+    setJoueur(NULL);
     Setnom(nom);
      this->setOffset(OFFSET+(ensCase[0]->getX()*SIZE),OFFSET+(ensCase[0]->getY()*SIZE));
     for (unsigned int i=0; i<ensCase.size(); i++)

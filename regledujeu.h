@@ -7,7 +7,6 @@
 #include <QPushButton>
 #include <QTabWidget>
 #include <QVBoxLayout>
-#include "imageexplicatif.h"
 
 class RegleDuJeu : public QWidget
 {
@@ -21,7 +20,6 @@ private :
     QTabWidget *ongletRegles;
     QLabel *InfoJeux;
     QLabel *DeroulementTour;
-    QPushButton *Map;
 
     QTabWidget *Jauge;
     QLabel *JaugeAction;
@@ -48,9 +46,7 @@ private :
     QLabel *CommandeAttaquer;
     QLabel *CommandeSorts;
     QLabel *CommandeDeplacement;
-    QPushButton *CommandeDeplacementIMG;
     QLabel *CommandeInfoUniteAdverse;
-    QPushButton *CommandeInfoUniteAdverseIMG;
     QLabel *CommandeCapturer;
 
     QTabWidget *Unites;
@@ -71,7 +67,6 @@ private :
 
      QWidget * IJ;
      QWidget * JAU;
-     QWidget * MAP;
      QWidget * JA;
      QWidget * JP;
      QWidget * BATS;
@@ -99,28 +94,6 @@ private :
      QWidget * VOL;
      QWidget * PRE;
      QWidget * MAG;
-
-     ImageExplicatif im;
-
-private slots:
-
-void agrandirDep()
-{
-    im.setImage("images/deplacergrand.png");
-    im.show();
-}
-
-void agrandirInfoUnite()
-{
-    im.setImage("images/infoAdversairegrand.png");
-    im.show();
-}
-
-void agrandirMap()
-{
-    im.setImage("images/Plateaugrand.jpeg");
-    im.show();
-}
 
 };
 

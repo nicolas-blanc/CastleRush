@@ -33,7 +33,7 @@ public :
         void setOccupant(Entite* occ, bool bat = false);
         inline Entite* getOccupant() {return m_occupant;}
         inline Entite* getUnite() { if (!(m_batiment)) return m_occupant; else return NULL; }
-        void transmettreAttaque(int nbPV);
+        void transmettreAttaque(int nbPV,Entite*e);
         bool isOccupee();
         void declencherEffets();
         Plateau* parent();

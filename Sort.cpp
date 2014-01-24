@@ -24,7 +24,7 @@ AttaquePuissante::AttaquePuissante(string nom, int degat, int portee, int ptActi
 void AttaquePuissante::lancerAttaque(Case *c)
 {
     animationAttaque(m_Entite->getPosition()[0],c);
-    c->transmettreAttaque(this->getDegat()+c->getUnite()->getJoueur()->getListeBonusJoueur()[2]);
+    c->transmettreAttaque(this->getDegat()+m_Entite->getJoueur()->getListeBonusJoueur()[2],m_Entite);
 }
 
 void AttaquePuissante::animationAttaque(Case *c1, Case *c2) {
@@ -82,10 +82,10 @@ void Charge::lancerAttaque(Case *c) {
     int x = c->getX() - m_Entite->getPosition()[0]->getX();
     int y = c->getY() - m_Entite->getPosition()[0]->getY();
 
-    c->transmettreAttaque(this->getDegat()+c->getUnite()->getJoueur()->getListeBonusJoueur()[2]);
+    c->transmettreAttaque(this->getDegat()+m_Entite->getJoueur()->getListeBonusJoueur()[2],m_Entite);
     animationAttaque(m_Entite->getPosition()[0],c);
-    m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+x,c->getY()+y)->transmettreAttaque(this->getDegat()+c->getUnite()->getJoueur()->getListeBonusJoueur()[2]-1);
-    m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+(2*x),c->getY()+(2*y))->transmettreAttaque(this->getDegat()+c->getUnite()->getJoueur()->getListeBonusJoueur()[2]-1);
+    m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+x,c->getY()+y)->transmettreAttaque(this->getDegat()+m_Entite->getJoueur()->getListeBonusJoueur()[2]-1,m_Entite);
+    m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+(2*x),c->getY()+(2*y))->transmettreAttaque(this->getDegat()+m_Entite->getJoueur()->getListeBonusJoueur()[2]-1,m_Entite);
 }
 
 void Charge::animationAttaque(Case *c1, Case *c2) {
@@ -143,7 +143,7 @@ AttaqueEmpoisonnee::AttaqueEmpoisonnee(string nom, int degat, int portee, int pt
 void AttaqueEmpoisonnee::lancerAttaque(Case *c) {
     animationAttaque(m_Entite->getPosition()[0],c);
     if (c->isOccupee()) {
-        c->transmettreAttaque(this->getDegat());
+        c->transmettreAttaque(this->getDegat()+m_Entite->getJoueur()->getListeBonusJoueur()[2],m_Entite);
         ((Unite*) c->getUnite())->ajouterEffet(m_effet);
     }
 }
@@ -265,7 +265,7 @@ Soin::Soin(string nom, int degat, int portee, int ptAction, Entite* ent) : Sort(
 
 void Soin::lancerAttaque(Case *c) {
     animationAttaque(m_Entite->getPosition()[0],c);
-    c->transmettreAttaque(this->getDegat()+c->getUnite()->getJoueur()->getListeBonusJoueur()[2]);
+    c->transmettreAttaque(this->getDegat()+m_Entite->getJoueur()->getListeBonusJoueur()[2],m_Entite);
 }
 
 void Soin::animationAttaque(Case *c1, Case *c2) {

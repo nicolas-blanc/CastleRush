@@ -80,7 +80,7 @@ void Unite::animationDeplacement(vector<Case *> chemin ) {
 
 bool Unite::deplacer(Case* c) {
     int mvt = this->mouvementDemande(c);
-    vector<Case*> chemin=((Case*)this->parentItem())->parent()->cheminDeplacement(getPosition()[0],c,min((getMouvement()+getJoueur()->getListeBonusJoueur()[4]),(getJoueur()->getPtAction()+getJoueur()->getListeBonusJoueur()[4])));
+    vector<Case*> chemin=((Case*)this->parentItem())->parent()->cheminDeplacement(getPosition()[0],c,min((getMouvement()+getJoueur()->getListeBonusJoueur()[4]+this->getBonusUnite()[3]),(getJoueur()->getPtAction()+getJoueur()->getListeBonusJoueur()[1])));
     if(chemin[chemin.size()-1]!=NULL)
     {
         if(this->getJoueur()->getPtAction()-mvt >=0)
@@ -89,7 +89,7 @@ bool Unite::deplacer(Case* c) {
             vector<Case*> position;
             position.push_back(c);
             this->setPosition(position);
-            this->setMouvement((this->getMouvement()-((chemin.size())-1)));
+            this->setMouvement((this->getMouvement()+this->getJoueur()->getListeBonusJoueur()[4]+this->getBonusUnite()[3]-((chemin.size())-1)));
             this->getJoueur()->modifPtAction(1);
             ((Plateau*)((Case*)this->parentItem())->parent())->setFlag(attente);
             return true;
@@ -127,56 +127,21 @@ bool Unite::attaquer(Case* c, AttaqueDeBase* attaque) {
     if(!c->isOccupee() || c->getOccupant()->getJoueur()!= ((Case*)parentItem())->parent()->getJoueurTour())
     {
         if (getJoueur()->getPtAction()<attaque->getPtAction()) {
-            cout << "erreur PtAction" << flush;
             attaquer = false;
         }
-        else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()+this->getJoueur()->getListeBonusJoueur()[3]) {
-           cout << "erreur Portee," <<flush;
+        else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()+this->getJoueur()->getListeBonusJoueur()[3] + this->getBonusUnite()[2]) {
            attaquer = false;
         }
         else
         {
-            cout<<"LOL1"<<flush;
             attaque->lancerAttaque(c);
-            cout<<"LOL10"<<flush;
 
-            if (!c->contientBatiment()&&c->isOccupee() && c->getOccupant()->getVie()==0){
-                QPixmap *tombe;
-                tombe=new QPixmap("images/Coffin.png");
-                (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
-
-                c->getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
-                c->setOccupant(NULL);
-            }
-            else if(c->isOccupee() && c->getOccupant()->Getnom()== "Chateau" && c->getOccupant()->getVie()==0)
-            {
-                QPixmap *tombe;
-                tombe=new QPixmap("images/ChateauDetruit.png");
-                (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
-
-                QMessageBox popup;
-                popup.setText("Victoire " + this->getJoueur()->getPseudo() + "!");
-                popup.exec();
-
-                this->getPosition()[0]->parent()->finDuJeu();
-
-            }
-            else if(c->isOccupee() && c->getOccupant()->Getnom() == "Tour" && c->getOccupant()->getVie()==0)
-            {
-                QPixmap *tombe;
-                tombe=new QPixmap("images/TourDetruite.png");
-                (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
-
-                c->getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
-                c->setOccupant(NULL);
-            }
             this->getJoueur()->modifPtAction(this->getCout());
             attaquer = true;
         }
     }
     else
     {
-        cout << "erreur Attaque Perso" << flush;
         attaquer = false;
     }
     return attaquer;
@@ -186,20 +151,17 @@ bool Unite::attaquer(Case* c, Sort* attaque) {
     bool attaquer;
     if(!c->contientBatiment()) {
         bool sortOk = (attaque->getNom() == "Concentration" || attaque->getNom() == "Soin" || attaque->getNom() == "Glyphe de Gel");
-        if(sortOk || (c->isOccupee()&&c->getOccupant()->getJoueur() != ((Case*)parentItem())->parent()->getJoueurTour()) || attaque->getDegat() < 0)
+        if(sortOk || (c->isOccupee()&&c->getOccupant()->getJoueur() != ((Case*)parentItem())->parent()->getJoueurTour()) || attaque->getDegat() + this->getJoueur()->getListeBonusJoueur()[2] + this->getBonusUnite()[1] < 0)
         {
             if (getJoueur()->getPtAction()<attaque->getPtAction()) {
-                cout << "erreur PtAction" << flush;
                 attaquer = false;
             }
-            else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()+this->getJoueur()->getListeBonusJoueur()[3]) {
-               cout << "erreur Portee," <<flush;
+            else if ((abs(c->getX() - this->getPosition()[0]->getX()) + abs(c->getY() - this->getPosition()[0]->getY())) > attaque->getPortee()+this->getJoueur()->getListeBonusJoueur()[3] + this->getBonusUnite()[2]) {
                attaquer = false;
             }
             else
             {
                 attaque->lancerAttaque(c);
-                cout<<"test2"<<flush;
                 if (c->isOccupee()&&((c->getOccupant())->getVie())==0){
                     QPixmap *tombe;
                     tombe=new QPixmap("images/Coffin.png");
@@ -214,12 +176,10 @@ bool Unite::attaquer(Case* c, Sort* attaque) {
         }
         else
         {
-            cout << "erreur Attaque Perso" << flush;
             attaquer = false;
         }
     } else
     {
-        cout << "erreur Sort batiment" << flush;
         attaquer = false;
     }
     return attaquer;
@@ -260,7 +220,7 @@ void Unite::attaquer(Entite* e, Sort* a) {
 }
 
 int Unite::getMouvement() {
-    return m_mouvement + getJoueur()->getListeBonusJoueur()[5] + v_bonus[3];
+    return m_mouvement;
 }
 
 Unite::~Unite() {
@@ -273,7 +233,10 @@ void Unite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         Entite::mouseReleaseEvent(event);
         ((Case*)parentItem())->parent()->CapturePossible(this->getPosition()[0]);
         if(((Case*)parentItem())->parent()->getFlag()==attente)
-            ((Case*)parentItem())->parent()->setBoutons(unite, getJoueur()->getNumero());
+        {
+        ((Case*)parentItem())->parent()->setBoutons(unite, getJoueur()->getNumero());
+        ((Case*)parentItem())->parent()->CapturePossible(this->getPosition()[0]);
+        }
         else
             ((Case*)parentItem())->parent()->setFlag(attente);
     }

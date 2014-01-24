@@ -18,29 +18,32 @@ BatimentBonusStat::BatimentBonusStat(QGraphicsItem* parent, vector<Case*>& ensCa
 
 void BatimentBonusStat::modifBonus() {
 // Modifie le bonus dans le vector de joueur, en fonction du bonus et du nombre de tours
+    if(getNbTours()<14)
+    {
     setNbTours(getNbTours()+1);
 
     switch(getStat()) {
         case 0:
-            setBonus(getBonus() + getNbTours()/2);
-            break;
-        case 1:
-            setBonus(getBonus() + getNbTours()/2);
-            break;
-        case 2:
-            setBonus(getBonus() + getNbTours()/6);
-            break;
-        case 3:
             setBonus(getBonus() + getNbTours()/4);
             break;
+        case 1:
+            setBonus(getBonus() + getNbTours()/4);
+            break;
+        case 2:
+            setBonus(getBonus() + getNbTours()/8);
+            break;
+        case 3:
+            setBonus(getBonus() + getNbTours()/6);
+            break;
         case 4:
-            setBonus(getBonus() + getNbTours()/3);
+            setBonus(getBonus() + getNbTours()/6);
             break;
         default:
             // appel d'exception
             break;
         }
     miseAJourBonus();
+    }
 }
 
 void BatimentBonusStat::Bonus() {
@@ -68,11 +71,20 @@ void BatimentBonusStat::Bonus() {
 }
 
 void BatimentBonusStat::randomStat() {
-    setStat(rand_a_b(2, 5));
+    setStat(rand_a_b(2,5));
 }
 
 void BatimentBonusStat::changementProprio(Joueur *j) {
+    if(this->getJoueur() != NULL)
+    {
+    this->getJoueur()->setListeBonusJoueur(getStat(), 0);
     Entite::setJoueur(j);
+    }
+    else
+    {
+       Entite::setJoueur(j);
+    }
+
     getJoueur()->setBatiment(this);
     if(getStat()>1)
         randomStat();
@@ -91,10 +103,10 @@ void BatimentBonusStat::mouseReleaseEvent(QGraphicsSceneMouseEvent *)
 
     if(((Case*)parentItem())->parent()->getFlag()==capture)
     {
-        if((((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtActionMax()/2) <= ((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtActionMax())
+        if((((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtActionMax()/2) <= ((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtAction())
         {
 
-            ((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->setPtAction(((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtActionMax()/2);
+            ((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->modifPtAction(((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtActionMax()/2);
             ((Case*)parentItem())->parent()->setInvocateur(((Unite*)((Case*)parentItem())->parent()->getSelect()));
             ((Case*)parentItem())->parent()->setBatimentBonus(this);
             ((Case*)parentItem())->parent()->updatePopPt();

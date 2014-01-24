@@ -132,6 +132,13 @@ public :
          inline void setBatimentBonus(BatimentBonusStat* batiment){BatimentBonus.push_back(batiment);}
 
          void finDuJeu();
+
+         void supprimerTour(Batiment *t)
+         {
+             vector<Batiment*>::iterator it = v_Batiment.begin();
+             it = find(v_Batiment.begin(), v_Batiment.end(),t);
+             v_Batiment.erase(it);
+         }
 };
 #include "Tour.h"
 #include "Entite.h"

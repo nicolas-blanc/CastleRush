@@ -27,7 +27,7 @@ AttaqueDeBase::AttaqueDeBase(int portee, int deg, Entite* ent)
 
 void AttaqueDeBase::lancerAttaque(Case* c) {
     animationAttaque(m_Entite->getPosition()[0],c);
-    c->transmettreAttaque(this->getDegat()+m_Entite->getJoueur()->getListeBonusJoueur()[2]);
+    c->transmettreAttaque(this->getDegat()+m_Entite->getJoueur()->getListeBonusJoueur()[2],m_Entite);
 }
 
 void AttaqueDeBase::animationAttaque(Case* c1, Case* c2) {

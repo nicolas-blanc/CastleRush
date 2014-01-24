@@ -9,6 +9,7 @@
 #include <QtGui>
 #include <QBrush>
 #include <math.h>
+#include <QMessageBox>
 
 #define SIZE 36
 
@@ -28,11 +29,9 @@ void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if (parent()->getFlag()==attente) {
         parent()->highlight(this);
         if (isOccupee()) {
-            cout<<"test"<<flush;
             parent()->afficheInfoUnite(getOccupant());
             parent()->setSelect(getOccupant());
             if (m_batiment) {
-                cout<<"test2"<<flush;
                 if (getOccupant()->Getnom()=="Chateau")
                     parent()->setBoutons(batChateau, getOccupant()->getJoueur()->getNumero());
                 else {
@@ -110,9 +109,52 @@ void Case::setOccupant(Entite* occ, bool bat) {
     m_batiment = bat;
 }
 
-void Case::transmettreAttaque(int nbPV) {
+void Case::transmettreAttaque(int nbPV, Entite*e) {
     if (m_occupant!=NULL) {
-            m_occupant->modifierVie(nbPV);
+        if(e->Getnom() == "Chevalier"
+           || e->Getnom() == "Archer"
+           || e->Getnom() == "Pretre"
+           || e->Getnom() == "Magicien"
+           || e->Getnom() == "Voleur"
+           || e->Getnom() == "Guerrier")
+           m_occupant->modifierVie(nbPV + ((Unite*)e)->getBonusUnite()[1]);
+        else
+        {
+           m_occupant->modifierVie(nbPV);
+        }
+
+        if (!contientBatiment()&&isOccupee() &&getOccupant()->getVie()==0){
+            QPixmap *tombe;
+            tombe=new QPixmap("images/Coffin.png");
+            (getOccupant())->setPixmap(tombe->copy(0,96,32,32));
+
+            getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
+            setOccupant(NULL);
+        }
+        else if(isOccupee() && getOccupant()->Getnom()== "Chateau" && getOccupant()->getVie()==0)
+        {
+            QPixmap *tombe;
+            tombe=new QPixmap("images/ChateauDetruit.png");
+            (getOccupant())->setPixmap(tombe->copy(0,96,32,32));
+
+            QMessageBox popup;
+            popup.setText("Victoire " + this->getOccupant()->getJoueur()->getPseudo() + "!");
+            popup.exec();
+
+             this->getOccupant()->getPosition()[0]->parent()->finDuJeu();
+
+        }
+        else if(isOccupee() && getOccupant()->Getnom() == "Tour" && getOccupant()->getVie()==0)
+        {
+            QPixmap *tombe;
+            tombe=new QPixmap("images/TourDetruite.png");
+            (getOccupant())->setPixmap(tombe->copy(0,96,32,32));
+
+            this->parent()->supprimerTour((Batiment*)this->getOccupant());
+            getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
+            setOccupant(NULL);
+        }
+
     }
 }
 
@@ -127,8 +169,10 @@ void Case::declencherEffets(Joueur *joueur) {
             m_effets[i]->appliquerEffetUnite(this);
         }
         if(m_effets[i]->getJoueur() == joueur)
-            if(m_effets[i]->decreaseTour())
+            if(m_effets[i]->decreaseTour()) {
                 enleverEffet(it);
+                parent()->highlight(this,-1,Qt::transparent,true);
+            }
         it++;
     }
 }

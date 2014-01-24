@@ -67,7 +67,6 @@ bool Chateau::Invoquer(catUnite unite, Case * c){
         }
         else
         {
-            cout << "erreur portee"<<flush;
         }
         return false;
     }

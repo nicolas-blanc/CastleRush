@@ -28,7 +28,7 @@ Attaque::Attaque(int portee, int degat, int ptAction, Entite* ent) : QObject(), 
 */
 
 void Attaque::lancerAttaque(Case* c) {
-    c->transmettreAttaque(m_Degat);
+    c->transmettreAttaque(m_Degat+ m_Entite->getJoueur()->getListeBonusJoueur()[2], m_Entite);
 }
 
 int Attaque::getDegat() {

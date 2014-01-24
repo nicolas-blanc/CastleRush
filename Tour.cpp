@@ -34,8 +34,7 @@ void Tour::attaqueAuto() {
     {
         attaquer(u->getPosition()[0]);
     }
-    else
-        cout << "pas d'unite presente" << endl << flush;
+
 }
 
 void Tour::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {

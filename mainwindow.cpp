@@ -29,7 +29,7 @@ void MainWindow::handleGen() {
         fstream fichier("plateau1.data", ios_base::in | ios_base::out | ios_base::trunc | ios_base::binary);
 
     if (fichier.fail()) { // Si echec de l'ouverture
-        cout << "Impossible d'ouvrir ou de créer le fichier" << endl;
+        //cout << "Impossible d'ouvrir ou de créer le fichier" << endl;
         exit(0);
     }
     int hauteur = 14;

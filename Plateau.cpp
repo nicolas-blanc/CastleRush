@@ -54,7 +54,7 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
 
         fichierPlateau.read((char*)&m_largeur ,sizeof(int));
         fichierPlateau.read((char*)&m_hauteur,sizeof(int));
-        QPixmap back("images/BackgroundV4.jpg");
+        QPixmap back("images/background.jpg");
         background = new QGraphicsPixmapItem();
         background->setPixmap(back.copy(0,0,SIZE*m_largeur,SIZE*m_hauteur));
         this->addItem(background);
@@ -254,11 +254,11 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
     addWidget(atk);
 
     bonus = new QLabel();
-    bonus->setGeometry(SIZE*(m_largeur+1), 100, 150, 25);
+    bonus->setGeometry(SIZE*(m_largeur+1), 130, 150, 25);
     addWidget(bonus);
 
     stat = new QLabel();
-    stat->setGeometry(SIZE*(m_largeur+1), 130, 150, 25);
+    stat->setGeometry(SIZE*(m_largeur+1), 100, 150, 25);
     addWidget(stat);
 
 
@@ -290,7 +290,7 @@ bool Plateau::isFini(ifstream& fichier) {
 
 void Plateau::handleDep() {
         highlight(plateau[0][0]);
-        highlight(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getMouvement()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[4]);
+        highlight(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getMouvement()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[4] + ((Unite*)selected)->getBonusUnite()[3]);
         setFlag(deplacement);
 }
 
@@ -308,6 +308,22 @@ void Plateau::gestionTour()
     QMessageBox popup;
     popup.setText("Tour joueur : " + jtour->getPseudo());
     popup.exec();
+
+    for(unsigned int i = 0; i<j.size();i++)
+    {
+        for(unsigned int d = 0; d<j[i]->getUnite().size();d++)
+        {
+            if(j[i]->getUnite()[d]->getVie() == 0)
+            {
+                    Unite*u= j[i]->getUnite()[d];
+                    Case* c = u->getPosition()[0];
+                    c->setOccupant(NULL, false);
+                    j[i]->deleteUnite(u);
+                    u->setPixmap(QPixmap(""));
+            }
+        }
+    }
+
     for(unsigned int i =0; i<v_Batiment.size(); i++)
     {
         Batiment *batiment = v_Batiment[i];
@@ -349,22 +365,6 @@ void Plateau::gestionTour()
         }
     }
     setBoutons(carre);
-
-
-    for(unsigned int i = 0; i<j.size();i++)
-    {
-        for(unsigned int d = 0; d<j[i]->getUnite().size();d++)
-        {
-            if(j[i]->getUnite()[d]->getVie() == 0)
-            {
-                    Unite*u= j[i]->getUnite()[d];
-                    Case* c = u->getPosition()[0];
-                    c->setOccupant(NULL, false);
-                    j[i]->deleteUnite(u);
-                    u->setPixmap(QPixmap(""));
-            }
-        }
-    }
 
     for(unsigned int i = 0; i < jtour->getUnite().size(); i++)
         jtour->getUnite()[i]->appliquerEffet();
@@ -420,9 +420,9 @@ void Plateau::afficheInfoUnite(Entite *u)
             typeid(*u) == typeid(Archer))
     {
         mvt->show();
-        mvt->setText("Mouvement : " + QString::number(((Unite*)u)->getMouvement()+u->getJoueur()->getListeBonusJoueur()[4]));
+        mvt->setText("Mouvement : " + QString::number(((Unite*)u)->getMouvement()+u->getJoueur()->getListeBonusJoueur()[4] + ((Unite*)u)->getBonusUnite()[3] ));
         atk->show();
-        atk->setText("Attaque : " + QString::number(((Unite*)u)->getAttaqueParDefaut()->getDegat()+((Unite*)u)->getJoueur()->getListeBonusJoueur()[2]));
+        atk->setText("Attaque : " + QString::number(((Unite*)u)->getAttaqueParDefaut()->getDegat()+((Unite*)u)->getJoueur()->getListeBonusJoueur()[2] + ((Unite*)u)->getBonusUnite()[1]));
     }
     if((typeid(*u) == typeid(BatimentBonusStat)))
      {
@@ -434,23 +434,23 @@ void Plateau::afficheInfoUnite(Entite *u)
 
          if (u->getJoueur()) {
              if(((BatimentBonusStat*)u)->getStat()==2)
-             stat->setText("Stat : Point de Vie");
-             else if(((BatimentBonusStat*)u)->getStat()==3)
              stat->setText("Stat : Dégât");
-             else if(((BatimentBonusStat*)u)->getStat()==4)
+             else if(((BatimentBonusStat*)u)->getStat()==3)
              stat->setText("Stat : Portée");
-             else if(((BatimentBonusStat*)u)->getStat()==5)
+             else if(((BatimentBonusStat*)u)->getStat()==4)
              stat->setText("Stat : Mouvement");
+
+             bonus->show();
+             bonus->setText("Bonus : " + QString::number(((BatimentBonusStat*)u)->getBonus()));
          }
 
-         bonus->show();
-         bonus->setText("Bonus : " + QString::number(((BatimentBonusStat*)u)->getBonus()));
+
      }
 }
 
 void Plateau::handleAtt(){
     highlight(plateau[0][0]);
-    highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getAttaqueParDefaut()->getPortee()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[3]);
+    highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getAttaqueParDefaut()->getPortee()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[3] + ((Unite*)selected)->getBonusUnite()[2]);
     setFlag(attaque);
 }
 
@@ -471,7 +471,7 @@ void Plateau::handleSort() {
 void Plateau::handleChoixSort(int i) {
 
     highlight(plateau[0][0]);
-    highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getSort(i)->getPortee()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[3]);
+    highlightAttaque(((Unite*)selected)->getPosition()[0],((Unite*)selected)->getSort(i)->getPortee()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[3] + ((Unite*)selected)->getBonusUnite()[2]);
     choixSort = ((Unite*)selected)->getSort(i);
     setFlag(attaqueSort);
 }
@@ -844,14 +844,12 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
         danger_entite = entite_presentes[0];
         for(unsigned int i =1; i<entite_presentes.size(); i++)
         {
-            cout<<"lol1"<<flush;
             u = entite_presentes[i];
             c =u->getPosition()[0];
             distance = abs(tr->getJoueur()->getBatiment()[0]->getPosition()[0]->getX()-
                     c->getX())
                      + abs(tr->getJoueur()->getBatiment()[0]->getPosition()[0]->getY()-
                      c->getY());
-            cout<<"lol2"<<flush;
             if(distance<distance_danger&&u->getJoueur()->getNumero()!=tr->getJoueur()->getNumero())
             {
                 distance_danger = distance;
