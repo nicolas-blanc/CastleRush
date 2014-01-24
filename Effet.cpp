@@ -28,7 +28,7 @@ void DegenVie::appliquerEffetUnite(Case *c) {
 MalusMouvement::MalusMouvement(Joueur *joueur, int nbTour, int malus) : Effet(joueur,nbTour) { m_malus = malus; }
 
 void MalusMouvement::appliquerEffetUnite(Case *c) {
-    ((Unite*) c->getUnite())->modifBonus(5,m_malus);
+    ((Unite*) c->getUnite())->modifBonus(3,-m_malus);
 }
 
 BonusDegat::BonusDegat(Joueur * joueur,int nbTour, int bonus) : Effet(joueur,nbTour) { m_bonus = bonus; }

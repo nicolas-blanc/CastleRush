@@ -107,7 +107,7 @@ bool Unite::deplacer(Case* c) {
 
 void Unite::resetMvt(){
 
-        this->setMouvement(this->getSaveMvt());
+        this->setMouvement(this->getSaveMvt()+ v_bonus[3]);
 
 }
 
@@ -136,9 +136,11 @@ bool Unite::attaquer(Case* c, AttaqueDeBase* attaque) {
         }
         else
         {
+            cout<<"LOL1"<<flush;
             attaque->lancerAttaque(c);
+            cout<<"LOL10"<<flush;
 
-            if (c->isOccupee() && c->getOccupant()->getVie()==0){
+            if (!c->contientBatiment()&&c->isOccupee() && c->getOccupant()->getVie()==0){
                 QPixmap *tombe;
                 tombe=new QPixmap("images/Coffin.png");
                 (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
@@ -292,8 +294,10 @@ void Unite::appliquerEffet() {
     vector<Effet*>::iterator it = v_effet.begin();
     for(unsigned int i = 0; i < v_effet.size() ;i++) {
         v_effet[i]->appliquerEffetUnite(getPosition()[0]);
-        if(v_effet[i]->decreaseTour())
+        if(v_effet[i]->decreaseTour()) {
             enleverEffet(it);
+            m_position[0]->parent()->highlight(m_position[0],-1,Qt::transparent,true);
+        }
         it++;
     }
 }

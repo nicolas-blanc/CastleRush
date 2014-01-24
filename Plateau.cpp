@@ -296,6 +296,7 @@ void Plateau::handleDep() {
 
 void Plateau::gestionTour()
 {
+    highlight(plateau[0][0]);
     this->setNombreTourJoueur(getNombreTour()/2 + 1);
     pop->setMaximum(jtour->getPopulationMax()+jtour->getListeBonusJoueur()[0]);
     this->setNombreTour(getNombreTour()+1);
@@ -634,7 +635,7 @@ void Plateau::intInvocVol()
     setFlag(invoquer);
 }
 
-void Plateau::highlight(Case* c, int portee, QColor color) {
+void Plateau::highlight(Case* c, int portee, QColor color, bool eraseBlue) {
     QColor blue=Qt::blue;
     blue.setAlpha(126);
     if (portee==-1) {
@@ -642,8 +643,10 @@ void Plateau::highlight(Case* c, int portee, QColor color) {
         portee=m_largeur*m_hauteur;
         for (int i=0; i<m_largeur; i++)
             for (int j=0; j<m_hauteur; j++) {
-                if (!plateau[i][j]->getGlyphe()) {
+                if (!plateau[i][j]->getGlyphe()||eraseBlue) {
                     plateau[i][j]->setBrush(*new QBrush(color));
+                    if (eraseBlue)
+                        plateau[i][j]->setGlyphe(false);
                 }
                 else {
                     plateau[i][j]->setBrush(*new QBrush(blue));
@@ -841,12 +844,14 @@ Unite * Plateau::getUniteAttaqueTour(Tour* tr)
         danger_entite = entite_presentes[0];
         for(unsigned int i =1; i<entite_presentes.size(); i++)
         {
+            cout<<"lol1"<<flush;
             u = entite_presentes[i];
-            c =u->getPosition()[i];
+            c =u->getPosition()[0];
             distance = abs(tr->getJoueur()->getBatiment()[0]->getPosition()[0]->getX()-
                     c->getX())
                      + abs(tr->getJoueur()->getBatiment()[0]->getPosition()[0]->getY()-
                      c->getY());
+            cout<<"lol2"<<flush;
             if(distance<distance_danger&&u->getJoueur()->getNumero()!=tr->getJoueur()->getNumero())
             {
                 distance_danger = distance;

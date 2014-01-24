@@ -94,12 +94,12 @@ void BatimentBonusStat::mouseReleaseEvent(QGraphicsSceneMouseEvent *)
         if((((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtActionMax()/2) <= ((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtActionMax())
         {
 
-        ((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->setPtAction(((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtActionMax()/2);
-        ((Case*)parentItem())->parent()->setInvocateur(((Unite*)((Case*)parentItem())->parent()->getSelect()));
-        ((Case*)parentItem())->parent()->setBatimentBonus(this);
-        ((Case*)parentItem())->parent()->updatePopPt();
-        ((Unite*)((Case*)parentItem())->parent()->getSelect())->setActif(false);
-        ((Case*)parentItem())->parent()->setFlag(attente);
+            ((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->setPtAction(((Unite*)((Case*)parentItem())->parent()->getSelect())->getJoueur()->getPtActionMax()/2);
+            ((Case*)parentItem())->parent()->setInvocateur(((Unite*)((Case*)parentItem())->parent()->getSelect()));
+            ((Case*)parentItem())->parent()->setBatimentBonus(this);
+            ((Case*)parentItem())->parent()->updatePopPt();
+            ((Unite*)((Case*)parentItem())->parent()->getSelect())->setActif(false);
+            ((Case*)parentItem())->parent()->setFlag(attente);
         }
         else
         {

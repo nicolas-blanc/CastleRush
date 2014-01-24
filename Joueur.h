@@ -23,9 +23,9 @@ public :
     inline int getNumero() { return m_numero; }
     inline int getPtAction() { return m_PtActionJoueur;}
     inline int getPopulation() { return m_Population;}
-    inline int getPtActionMax() { return m_PtActionMax + m_listeBonusJoueur[1]; }
+    inline int getPtActionMax() { return m_PtActionMax;}
     inline void setPtActionMax(int pt) {m_PtActionMax = pt;}
-    inline int getPopulationMax() { return m_PopulationMax + m_listeBonusJoueur[0]; }
+    inline int getPopulationMax() { return m_PopulationMax;}
     inline void setPopulationMax(int pop) { m_PopulationMax=pop;}
     inline vector<int> getListeBonusJoueur() { return m_listeBonusJoueur; }
     inline int getListeBonusJoueur(int val) { return m_listeBonusJoueur[val]; }
@@ -69,10 +69,9 @@ private :
     // Vecteur des bonus pour le joueur
         // le 1er element correspond à un bonus de population
         // le 2e element correspond à un bonus de pointAction
-        // le 3e element correcspond à un bonus de pointDeVie
-        // le 4e element correspond à un bonus de dégât
-        // le 5e element correspond à un bonus de portée
-        // le 6e element correspond à un bonus de mouvement
+        // le 3e element correspond à un bonus de dégât
+        // le 4e element correspond à un bonus de portée
+        // le 5e element correspond à un bonus de mouvement
 
 
 };
