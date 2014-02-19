@@ -44,13 +44,13 @@ void AttaqueDeBase::animationAttaque(Case* c1, Case* c2) {
     QPropertyAnimation *placement = new QPropertyAnimation(this, "pixmap");
     placement->setDuration(1);
     int anim;
-    if (decalageX>0)
+    if(decalageX>0)
         anim=30;
-    else if (decalageX<0)
+    else if(decalageX<0)
         anim=20;
-    else if (decalageY<0)
+    else if(decalageY<0)
         anim=10;
-    else if (decalageY>0)
+    else if(decalageY>0)
         anim=0;
     placement->setStartValue(anim+1);
     placement->setEndValue(anim+1);

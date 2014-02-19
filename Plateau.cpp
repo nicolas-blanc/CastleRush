@@ -131,7 +131,7 @@ Plateau::Plateau(vector<Joueur*> joueurs, string nomPlateau) : QGraphicsScene() 
         }
 
     TOUR = new QLabel("Tour Total : " + QString::number(NombreTour) + " -- Tour n°" +QString::number(NombreTourJoueur));
-    TOUR->setGeometry(SIZE*(m_largeur+1),(-30),180,25);
+    TOUR->setGeometry(SIZE*(m_largeur+1),(-30),200,25);
     addWidget(TOUR);
 
     att = new QPushButton("Attaquer");
@@ -296,6 +296,7 @@ void Plateau::handleDep() {
 
 void Plateau::gestionTour()
 {
+    this->setFlag(attente);
     highlight(plateau[0][0]);
     this->setNombreTourJoueur(getNombreTour()/2 + 1);
     pop->setMaximum(jtour->getPopulationMax()+jtour->getListeBonusJoueur()[0]);
@@ -464,6 +465,14 @@ void Plateau::handleSort() {
     for( map <string,Sort*>::iterator it = v_sortMap.begin(); it != v_sortMap.end(); it++) {
         v_sort[i]->show();
         v_sort[i]->setText(QString((it->second->getNom()).c_str()));
+        if(((Unite*)selected)->getJoueur()->getPtAction()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[1] < it->second->getPtAction())
+        {
+            v_sort[i]->setEnabled(false);
+        }
+        else
+        {
+            v_sort[i]->setEnabled(true);
+        }
         i++;
     }
 }
@@ -543,12 +552,88 @@ void Plateau::setBoutons(typeElement type, int numJoueur) {
         bonus->hide();
         if(numJoueur==this->getJoueurTour()->getNumero())
         {
-        guer->show();
-        mag->show();
-        vol->show();
-        pret->show();
-        chev->show();
-        arch->show();
+            Joueur *jinv = new Joueur(-1,-1);
+            Guerrier *g = new Guerrier(plateau[0][0],plateau[0][0],jinv);
+            Chevalier *c = new Chevalier(plateau[0][0],plateau[0][0],jinv);
+            Archer *a = new Archer(plateau[0][0],plateau[0][0],jinv);
+            Voleur *v = new Voleur(plateau[0][0],plateau[0][0],jinv);
+            Magicien *m = new Magicien(plateau[0][0],plateau[0][0],jinv);
+            Pretre *p = new Pretre(plateau[0][0],plateau[0][0],jinv);
+            guer->show();
+            mag->show();
+            vol->show();
+            pret->show();
+            chev->show();
+            arch->show();
+
+
+            if(jtour->getPopulationMax()+jtour->getListeBonusJoueur()[0] < jtour->getPopulation() + g->getPopulation()
+                    || jtour->getPtAction() - g->getCout() < 0)
+            {
+                guer->setEnabled(false);
+            }
+            else
+            {
+                guer->setEnabled(true);
+            }
+
+            if(jtour->getPopulationMax()+jtour->getListeBonusJoueur()[0] < jtour->getPopulation() + c->getPopulation()
+                    || jtour->getPtAction()- c->getCout()<0)
+            {
+                chev->setEnabled(false);
+            }
+            else
+            {
+                chev->setEnabled(true);
+            }
+
+            if(jtour->getPopulationMax()+jtour->getListeBonusJoueur()[0] < jtour->getPopulation() + a->getPopulation()
+                    || jtour->getPtAction()- a->getCout()<0)
+            {
+                arch->setEnabled(false);
+            }
+            else
+            {
+                arch->setEnabled(true);
+            }
+
+            if( jtour->getPopulationMax()+jtour->getListeBonusJoueur()[0] <jtour->getPopulation() + m->getPopulation()
+                    || jtour->getPtAction()- m->getCout()<0)
+            {
+                mag->setEnabled(false);
+            }
+            else
+            {
+                mag->setEnabled(true);
+            }
+
+            if( jtour->getPopulationMax()+jtour->getListeBonusJoueur()[0] < jtour->getPopulation() + v->getPopulation()
+                    || jtour->getPtAction()- v->getCout()<0)
+            {
+                vol->setEnabled(false);
+            }
+            else
+            {
+                vol->setEnabled(true);
+            }
+
+            if(jtour->getPopulationMax()+jtour->getListeBonusJoueur()[0] < jtour->getPopulation() + p->getPopulation()
+                    || jtour->getPtAction()- p->getCout()<0)
+            {
+                pret->setEnabled(false);
+            }
+            else
+            {
+                pret->setEnabled(true);
+            }
+
+            delete g;
+            delete a;
+            delete c;
+            delete m;
+            delete p;
+            delete v;
+            delete jinv;
         }
         for(int i = 0; i < NBSORT; i++)
             v_sort[i]->hide();
@@ -580,7 +665,19 @@ void Plateau::setBoutonsUnite(bool active) {
     if (active) {
         att->show();
         dep->show();
+        if(((Unite*)selected)->getMouvement()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[4]+((Unite*)selected)->getBonusUnite()[3]==0 || ((Unite*)selected)->getJoueur()->getPtAction()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[1] <1)
+            dep->setEnabled(false);
+        else
+            dep->setEnabled(true);
         sorts->show();
+        if(((Unite*)selected)->getJoueur()->getPtAction()+((Unite*)selected)->getJoueur()->getListeBonusJoueur()[1] < ((Unite*)selected)->getAttaqueParDefaut()->getPtAction())
+        {
+            att->setEnabled(false);
+        }
+        else
+        {
+            att->setEnabled(true);
+        }
         capt->show();
         capt->setEnabled(false);
     }

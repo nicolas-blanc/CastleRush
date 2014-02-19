@@ -18,8 +18,6 @@ BatimentBonusStat::BatimentBonusStat(QGraphicsItem* parent, vector<Case*>& ensCa
 
 void BatimentBonusStat::modifBonus() {
 // Modifie le bonus dans le vector de joueur, en fonction du bonus et du nombre de tours
-    if(getNbTours()<14)
-    {
     setNbTours(getNbTours()+1);
 
     switch(getStat()) {
@@ -33,9 +31,11 @@ void BatimentBonusStat::modifBonus() {
             setBonus(getBonus() + getNbTours()/8);
             break;
         case 3:
+        if(this->getBonus()<4)
             setBonus(getBonus() + getNbTours()/6);
             break;
         case 4:
+        if(this->getBonus()<4)
             setBonus(getBonus() + getNbTours()/6);
             break;
         default:
@@ -43,7 +43,6 @@ void BatimentBonusStat::modifBonus() {
             break;
         }
     miseAJourBonus();
-    }
 }
 
 void BatimentBonusStat::Bonus() {
@@ -52,7 +51,7 @@ void BatimentBonusStat::Bonus() {
             setBonus(5);
             break;
         case 1:
-            setBonus(1/*nbToursTotal/2*/);//nbToursTotal variable global
+            setBonus(1);
             break;
         case 2:
             setBonus(1);
@@ -61,7 +60,7 @@ void BatimentBonusStat::Bonus() {
             setBonus(1);
             break;
         case 4:
-            setBonus(2);
+            setBonus(1);
             break;
         default:
             // appel exception

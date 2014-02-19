@@ -32,7 +32,7 @@ public :
         //           QWidget *widget);
         void setOccupant(Entite* occ, bool bat = false);
         inline Entite* getOccupant() {return m_occupant;}
-        inline Entite* getUnite() { if (!(m_batiment)) return m_occupant; else return NULL; }
+        inline Entite* getUnite() { if (!(m_batiment)) return m_occupant; else return NULL;}
         void transmettreAttaque(int nbPV,Entite*e);
         bool isOccupee();
         void declencherEffets();
@@ -43,7 +43,10 @@ public :
         bool contientBatiment() {return m_batiment;}
 
         inline void ajouterEffet(Effet * effet) { m_effets.push_back(effet); }
-        void enleverEffet(vector<Effet*>::iterator it) { m_effets.erase(it); }
+        void enleverEffet(vector<Effet*>::iterator it)
+        {
+            m_effets.erase(it);
+        }
         inline bool isEffets() { return m_effets.size() != 0; }
 
         Case& operator=(const Case& ) {return *this;}

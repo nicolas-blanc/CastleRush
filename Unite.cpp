@@ -107,7 +107,7 @@ bool Unite::deplacer(Case* c) {
 
 void Unite::resetMvt(){
 
-        this->setMouvement(this->getSaveMvt()+ v_bonus[3]);
+        this->setMouvement(this->getSaveMvt());
 
 }
 
@@ -117,9 +117,7 @@ int Unite::mouvementDemande(Case* c)
 }
 
 void Unite::modifierVie(int vie) {
-    Entite::modifierVie(vie);/*
-    if (estMort())
-        this->getJoueur()->deleteUnite(this);*/
+    Entite::modifierVie(vie);
 }
 
 bool Unite::attaquer(Case* c, AttaqueDeBase* attaque) {
@@ -162,14 +160,6 @@ bool Unite::attaquer(Case* c, Sort* attaque) {
             else
             {
                 attaque->lancerAttaque(c);
-                if (c->isOccupee()&&((c->getOccupant())->getVie())==0){
-                    QPixmap *tombe;
-                    tombe=new QPixmap("images/Coffin.png");
-                    (c->getOccupant())->setPixmap(tombe->copy(0,96,32,32));
-
-                    c->getOccupant()->setFlag(QGraphicsItem::ItemIsSelectable,false);
-                    c->setOccupant(NULL);
-                }
                 this->getJoueur()->modifPtAction(this->getCout());
                 attaquer = true;
             }
@@ -234,8 +224,9 @@ void Unite::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         ((Case*)parentItem())->parent()->CapturePossible(this->getPosition()[0]);
         if(((Case*)parentItem())->parent()->getFlag()==attente)
         {
-        ((Case*)parentItem())->parent()->setBoutons(unite, getJoueur()->getNumero());
-        ((Case*)parentItem())->parent()->CapturePossible(this->getPosition()[0]);
+                ((Case*)parentItem())->parent()->setBoutons(unite, getJoueur()->getNumero());
+                ((Case*)parentItem())->parent()->CapturePossible(this->getPosition()[0]);
+                ((Case*)parentItem())->parent()->afficheInfoUnite(this);
         }
         else
             ((Case*)parentItem())->parent()->setFlag(attente);
@@ -258,7 +249,10 @@ void Unite::appliquerEffet() {
     for(unsigned int i = 0; i < v_effet.size() ;i++) {
         v_effet[i]->appliquerEffetUnite(getPosition()[0]);
         if(v_effet[i]->decreaseTour()) {
-            enleverEffet(it);
+            if(enleverEffet(v_effet[i]))
+            {
+                ((BonusDegat*)v_effet[i])->enleverEffetUnite(this->getPosition()[0]);
+            }
             m_position[0]->parent()->highlight(m_position[0],-1,Qt::transparent,true);
         }
         it++;

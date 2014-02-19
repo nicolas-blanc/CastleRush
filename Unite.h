@@ -45,9 +45,29 @@ class Unite : public QObject,public Entite {
         inline void modifBonus(int bonus, int effet) { v_bonus[bonus] = effet; }
         inline vector<int> getBonusUnite() { return v_bonus; }
 
-        inline void ajouterEffet(Effet* effet) {
-            cout<<"LOL"<<flush;this->v_effet.push_back(effet); }
-        void enleverEffet(vector <Effet*>::iterator it) { v_effet.erase(it); }
+        inline void ajouterEffet(Effet* effet)
+        {
+        this->v_effet.push_back(effet);
+        }
+
+        bool enleverEffet(Effet* effet)
+        {
+            vector<Effet*>::iterator it = v_effet.begin();
+            unsigned int i = 0;
+            bool aeffet = false;
+            while(i<v_effet.size() && !aeffet)
+            {
+                if(v_effet[i] == effet)
+                {
+                    aeffet = true;
+                    v_effet.erase(it);
+                }
+                i++;
+                it++;
+            }
+
+            return aeffet;
+        }
         void appliquerEffet();
 
         int mouvementDemande(Case* c);

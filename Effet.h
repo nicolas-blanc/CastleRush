@@ -15,12 +15,14 @@ class Effet {
 
         virtual void appliquerEffetUnite(Case * ) {}
         void appliquerEffetCase(Case *c);
+        void enleverEffetUnite(Case *c){}
 };
 
 class DegenVie : public Effet {
 public:
     DegenVie(Joueur * joueur,int nbTour, int malus);
     void appliquerEffetUnite(Case *c);
+    void enleverEffetUnite(Case *){}
 private:
     int m_malus;
 };
@@ -29,6 +31,7 @@ class MalusMouvement : public Effet {
 public:
     MalusMouvement(Joueur * joueur,int nbTour, int malus);
     void appliquerEffetUnite(Case *c);
+    void enleverEffetUnite(Case *c);
 private:
     int m_malus;
 };
@@ -36,7 +39,8 @@ private:
 class BonusDegat : public Effet {
 public:
     BonusDegat(Joueur *joueur, int nbTour, int bonus);
-    void appliquerEffetUnite(Case * c);
+    void appliquerEffetUnite(Case *c);
+    void enleverEffetUnite(Case *c);
 private:
     int m_bonus;
 };

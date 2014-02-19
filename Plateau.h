@@ -109,6 +109,9 @@ public :
         vector<Case*> cheminDeplacement(Case* c1, Case* c2, int portee);
         bool porteeAttaquePossible(Case* c1, Case* c2, int portee);
 
+        inline int getHauteur() {return m_hauteur;}
+        inline int getLargeur() {return m_largeur;}
+
         inline void setUnitInvoc(catUnite unite) { unitInvoc = unite;}
         inline catUnite getUnitInvoc() { return unitInvoc;}
 

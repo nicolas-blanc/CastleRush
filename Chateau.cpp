@@ -41,8 +41,8 @@ bool Chateau::Invoquer(catUnite unite, Case * c){
             break;}
     }
 
-    if(this->getJoueur()->getPopulation()+u->getPopulation() <= getJoueur()->getPopulationMax()
-            && this->getJoueur()->getPtAction()-u->getCout()>=0
+    if(this->getJoueur()->getPopulation()+u->getPopulation() <= getJoueur()->getPopulationMax() +getJoueur()->getListeBonusJoueur()[0]
+            && this->getJoueur()->getPtAction()+getJoueur()->getListeBonusJoueur()[1]-u->getCout()>=0
             && invoc_possible)
     {
         this->getJoueur()->modifPopulation(u->getPopulation());
@@ -53,13 +53,13 @@ bool Chateau::Invoquer(catUnite unite, Case * c){
     {
         c->setOccupant(NULL);
         delete u;
-        if(this->getJoueur()->getPopulation()+u->getPopulation() >= getJoueur()->getPopulationMax())
+        if(this->getJoueur()->getPopulation()+u->getPopulation() >= getJoueur()->getPopulationMax() +getJoueur()->getListeBonusJoueur()[0])
         {
             QMessageBox popup;
             popup.setText("Vous n'avez pas assez de point de population!");
             popup.exec();
         }
-        else if (this->getJoueur()->getPtAction()-u->getCout()<0)
+        else if (this->getJoueur()->getPtAction()+getJoueur()->getListeBonusJoueur()[1]-u->getCout()<0)
         {
             QMessageBox popup;
             popup.setText("Vous n'avez pas assez de point d'action!");

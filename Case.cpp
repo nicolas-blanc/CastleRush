@@ -58,11 +58,13 @@ void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             this->mouseReleaseEvent(event);
         }
         else {
-            parent()->CapturePossible(this);
             parent()->getSelect()->setSelected(true);
             parent()->setFlag(attente);
             parent()->highlight(this);
             this->parent()->updatePopPt();
+            this->parent()->setBoutons(unite, ((Unite*)parent()->getSelect())->getJoueur()->getNumero());
+            this->parent()->afficheInfoUnite(this->getOccupant());
+            parent()->CapturePossible(this);
         }
     }
     else if (parent()->getFlag()==attaque) {
@@ -96,6 +98,7 @@ void Case::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             parent()->highlight(this);
             parent()->updatePopPt();
             parent()->setFlag(attente);
+            parent()->setBoutons(batChateau, ch->getJoueur()->getNumero());
         }
     }
 }
@@ -165,14 +168,20 @@ bool Case::isOccupee() {
 void Case::declencherEffets(Joueur *joueur) {
     vector<Effet*>::iterator it = m_effets.begin();
     for(unsigned int i = 0; i < m_effets.size() ;i++) {
-        if(isOccupee() && !(m_batiment)) {
-            m_effets[i]->appliquerEffetUnite(this);
-        }
         if(m_effets[i]->getJoueur() == joueur)
-            if(m_effets[i]->decreaseTour()) {
-                enleverEffet(it);
+        {
+            if(m_effets[i]->decreaseTour())
+            {
                 parent()->highlight(this,-1,Qt::transparent,true);
+                bool vrai = ((Unite*)this->getUnite())->enleverEffet(m_effets[i]);
+                if(vrai)
+                {
+                    ((MalusMouvement*)m_effets[i])->enleverEffetUnite(this);
+                }
+                enleverEffet(it);
+                vrai=false;
             }
+        }
         it++;
     }
 }

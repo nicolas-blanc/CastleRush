@@ -203,13 +203,57 @@ GlypheGel::GlypheGel(string nom, int portee, int ptAction, Entite* ent) : Sort(n
 
 void GlypheGel::lancerAttaque(Case *c) {
     animationAttaque(m_Entite->getPosition()[0],c);
+
+
     c->ajouterEffet(m_effet);
-    m_Entite->getJoueur()->getPlateau()->getCase(c->getX()-1,c->getY())->ajouterEffet(m_effet);
-    m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+1,c->getY())->ajouterEffet(m_effet);
-    m_Entite->getJoueur()->getPlateau()->getCase(c->getX(),c->getY()-1)->ajouterEffet(m_effet);
-    m_Entite->getJoueur()->getPlateau()->getCase(c->getX(),c->getY()+1)->ajouterEffet(m_effet);
-    m_Entite->getJoueur()->getPlateau()->highlight(c);
-    m_Entite->getJoueur()->getPlateau()->highlight(c,1,Qt::blue);
+        if(c->getUnite())
+      {
+          m_effet->appliquerEffetUnite(c);
+          ((Unite*)c->getUnite())->ajouterEffet(m_effet);
+      }
+
+        if(c->getX()-1 >= 0)
+        {
+        m_Entite->getJoueur()->getPlateau()->getCase(c->getX()-1,c->getY())->ajouterEffet(m_effet);
+        if(m_Entite->getJoueur()->getPlateau()->getCase(c->getX()-1,c->getY())->getUnite())
+        {
+            ((Unite*)m_Entite->getJoueur()->getPlateau()->getCase(c->getX()-1,c->getY())->getUnite())->ajouterEffet(m_effet);
+            m_effet->appliquerEffetUnite(m_Entite->getJoueur()->getPlateau()->getCase(c->getX()-1,c->getY()));
+        }
+        }
+
+        if(c->getX()+1 < c->parent()->getLargeur())
+        {
+        m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+1,c->getY())->ajouterEffet(m_effet);
+        if(m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+1,c->getY())->getUnite())
+        {
+            m_effet->appliquerEffetUnite(m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+1,c->getY()));
+            ((Unite*)m_Entite->getJoueur()->getPlateau()->getCase(c->getX()+1,c->getY())->getUnite())->ajouterEffet(m_effet);
+        }
+        }
+
+        if(c->getY()-1 >=0)
+        {
+        m_Entite->getJoueur()->getPlateau()->getCase(c->getX(),c->getY()-1)->ajouterEffet(m_effet);
+        if(m_Entite->getJoueur()->getPlateau()->getCase(c->getX(),c->getY()-1)->getUnite())
+        {
+            m_effet->appliquerEffetUnite(m_Entite->getJoueur()->getPlateau()->getCase(c->getX(),c->getY()-1));
+            ((Unite*)m_Entite->getJoueur()->getPlateau()->getCase(c->getX(),c->getY()-1)->getUnite())->ajouterEffet(m_effet);
+        }
+        }
+
+        if(c->getY()+1 < c->parent()->getHauteur())
+        {
+        m_Entite->getJoueur()->getPlateau()->getCase(c->getX(),c->getY()+1)->ajouterEffet(m_effet);
+        if(m_Entite->getJoueur()->getPlateau()->getCase(c->getX(),c->getY()+1)->getUnite())
+        {
+            m_effet->appliquerEffetUnite(m_Entite->getJoueur()->getPlateau()->getCase(c->getX(),c->getY()+1));
+            ((Unite*)m_Entite->getJoueur()->getPlateau()->getCase(c->getX(),c->getY()+1)->getUnite())->ajouterEffet(m_effet);
+        }
+        }
+
+        m_Entite->getJoueur()->getPlateau()->highlight(c);
+        m_Entite->getJoueur()->getPlateau()->highlight(c,1,Qt::blue);
 }
 
 void GlypheGel::animationAttaque(Case *c1, Case *c2) {
@@ -294,7 +338,6 @@ void Soin::animationAttaque(Case *c1, Case *c2) {
     placement->setEndValue(anim+1);
     group->addAnimation(placement);
 
-    //for (int k=0; k<5; k++)
         for (unsigned int i=0; i<getImageAttaque().size(); i++) {
             QPropertyAnimation *animPix = new QPropertyAnimation(this, "pixmap");
             animPix->setDuration(50);
@@ -312,7 +355,7 @@ void Soin::animationAttaque(Case *c1, Case *c2) {
 }
 
 Concentration::Concentration(string nom, int degat, int portee, int ptAction, Entite* ent) : Sort(nom,degat,portee,ptAction,ent) {
-    m_effet = new BonusDegat(ent->getJoueur(),2,1);
+    m_effet = new BonusDegat(ent->getJoueur(),2,2);
     QPixmap* atq = new QPixmap("images/Concentration1-2.png");
     for (int j=0; j<3; j++)
         for (int i=0; i<5; i++)
@@ -324,6 +367,7 @@ Concentration::Concentration(string nom, int degat, int portee, int ptAction, En
 void Concentration::lancerAttaque(Case *c) {
     animationAttaque(m_Entite->getPosition()[0],c);
     ((Unite*) c->getUnite())->ajouterEffet(m_effet);
+    m_effet->appliquerEffetUnite(c);
 }
 
 void Concentration::animationAttaque(Case *c1, Case *c2) {
